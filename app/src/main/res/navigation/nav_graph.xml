@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tablesFragment">
+
+    <fragment
+        android:id="@+id/tablesFragment"
+        android:name="com.example.easyrestapp.TablesFragment"
+        android:label="fragment_tables"
+        tools:layout="@layout/fragment_tables" >
+        <action
+            android:id="@+id/action_tablesFragment_to_openTableFragment"
+            app:destination="@id/openTableFragment" />
+        <action
+            android:id="@+id/action_tablesFragment_to_orderRecoveryFragment"
+            app:destination="@id/orderRecoveryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderRecoveryFragment"
+        android:name="com.example.easyrestapp.OrderRecoveryFragment"
+        android:label="fragment_order_recovery"
+        tools:layout="@layout/fragment_order_recovery" />
+    <fragment
+        android:id="@+id/openTableFragment"
+        android:name="com.example.easyrestapp.OpenTableFragment"
+        android:label="fragment_open_table"
+        tools:layout="@layout/fragment_open_table" />
+</navigation>
