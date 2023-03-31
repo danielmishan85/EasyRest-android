@@ -2,35 +2,58 @@ package com.example.easyrestapp;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyrestapp.databinding.FragmentTablesBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TablesFragment extends Fragment {
 
     FragmentTablesBinding binding;
+    TablesRecyclerAdapter adapter;
+    List<Table> tables;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("All Reviews");
-        // Inflates the layout for this fragment and sets the title of the ActionBar
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Tables</font>"));
+
+
+        tables=new ArrayList<>();
+        for (int i=0;i<20;i++){
+            tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
+        }
+
+
         binding = FragmentTablesBinding.inflate(inflater, container, false);
         View v=binding.getRoot();
         binding.openTableBtn.setOnClickListener(V->{
@@ -52,6 +75,16 @@ public class TablesFragment extends Fragment {
         });
 
 
+        binding.tablesRv.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
+         adapter = new TablesRecyclerAdapter(getLayoutInflater(),tables);
+        binding.tablesRv.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((int pos)-> {
+
+            //in order to find the rec position in all rec list so that i can use the same recInfo frag
+
+        });
+
 
         return  v;
     }
@@ -60,7 +93,7 @@ public class TablesFragment extends Fragment {
 
     public void showOpenTablePopup() {
         // Create the popup dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder  builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
         builder.setView(popupView);
 
@@ -105,6 +138,7 @@ public class TablesFragment extends Fragment {
     public void showPaymentPopup() {
         // Create the popup dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
         builder.setView(popupView);
 
@@ -153,4 +187,88 @@ public class TablesFragment extends Fragment {
         // Show the popup dialog
         builder.show();
     }
+
+
+    //--------------------- view holder ---------------------------
+    class TablesViewHolder extends RecyclerView.ViewHolder {
+        TextView   tNum,tNote,tDinners, tAvg,tTotal;
+
+        public TablesViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+            tNum=itemView.findViewById(R.id.table_num);
+            tNote=itemView.findViewById(R.id.notes_tv);
+            tDinners=itemView.findViewById(R.id.dinners_num);
+            tTotal=itemView.findViewById(R.id.amount_tv);
+            tAvg=itemView.findViewById(R.id.avg_tv);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    listener.onItemClick(pos);
+                }
+            });
+        }
+
+        public void bind(Table table) {
+            tNum.setText(table.tNum);
+            tNote.setText(table.tNote);
+            tDinners.setText(table.tDinners);
+            tTotal.setText(String.valueOf(table.tTotal));
+            tAvg.setText(String.valueOf( table.tAvg));
+        }
+    }
+    //---------------------OnItemClickListener ---------------------------
+    public interface OnItemClickListener{
+        void onItemClick(int pos);
+    }
+
+
+
+    //---------------------Recycler adapter ---------------------------
+    class TablesRecyclerAdapter extends RecyclerView.Adapter<TablesViewHolder>{
+        OnItemClickListener listener;
+        LayoutInflater inflater;
+        List<Table> data;
+
+        public void setData(List<Table> data){
+            this.data = data;
+            notifyDataSetChanged();
+        }
+        public TablesRecyclerAdapter(LayoutInflater inflater, List<Table> data){
+            this.inflater = inflater;
+            this.data = data;
+        }
+
+        // Set the OnItemClickListener
+        void setOnItemClickListener(OnItemClickListener listener){
+            this.listener = listener;
+        }
+        // Create a view holder
+        @NonNull
+        @Override
+        public TablesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            // Inflate the row layout
+            View view = getLayoutInflater().inflate(R.layout.table_row,parent,false);
+            // Create and return a new AllRecommendationsViewHolder
+            return new TablesViewHolder(view,listener);
+        }
+
+        // Bind the data to the view holder
+        @Override
+        public void onBindViewHolder(@NonNull TablesViewHolder holder, int position) {
+            Table re = data.get(position);
+            holder.bind(re);
+        }
+
+        // Return the number of items in the data
+        @Override
+        public int getItemCount() {
+            if (data == null) return 0;
+            return data.size();
+        }
+    }
+
+
+
 }
