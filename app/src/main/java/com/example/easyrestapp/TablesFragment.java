@@ -76,7 +76,7 @@ public class TablesFragment extends Fragment {
 
 
         binding.tablesRv.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
-         adapter = new TablesRecyclerAdapter(getLayoutInflater(),tables);
+        adapter = new TablesRecyclerAdapter(getLayoutInflater(),tables);
         binding.tablesRv.setAdapter(adapter);
 
         adapter.setOnItemClickListener((int pos)-> {
@@ -147,6 +147,12 @@ public class TablesFragment extends Fragment {
         EditText editText2 = popupView.findViewById(R.id.editText2);
         EditText editText3 = popupView.findViewById(R.id.editText3);
         EditText editText4 = popupView.findViewById(R.id.editText4);
+        //change the text when we have a real DB
+        editText1.setText("100");
+        editText2.setText("20");
+        editText3.setText("10");
+        editText4.setText("0");
+
         TextView tv1 = popupView.findViewById(R.id.textView);
         TextView tv2 = popupView.findViewById(R.id.textView7);
         TextView tv3 = popupView.findViewById(R.id.textView9);
@@ -155,6 +161,12 @@ public class TablesFragment extends Fragment {
         tv2.setText("Discount: ");
         tv3.setText("Service: ");
         tv4.setText("Total: ");
+        double amount = Double.parseDouble(editText1.getText().toString());
+        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
+        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
+
+        double totalAmount = amount * (1 - discount) * (1 + tax);
+        editText4.setText(Double.toString(totalAmount));
 
 
         // Set up the buttons
