@@ -26,5 +26,9 @@
         android:id="@+id/openTableFragment"
         android:name="com.example.easyrestapp.OpenTableFragment"
         android:label="fragment_open_table"
-        tools:layout="@layout/fragment_open_table" />
+        tools:layout="@layout/fragment_open_table" >
+        <argument
+            android:name="chosenTable"
+            app:argType="integer" />
+    </fragment>
 </navigation>

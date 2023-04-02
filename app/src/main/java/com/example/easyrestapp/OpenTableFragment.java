@@ -2,63 +2,48 @@ package com.example.easyrestapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OpenTableFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.easyrestapp.databinding.FragmentOpenTableBinding;
+import com.example.easyrestapp.databinding.FragmentTablesBinding;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class OpenTableFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public OpenTableFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OpenTableFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OpenTableFragment newInstance(String param1, String param2) {
-        OpenTableFragment fragment = new OpenTableFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    FragmentOpenTableBinding binding;
+    List<Table> tables;
+    int currentTable;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        tables=new ArrayList<>();
+        for (int i=0;i<20;i++){
+            tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_open_table, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentOpenTableBinding.inflate(inflater, container, false);
+        View v=binding.getRoot();
+        currentTable=OpenTableFragmentArgs.fromBundle(getArguments()).getChosenTable();
+        Log.d("tag"," "+currentTable);
+
+        return v;
     }
 }

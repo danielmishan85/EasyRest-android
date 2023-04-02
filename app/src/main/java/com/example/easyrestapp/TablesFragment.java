@@ -38,7 +38,7 @@ public class TablesFragment extends Fragment {
     FragmentTablesBinding binding;
     TablesRecyclerAdapter adapter;
     List<Table> tables;
-
+    int chosenTable;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,8 +56,9 @@ public class TablesFragment extends Fragment {
 
         binding = FragmentTablesBinding.inflate(inflater, container, false);
         View v=binding.getRoot();
+
         binding.openTableBtn.setOnClickListener(V->{
-            NavDirections action = TablesFragmentDirections.actionTablesFragmentToOpenTableFragment();
+            NavDirections action = TablesFragmentDirections.actionTablesFragmentToOpenTableFragment(chosenTable);
             Navigation.findNavController(getActivity(), R.id.main_navhost).navigate(action);
         });
 
@@ -80,9 +81,8 @@ public class TablesFragment extends Fragment {
         binding.tablesRv.setAdapter(adapter);
 
         adapter.setOnItemClickListener((int pos)-> {
-
-            //in order to find the rec position in all rec list so that i can use the same recInfo frag
-
+            chosenTable=pos;
+            binding.chosenTableTv.setText("Chosen table: "+pos);
         });
 
 
@@ -148,9 +148,9 @@ public class TablesFragment extends Fragment {
         EditText editText3 = popupView.findViewById(R.id.editText3);
         EditText editText4 = popupView.findViewById(R.id.editText4);
         //change the text when we have a real DB
-        editText1.setText("100");
-        editText2.setText("20");
-        editText3.setText("10");
+        editText1.setText("0");
+        editText2.setText("0");
+        editText3.setText("0");
         editText4.setText("0");
 
         TextView tv1 = popupView.findViewById(R.id.textView);
@@ -160,9 +160,9 @@ public class TablesFragment extends Fragment {
         tv1.setText("Amount: ");
         tv2.setText("Discount: ");
         tv3.setText("Service: ");
+        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
         tv4.setText("Total: ");
         double amount = Double.parseDouble(editText1.getText().toString());
-        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
         double tax = Double.parseDouble(editText3.getText().toString()) / 100;
 
         double totalAmount = amount * (1 - discount) * (1 + tax);
