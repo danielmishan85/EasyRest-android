@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
         app:cardBackgroundColor="@color/purple_500"
         app:cardCornerRadius="40dp"
         app:cardElevation="8dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="5dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,18 +22,22 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="1dp">
 
-
-            <ImageView
-                android:id="@+id/dishRow_img"
-                android:layout_width="90dp"
-                android:layout_height="120dp"
+            <TextView
+                android:id="@+id/tableDishRow_dishType"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
+                android:background="@drawable/pink1280_back"
+                android:text="F"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tableDishRow_dishName_tv"
@@ -41,12 +45,16 @@
                 android:layout_height="wrap_content"
                 android:text="Dish Name"
                 android:textAlignment="center"
-                android:textSize="30dp"
+                android:textSize="20sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/dishRow_img"
+                app:layout_constraintStart_toEndOf="@+id/tableDishRow_dishType"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
