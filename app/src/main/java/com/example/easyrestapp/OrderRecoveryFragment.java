@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.easyrestapp.databinding.FragmentOrderRecoveryBinding;
+import com.example.easyrestapp.model.Table;
+
 import java.util.ArrayList;
 import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;

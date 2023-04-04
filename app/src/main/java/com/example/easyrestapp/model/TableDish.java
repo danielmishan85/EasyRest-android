@@ -1,4 +1,6 @@
-package com.example.easyrestapp;
+package com.example.easyrestapp.model;
+
+import com.example.easyrestapp.model.Dish;
 
 import java.util.ArrayList;
 

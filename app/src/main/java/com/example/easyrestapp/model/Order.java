@@ -1,4 +1,6 @@
-package com.example.easyrestapp;
+package com.example.easyrestapp.model;
+
+import com.example.easyrestapp.model.Table;
 
 public class Order {
     public Table table;

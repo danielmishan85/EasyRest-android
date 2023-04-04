@@ -16,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.easyrestapp.databinding.FragmentOpenTableBinding;
+import com.example.easyrestapp.model.Dish;
+import com.example.easyrestapp.model.Model;
+import com.example.easyrestapp.model.Table;
+import com.example.easyrestapp.model.TableDish;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,39 +38,17 @@ public class OpenTableFragment extends Fragment {
     List<Table> tables;
     int totalAmount = 0;
     double numOfDiners = 0;
+    int chosenTableDish = 0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        menu = new ArrayList<>();
-        filterMenu = new ArrayList<>();
-        orderList = new ArrayList<>();
-        tables = new ArrayList<>();
-        //menu
-        for (int i=0;i<10;i++){
-            menu.add(new Dish("Dish number " + Integer.toString(i), "Start", new ArrayList<>()));
-        }
-        for (int i=10;i<20;i++){
-            menu.add(new Dish("Dish number " + Integer.toString(i), "Main", new ArrayList<>()));
-        }
-        for (int i=20;i<30;i++){
-            menu.add(new Dish("Dish number " + Integer.toString(i), "Dessert", new ArrayList<>()));
-        }
-        //order list
-        for (int i=0;i<2;i++){
-            orderList.add(new TableDish(menu.get(i), "no comments yet"));
-        }
-        for (int i=10;i<12;i++){
-            orderList.add(new TableDish(menu.get(i), "no comments yet"));
-        }
-        for (int i=20;i<22;i++){
-            orderList.add(new TableDish(menu.get(i), "no comments yet"));
-        }
-       //tables
-        for (int i=0;i<20;i++){
-            tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
-        }
+        currentTable=OpenTableFragmentArgs.fromBundle(getArguments()).getChosenTable();
+        menu = Model.instance().getMenu();
+        filterMenu = new ArrayList<>(); //filter menu by type
+        tables = Model.instance().getTables();
+        orderList = tables.get(currentTable).getOrderList();
 
         binding = FragmentOpenTableBinding.inflate(inflater, container, false);
         View v=binding.getRoot();
@@ -78,7 +60,7 @@ public class OpenTableFragment extends Fragment {
         binding.menuList.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
         setMenuAdapter(menuAdapter, menu);  //show all the dishes
 
-        //filter dishes by type
+        //filter dishes by type, by press button
         binding.openTableStartesBtn.setOnClickListener(V -> {
             filterMenu = menu.stream().filter(d -> d.type.equals("Start")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
@@ -91,14 +73,35 @@ public class OpenTableFragment extends Fragment {
             filterMenu = menu.stream().filter(d -> d.type.equals("Dessert")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
         });
+        binding.openTableDrinksBtn.setOnClickListener(V -> {
+            filterMenu = menu.stream().filter(d -> d.type.equals("Drink")).collect(Collectors.toList());
+            setMenuAdapter(menuAdapter, filterMenu);
+        });
 
         binding.tableOrderList.setLayoutManager(new LinearLayoutManager(getContext()));  //define the recycler view to be a list
         tableOrderAdapter = new TableOrderRecyclerAdapter(getLayoutInflater(), orderList);
         binding.tableOrderList.setAdapter(tableOrderAdapter);
 
+        tableOrderAdapter.setOnItemClickListener((int pos) -> {
+            chosenTableDish = pos;
+            Log.d("chosenTableDish", Integer.toString(pos));
+        });
+        binding.openTableFirstBtn.setOnClickListener(V -> {
+            orderList.get(chosenTableDish).type = "F";
+            setTableOrderAdapter(tableOrderAdapter, orderList);
+        });
+        binding.openTableMainBtn2.setOnClickListener(V -> {
+            orderList.get(chosenTableDish).type = "M";
+            setTableOrderAdapter(tableOrderAdapter, orderList);
+        });
+        binding.openTableDeleteBtn.setOnClickListener(V -> {
+            Model.instance().tables.get(currentTable).getOrderList().remove(chosenTableDish);
+            orderList.remove(chosenTableDish);
+            setTableOrderAdapter(tableOrderAdapter, orderList);
+        });
+
         binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount) + " ₪");
 
-        currentTable=OpenTableFragmentArgs.fromBundle(getArguments()).getChosenTable();
         numOfDiners = Double.valueOf(tables.get(currentTable).tDinners);
         binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(totalAmount/numOfDiners)  + " ₪");
 
@@ -113,6 +116,11 @@ public class OpenTableFragment extends Fragment {
     public void setMenuAdapter(MenuRecyclerAdapter adapter, List<Dish> l) {
         adapter = new MenuRecyclerAdapter(getLayoutInflater(),l);
         binding.menuList.setAdapter(adapter);
+    }
+
+    public void setTableOrderAdapter(TableOrderRecyclerAdapter adapter, List<TableDish> l) {
+        adapter = new TableOrderRecyclerAdapter(getLayoutInflater(),l);
+        binding.tableOrderList.setAdapter(adapter);
     }
 
 
@@ -212,6 +220,8 @@ public class OpenTableFragment extends Fragment {
         public void bind(TableDish td) {
             dishName.setText(td.getName());
             dishType.setText(td.getType());
+
+
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.easyrestapp;
+package com.example.easyrestapp.model;
 
 import java.util.ArrayList;
 
