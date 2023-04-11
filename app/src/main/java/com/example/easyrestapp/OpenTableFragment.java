@@ -61,8 +61,7 @@ public class OpenTableFragment extends Fragment {
         }
 
         binding.menuList.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
-        //setMenuAdapter(menuAdapter, menu);  //show all the dishes
-        menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), menu);
+        menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), menu);  //show all the dishes
         binding.menuList.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
