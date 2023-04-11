@@ -1,9 +1,11 @@
 package com.example.easyrestapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,7 +61,14 @@ public class OpenTableFragment extends Fragment {
         }
 
         binding.menuList.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
-        setMenuAdapter(menuAdapter, menu);  //show all the dishes
+        //setMenuAdapter(menuAdapter, menu);  //show all the dishes
+        menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), menu);
+        binding.menuList.setAdapter(menuAdapter);
+
+        menuAdapter.setOnItemClickListener((int pos) -> {
+//            showOpenTableDishPopup(tables.get(currentTable), menu.get(pos));
+            Log.d("chosenDish", Integer.toString(pos));
+        });
 
         //filter dishes by type, by press button
         binding.openTableStartesBtn.setOnClickListener(V -> {
@@ -111,6 +121,46 @@ public class OpenTableFragment extends Fragment {
         Log.d("tag"," "+currentTable);
 
         return v;
+    }
+
+    public void showOpenTableDishPopup(Table table, Dish dish) {
+        // Create the popup dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+        View popupView = getLayoutInflater().inflate(R.layout.table_dish_popup, null);
+        builder.setView(popupView);
+
+        // Get references to the dish fields
+        ImageView dishImg = popupView.findViewById(R.id.tableDish_img);
+        TextView dishName = popupView.findViewById(R.id.tableDish_name);
+        TextView dishIngredients = popupView.findViewById(R.id.tableDish_ingredients);
+        EditText tableComments = popupView.findViewById(R.id.tableDish_comments);
+        dishImg.setImageResource(R.drawable.no_img);
+        dishName.setText(dish.getName());
+        dishIngredients.setText("will be written the dish ingredients...");
+        tableComments.setText("will be written the allergic of table... and we can add more comments");
+
+
+        // Set up the buttons
+        builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Save the waiter input
+                String comments = tableComments.getText().toString();
+
+                // Do something with the table dish input
+                TableDish td = new TableDish(dish, comments);
+                orderList.add(td);
+
+            }
+        });
+
+        builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Cancel the dialog
+                dialog.dismiss();
+            }
+        });
     }
 
     public void setMenuAdapter(MenuRecyclerAdapter adapter, List<Dish> l) {
