@@ -62,7 +62,7 @@ public class OpenTableFragment extends Fragment {
 
         //calculate the amount of the specific table
         for (TableDish td: orderList){
-            totalAmount += td.getPrice();
+            totalAmount += td.dish.getPrice();
         }
 
 
@@ -78,46 +78,31 @@ public class OpenTableFragment extends Fragment {
 
         //filter dishes by type, by press button
         binding.openTableStartesBtn.setOnClickListener(V -> {
+            menuButtonsColorReset();
             binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            // Set the background color of the other buttons to red
-            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Start")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
         });
         binding.openTableMainBtn.setOnClickListener(V -> {
+            menuButtonsColorReset();
             binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            // Set the background color of the other buttons to red
-            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Main")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
-            //binding.openTableMainBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
         });
         binding.openTableDessertBtn.setOnClickListener(V -> {
+            menuButtonsColorReset();
             binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            // Set the background color of the other buttons to red
-            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Dessert")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
-            //binding.openTableDessertBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
 
         });
         binding.openTableDrinksBtn.setOnClickListener(V -> {
+            menuButtonsColorReset();
             binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            // Set the background color of the other buttons to red
-            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
-            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Drink")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
-            //binding.openTableDrinksBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
-
         });
+
 
 
         //************************************** table orders list***********************************
@@ -149,6 +134,13 @@ public class OpenTableFragment extends Fragment {
         return v;
     }
 
+    public void menuButtonsColorReset(){
+        binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+
+    }
 
     public void showPaymentPopup() {
         // Create the popup dialog
@@ -215,6 +207,7 @@ public class OpenTableFragment extends Fragment {
         builder.show();
     }
 
+
     public void showOpenTableDishPopup(Table table, Dish dish) {
         // Create the popup dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
@@ -229,7 +222,7 @@ public class OpenTableFragment extends Fragment {
         dishImg.setImageResource(R.drawable.no_img);
         dishName.setText(dish.getName());
         dishIngredients.setText("will be written the dish ingredients...");
-        tableComments.setText("will be written the allergic of table... and we can add more comments");
+//        tableComments.setHint("will be written the allergic of table... and we can add more comments");
 
 
         // Set up the buttons
@@ -257,6 +250,30 @@ public class OpenTableFragment extends Fragment {
         // Show the popup dialog
         builder.show();
     }
+
+    private void showDishCommentsPopup(int dishIndex) {
+        // Get the dish object from the orderList using the dishIndex
+        TableDish dish = orderList.get(dishIndex);
+
+        // Create the popup dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+        builder.setTitle("Comments for " + dish.dish.getName()); // Set the title of the popup dialog
+        builder.setMessage(dish.getComments()); // Set the comments as the message of the popup dialog
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Dismiss the dialog when "OK" is clicked
+                dialog.dismiss();
+            }
+        });
+
+        // Show the popup dialog
+        builder.show();
+    }
+
+
 
 
     public void setMenuAdapter(MenuRecyclerAdapter adapter, List<Dish> l) {
@@ -364,15 +381,15 @@ public class OpenTableFragment extends Fragment {
             dishType.setOnClickListener(v->{
                 if(dishType.getText().toString().equals("F")) {
                     dishType.setText("M");
-                    orderList.get(getAdapterPosition()).type = "M";
+                    orderList.get(getAdapterPosition()).dish.type = "M";
                 }
                 else{
                     dishType.setText("F");
-                    orderList.get(getAdapterPosition()).type = "F";
+                    orderList.get(getAdapterPosition()).dish.type = "F";
                 }
             });
             dishDelete.setOnClickListener(v->{
-                orderList.remove(chosenTableDish);
+                orderList.remove(getAdapterPosition());
                 setTableOrderAdapter(tableOrderAdapter, orderList);
             });
 
@@ -382,7 +399,7 @@ public class OpenTableFragment extends Fragment {
 
             dishComment.setOnClickListener(v->{
                 //continue from here
-                //showDishCommentsPopup();
+                showDishCommentsPopup(getAdapterPosition());
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -395,8 +412,8 @@ public class OpenTableFragment extends Fragment {
         }
 
         public void bind(TableDish td) {
-            dishName.setText(td.getName());
-            dishType.setText(td.getType());
+            dishName.setText(td.dish.getName());
+            dishType.setText(td.dish.getType());
 
 
         }

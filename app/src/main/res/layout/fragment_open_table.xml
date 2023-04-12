@@ -67,7 +67,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tableOrderRV"
-        android:layout_width="700dp"
+        android:layout_width="650dp"
         android:layout_height="350dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

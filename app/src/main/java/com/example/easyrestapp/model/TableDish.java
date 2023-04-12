@@ -6,43 +6,52 @@ import java.util.ArrayList;
 
 public class TableDish {
 
-    public String name;
-    public String type;
-    public double price;
+    public Dish dish;
     public ArrayList<String> ingredients;
     public String comments;
-
-    public boolean isChacked() {
-        return chacked;
-    }
-
-    public void setChacked(boolean chacked) {
-        this.chacked = chacked;
-    }
-
-    public boolean chacked;
+    public boolean checked;
 
     public TableDish(Dish d, String comments) {
-        this.name = d.getName();
+        this.dish=d;
         if(d.getType().equals("Start"))
-            this.type = "F";
+            this.dish.type = "F";
         else if (d.getType().equals("Main"))
-            this.type = "M";
+            this.dish.type = "M";
         else
-            this.type = "X";
-        this.price = d.getPrice();
+            this.dish.type = "X";
+        this.dish.price = d.getPrice();
         this.comments = comments;
     }
 
-    public String getName() {
-        return name;
+    public boolean isChacked() {
+        return checked;
     }
 
-    public String getType() {
-        return type;
+    public void setChacked(boolean chacked) {
+        this.checked = chacked;
     }
 
-    public double getPrice() {
-        return price;
+    public Dish getDish() {
+        return dish;
+    }
+
+    public void setDish(Dish dish) {
+        this.dish = dish;
+    }
+
+    public ArrayList<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(ArrayList<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }
