@@ -55,35 +55,35 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/commentsDish_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton4"
+                app:layout_constraintEnd_toStartOf="@+id/fireDish_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/FirstOrMainBtb"
                 app:srcCompat="@drawable/ic_baseline_comment_24"
                 tools:layout_editor_absoluteY="15dp" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/deleteDish_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/tableDishRow_dishName_tv"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageButton4"
+                app:layout_constraintStart_toEndOf="@+id/fireDish_btn"
                 app:srcCompat="@drawable/ic_baseline_delete_24"
                 tools:layout_editor_absoluteY="13dp" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/fireDish_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+                app:layout_constraintEnd_toStartOf="@+id/deleteDish_btn"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageButton"
+                app:layout_constraintStart_toEndOf="@+id/commentsDish_btn"
                 app:srcCompat="@drawable/ic_baseline_local_fire_department_24"
                 tools:layout_editor_absoluteY="13dp" />
 

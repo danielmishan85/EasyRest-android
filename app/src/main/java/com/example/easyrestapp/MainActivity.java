@@ -10,8 +10,6 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     NavController navController;
-//CHECKING SOMT
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

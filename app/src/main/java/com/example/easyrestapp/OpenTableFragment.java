@@ -1,11 +1,13 @@
 package com.example.easyrestapp;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,20 +78,45 @@ public class OpenTableFragment extends Fragment {
 
         //filter dishes by type, by press button
         binding.openTableStartesBtn.setOnClickListener(V -> {
+            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            // Set the background color of the other buttons to red
+            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Start")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
         });
         binding.openTableMainBtn.setOnClickListener(V -> {
+            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            // Set the background color of the other buttons to red
+            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Main")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
+            //binding.openTableMainBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
         });
         binding.openTableDessertBtn.setOnClickListener(V -> {
+            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            // Set the background color of the other buttons to red
+            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Dessert")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
+            //binding.openTableDessertBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
+
         });
         binding.openTableDrinksBtn.setOnClickListener(V -> {
+            binding.openTableDrinksBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            // Set the background color of the other buttons to red
+            binding.openTableStartesBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableDessertBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+            binding.openTableMainBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             filterMenu = menu.stream().filter(d -> d.type.equals("Drink")).collect(Collectors.toList());
             setMenuAdapter(menuAdapter, filterMenu);
+            //binding.openTableDrinksBtn.setBackground(getResources().getDrawable(R.drawable.button_selector));
+
         });
 
 
@@ -102,10 +130,6 @@ public class OpenTableFragment extends Fragment {
             Log.d("chosenTableDish", Integer.toString(pos));
         });
 
-//        binding.openTableDeleteBtn.setOnClickListener(V -> {
-//            orderList.remove(chosenTableDish);
-//            setTableOrderAdapter(tableOrderAdapter, orderList);
-//        });
         binding.openTablePaymentBtn.setOnClickListener(V -> {
             showPaymentPopup();
         });
@@ -234,6 +258,7 @@ public class OpenTableFragment extends Fragment {
         builder.show();
     }
 
+
     public void setMenuAdapter(MenuRecyclerAdapter adapter, List<Dish> l) {
         adapter = new MenuRecyclerAdapter(getLayoutInflater(),l);
         binding.menuRV.setAdapter(adapter);
@@ -320,14 +345,21 @@ public class OpenTableFragment extends Fragment {
 
     //--------------------- table order view holder ---------------------------
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
-//lital
         TextView dishName;
         Button dishType;
+        ImageButton dishDelete;
+        ImageButton dishFire;
+        ImageButton dishComment;
+
 
         public TableOrderViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             dishName = itemView.findViewById(R.id.tableDishRow_dishName_tv);
             dishType = itemView.findViewById(R.id.FirstOrMainBtb);
+            dishDelete = itemView.findViewById(R.id.deleteDish_btn);
+            dishFire = itemView.findViewById(R.id.fireDish_btn);
+            dishComment = itemView.findViewById(R.id.commentsDish_btn);
+
 
             dishType.setOnClickListener(v->{
                 if(dishType.getText().toString().equals("F")) {
@@ -338,6 +370,19 @@ public class OpenTableFragment extends Fragment {
                     dishType.setText("F");
                     orderList.get(getAdapterPosition()).type = "F";
                 }
+            });
+            dishDelete.setOnClickListener(v->{
+                orderList.remove(chosenTableDish);
+                setTableOrderAdapter(tableOrderAdapter, orderList);
+            });
+
+            dishFire.setOnClickListener(v->{
+                //continue from here
+            });
+
+            dishComment.setOnClickListener(v->{
+                //continue from here
+                //showDishCommentsPopup();
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
