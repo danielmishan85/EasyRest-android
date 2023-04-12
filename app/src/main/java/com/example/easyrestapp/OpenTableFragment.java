@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,22 +48,25 @@ public class OpenTableFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        binding = FragmentOpenTableBinding.inflate(inflater, container, false);
+        View v=binding.getRoot();
         currentTable=OpenTableFragmentArgs.fromBundle(getArguments()).getChosenTable();
+
         menu = Model.instance().getMenu();
         filterMenu = new ArrayList<>(); //filter menu by type
         tables = Model.instance().getTables();
         orderList = tables.get(currentTable).getOrderList();
 
-        binding = FragmentOpenTableBinding.inflate(inflater, container, false);
-        View v=binding.getRoot();
-
+        //calculate the amount of the specific table
         for (TableDish td: orderList){
             totalAmount += td.getPrice();
         }
 
-        binding.menuList.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
+
+        //*********************************menu list *********************************************
+        binding.menuRV.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
         menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), menu);  //show all the dishes
-        binding.menuList.setAdapter(menuAdapter);
+        binding.menuRV.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
             showOpenTableDishPopup(tables.get(currentTable), menu.get(pos));
@@ -87,30 +91,26 @@ public class OpenTableFragment extends Fragment {
             setMenuAdapter(menuAdapter, filterMenu);
         });
 
-        binding.tableOrderList.setLayoutManager(new LinearLayoutManager(getContext()));  //define the recycler view to be a list
+
+        //************************************** table orders list***********************************
+        binding.tableOrderRV.setLayoutManager(new LinearLayoutManager(getContext()));  //define the recycler view to be a list
         tableOrderAdapter = new TableOrderRecyclerAdapter(getLayoutInflater(), orderList);
-        binding.tableOrderList.setAdapter(tableOrderAdapter);
+        binding.tableOrderRV.setAdapter(tableOrderAdapter);
 
         tableOrderAdapter.setOnItemClickListener((int pos) -> {
             chosenTableDish = pos;
             Log.d("chosenTableDish", Integer.toString(pos));
         });
-        binding.openTableFirstBtn.setOnClickListener(V -> {
-            orderList.get(chosenTableDish).type = "F";
-            setTableOrderAdapter(tableOrderAdapter, orderList);
-        });
-        binding.openTableMainBtn2.setOnClickListener(V -> {
-            orderList.get(chosenTableDish).type = "M";
-            setTableOrderAdapter(tableOrderAdapter, orderList);
-        });
-        binding.openTableDeleteBtn.setOnClickListener(V -> {
-//            Model.instance().tables.get(currentTable).getOrderList().remove(chosenTableDish);
-            orderList.remove(chosenTableDish);
-            setTableOrderAdapter(tableOrderAdapter, orderList);
-        });
+
+//        binding.openTableDeleteBtn.setOnClickListener(V -> {
+//            orderList.remove(chosenTableDish);
+//            setTableOrderAdapter(tableOrderAdapter, orderList);
+//        });
         binding.openTablePaymentBtn.setOnClickListener(V -> {
             showPaymentPopup();
         });
+
+
 
         binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount) + " ₪");
 
@@ -139,7 +139,7 @@ public class OpenTableFragment extends Fragment {
         EditText editText3 = popupView.findViewById(R.id.editText3);
         EditText editText4 = popupView.findViewById(R.id.editText4);
         //change the text when we have a real DB
-        editText1.setText("0");
+        editText1.setText(totalAmount);
         editText2.setText("0");
         editText3.setText("0");
         editText4.setText("0");
@@ -236,12 +236,12 @@ public class OpenTableFragment extends Fragment {
 
     public void setMenuAdapter(MenuRecyclerAdapter adapter, List<Dish> l) {
         adapter = new MenuRecyclerAdapter(getLayoutInflater(),l);
-        binding.menuList.setAdapter(adapter);
+        binding.menuRV.setAdapter(adapter);
     }
 
     public void setTableOrderAdapter(TableOrderRecyclerAdapter adapter, List<TableDish> l) {
         adapter = new TableOrderRecyclerAdapter(getLayoutInflater(),l);
-        binding.tableOrderList.setAdapter(adapter);
+        binding.tableOrderRV.setAdapter(adapter);
     }
 
 
@@ -320,14 +320,25 @@ public class OpenTableFragment extends Fragment {
 
     //--------------------- table order view holder ---------------------------
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
-
-        TextView dishType;
+//lital
         TextView dishName;
+        Button dishType;
 
         public TableOrderViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             dishName = itemView.findViewById(R.id.tableDishRow_dishName_tv);
-            dishType = itemView.findViewById(R.id.tableDishRow_dishType);
+            dishType = itemView.findViewById(R.id.FirstOrMainBtb);
+
+            dishType.setOnClickListener(v->{
+                if(dishType.getText().toString().equals("F")) {
+                    dishType.setText("M");
+                    orderList.get(getAdapterPosition()).type = "M";
+                }
+                else{
+                    dishType.setText("F");
+                    orderList.get(getAdapterPosition()).type = "F";
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

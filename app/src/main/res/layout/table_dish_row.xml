@@ -23,24 +23,6 @@
             android:layout_marginBottom="1dp">
 
             <TextView
-                android:id="@+id/tableDishRow_dishType"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/pink1280_back"
-                android:text="F"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/purple_500"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/tableDishRow_dishName_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +32,7 @@
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tableDishRow_dishType"
+                app:layout_constraintStart_toEndOf="@+id/FirstOrMainBtb"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
@@ -61,6 +43,49 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/FirstOrMainBtb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="F"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/FirstOrMainBtb"
+                app:srcCompat="@drawable/ic_baseline_comment_24"
+                tools:layout_editor_absoluteY="15dp" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/tableDishRow_dishName_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageButton4"
+                app:srcCompat="@drawable/ic_baseline_delete_24"
+                tools:layout_editor_absoluteY="13dp" />
+
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageButton"
+                app:srcCompat="@drawable/ic_baseline_local_fire_department_24"
+                tools:layout_editor_absoluteY="13dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

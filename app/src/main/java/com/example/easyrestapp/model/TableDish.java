@@ -12,6 +12,16 @@ public class TableDish {
     public ArrayList<String> ingredients;
     public String comments;
 
+    public boolean isChacked() {
+        return chacked;
+    }
+
+    public void setChacked(boolean chacked) {
+        this.chacked = chacked;
+    }
+
+    public boolean chacked;
+
     public TableDish(Dish d, String comments) {
         this.name = d.getName();
         if(d.getType().equals("Start"))
@@ -19,7 +29,7 @@ public class TableDish {
         else if (d.getType().equals("Main"))
             this.type = "M";
         else
-            this.type = "";
+            this.type = "X";
         this.price = d.getPrice();
         this.comments = comments;
     }
