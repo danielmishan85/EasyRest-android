@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
+    public String gettNum() {
+        return tNum;
+    }
+
     public String tNum;
     public String tNote;
     public String tDinners;

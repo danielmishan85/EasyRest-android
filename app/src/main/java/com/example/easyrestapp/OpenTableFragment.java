@@ -1,7 +1,6 @@
 package com.example.easyrestapp;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -117,6 +116,7 @@ public class OpenTableFragment extends Fragment {
 
         binding.openTablePaymentBtn.setOnClickListener(V -> {
             showPaymentPopup();
+
         });
 
 
@@ -144,8 +144,7 @@ public class OpenTableFragment extends Fragment {
 
     public void showPaymentPopup() {
         // Create the popup dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
         builder.setView(popupView);
 
@@ -155,7 +154,7 @@ public class OpenTableFragment extends Fragment {
         EditText editText3 = popupView.findViewById(R.id.editText3);
         EditText editText4 = popupView.findViewById(R.id.editText4);
         //change the text when we have a real DB
-        editText1.setText(totalAmount);
+        editText1.setText(Integer.toString(totalAmount));
         editText2.setText("0");
         editText3.setText("0");
         editText4.setText("0");
@@ -295,7 +294,7 @@ public class OpenTableFragment extends Fragment {
 
         public MenuViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            dishName = itemView.findViewById(R.id.tableDishRow_dishName_tv);
+            dishName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
             avatarImg = itemView.findViewById(R.id.dishRow_img);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -371,8 +370,8 @@ public class OpenTableFragment extends Fragment {
 
         public TableOrderViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            dishName = itemView.findViewById(R.id.tableDishRow_dishName_tv);
-            dishType = itemView.findViewById(R.id.FirstOrMainBtb);
+            dishName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
+            dishType = itemView.findViewById(R.id.tableDishRow_FirstOrMainBtb);
             dishDelete = itemView.findViewById(R.id.deleteDish_btn);
             dishFire = itemView.findViewById(R.id.fireDish_btn);
             dishComment = itemView.findViewById(R.id.commentsDish_btn);

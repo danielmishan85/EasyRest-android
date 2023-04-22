@@ -7,14 +7,14 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class WaiterActivity extends AppCompatActivity {
 
     NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_waiter);
 
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.main_navhost);
         navController = navHostFragment.getNavController();

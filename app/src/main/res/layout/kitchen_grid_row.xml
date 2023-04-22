@@ -23,21 +23,20 @@
             android:layout_marginBottom="1dp">
 
             <TextView
-                android:id="@+id/TableDishRow_dishName_tv"
+                android:id="@+id/kitchenGridRow_dishName_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
                 android:text="Dish Name"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/checkBox"
-                app:layout_constraintStart_toEndOf="@+id/deleteDish_btn"
+                app:layout_constraintEnd_toStartOf="@+id/kitchenGridRow_timeTV"
+                app:layout_constraintStart_toEndOf="@+id/kitchenGridRow_FirstOrMainBtb"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/kitchenGridRow_checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -46,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/tableDishRow_FirstOrMainBtb"
+                android:id="@+id/kitchenGridRow_FirstOrMainBtb"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -55,32 +54,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/commentsDish_btn"
+            <TextView
+                android:id="@+id/kitchenGridRow_timeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                app:layout_constraintStart_toEndOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:srcCompat="@drawable/ic_baseline_comment_24" />
-
-            <ImageButton
-                android:id="@+id/deleteDish_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                app:layout_constraintStart_toEndOf="@+id/fireDish_btn"
-                app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:srcCompat="@drawable/ic_baseline_delete_24" />
-
-            <ImageButton
-                android:id="@+id/fireDish_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                app:layout_constraintStart_toEndOf="@+id/commentsDish_btn"
-                app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:srcCompat="@drawable/ic_baseline_local_fire_department_24" />
+                android:layout_marginEnd="60dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/kitchenGridRow_checkBox"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
