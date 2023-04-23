@@ -34,7 +34,7 @@ public class KitchenActivity extends AppCompatActivity {
 
         tables = Model.instance().getTables();
         openTablesList = findViewById(R.id.kitchen_tablesList);
-        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),3));  //define the recycler view to be a list
+        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),3,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
         kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
         openTablesList.setAdapter(kitchenAdapter);
     }
@@ -131,13 +131,7 @@ public class KitchenActivity extends AppCompatActivity {
             time = itemView.findViewById(R.id.kitchenGridRow_timeTV);
             checkBox = itemView.findViewById(R.id.kitchenGridRow_checkBox);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    listener.onItemClick(pos);
-                }
-            });
+
         }
 
         public void bind(TableDish td) {
