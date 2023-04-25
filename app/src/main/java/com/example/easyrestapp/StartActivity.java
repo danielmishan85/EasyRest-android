@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.easyrestapp.model.MongoDB;
+
 public class StartActivity extends AppCompatActivity {
 
     @Override
@@ -24,6 +26,7 @@ public class StartActivity extends AppCompatActivity {
         });
 
         kitchen_btn.setOnClickListener((v)->{
+            MongoDB.main();
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
