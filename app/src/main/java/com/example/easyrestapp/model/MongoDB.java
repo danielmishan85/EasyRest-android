@@ -21,7 +21,7 @@ public class MongoDB {
 
         Executor executor = Executors.newSingleThreadExecutor();
         // Replace the connection string with your own
-        String connectionString = "mongodb+srv://easyRest:121197@cluster0.61aruej.mongodb.net/?retryWrites=true&w=majority";
+        String connectionString = "mongodb+srv://EasyRest:121197@cluster0.6oimwzg.mongodb.net/?retryWrites=true&w=majority";
 //        MongoClient mongoClient = MongoClients.create(connectionString);
 
 //        executor.execute(()-> {

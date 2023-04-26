@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.easyrestapp.model.MongoDB;
+import com.example.easyrestapp.model.ServerConnection;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -26,7 +27,9 @@ public class StartActivity extends AppCompatActivity {
         });
 
         kitchen_btn.setOnClickListener((v)->{
-            MongoDB.main();
+//            MongoDB.main();
+            ServerConnection serverConnection = new ServerConnection();
+            serverConnection.connectToServer("127.0.0.1", 3001);
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
