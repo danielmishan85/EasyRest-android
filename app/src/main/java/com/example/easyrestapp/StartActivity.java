@@ -2,13 +2,10 @@ package com.example.easyrestapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.example.easyrestapp.model.MongoDB;
 import com.example.easyrestapp.model.ServerConnection;
 
 public class StartActivity extends AppCompatActivity {
@@ -27,9 +24,8 @@ public class StartActivity extends AppCompatActivity {
         });
 
         kitchen_btn.setOnClickListener((v)->{
-//            MongoDB.main();
-            ServerConnection serverConnection = new ServerConnection();
-            serverConnection.connectToServer("127.0.0.1", 3001);
+            ServerConnection serverConnection = new ServerConnection("10.0.2.2", 3001);
+            serverConnection.getDishesByCategory("starter","MyRest");
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
