@@ -1,39 +1,34 @@
 package com.example.easyrestapp.model;
 
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 public class ServerConnection {
     private ExecutorService executorService;
     private String serverAddress;
     private int serverPort;
-    private Socket socket;
+    private HttpURLConnection connection;
+    private Gson gson;
 
     public ServerConnection(final String serverAddress, final int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         executorService = Executors.newSingleThreadExecutor();
+        gson = new Gson();
         executorService.execute(() -> {
             try {
                 // Establish the connection with the server
-                socket = new Socket(serverAddress, serverPort);
+                connection = (HttpURLConnection) new URL("http://" + serverAddress + ":" + serverPort).openConnection();
                 Log.d("server", "Connection successful!");
-            } catch (UnknownHostException e) {
-                // Handle unknown host exception
-                Log.d("server", e + "");
             } catch (IOException e) {
                 // Handle IO exception
                 Log.d("server", e + "");
@@ -41,47 +36,59 @@ public class ServerConnection {
         });
     }
 
-    public void getDishesByCategory(final String category, final String restaurantName) {
+    public void getDishesByCategory(String category, String restaurantName) {
+        if (connection == null) {
+            Log.d("server", "Connection not established!");
+            return;
+        }
         executorService.execute(() -> {
             try {
-                // Send the request to the server
-                JSONObject request = new JSONObject();
-                request.put("dishCategory", category);
-                request.put("ResturantName", restaurantName);
+                // Construct request URL
+                URL url = new URL("http://127.0.0.1:3001/getByCategory");
 
-                OutputStream outputStream = socket.getOutputStream();
-                PrintWriter writer = new PrintWriter(outputStream);
-                writer.println(request.toString());
-                writer.flush();
+                // Open HTTP connection
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                // Receive the response from the server
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String response = reader.readLine();
+                // Set request method and headers
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
 
-                // Print the JSON string in the log
-                Log.d("server", "Response from server: " + response);
+                // Create request body
+                RequestBody requestBody = new RequestBody(category, restaurantName);
+                Gson gson = new Gson();
+                String requestBodyJson = gson.toJson(requestBody);
 
-                // TODO: Parse the JSON string and handle the result
-
-                // Close the streams
-                writer.close();
-                reader.close();
-                inputStream.close();
+                // Write request body to output stream
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(requestBodyJson.getBytes());
+                outputStream.flush();
                 outputStream.close();
 
-            } catch (UnknownHostException e) {
-                // Handle unknown host exception
-                Log.d("server", e + "");
+                // Read response from input stream
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String response = bufferedReader.readLine();
+                bufferedReader.close();
+                inputStream.close();
+
+                // Log response
+                Log.d("server", response);
             } catch (IOException e) {
                 // Handle IO exception
-                Log.d("server", e + "");
-            } catch (JSONException e) {
-                // Handle JSON exception
                 Log.d("server", e + "");
             }
         });
     }
 
-    // Other methods for sending and receiving data from the server go here
+    private static class RequestBody {
+        private String dishCategory;
+        private String ResturantName;
+
+        public RequestBody(String dishCategory, String ResturantName) {
+            this.dishCategory = dishCategory;
+            this.ResturantName = ResturantName;
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ import com.example.easyrestapp.model.ServerConnection;
 
 public class StartActivity extends AppCompatActivity {
 
+    ServerConnection serverConnection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,14 +19,15 @@ public class StartActivity extends AppCompatActivity {
         Button waiter_btn = this.findViewById(R.id.waiter_btn);
 
         waiter_btn.setOnClickListener((v)->{
+            serverConnection.getDishesByCategory("starter","MyRest");
             Intent i= new Intent(this,WaiterActivity.class);
             startActivity(i);
 
         });
 
         kitchen_btn.setOnClickListener((v)->{
-            ServerConnection serverConnection = new ServerConnection("10.0.2.2", 3001);
-            serverConnection.getDishesByCategory("starter","MyRest");
+            serverConnection = new ServerConnection("5.5.5.5", 3001);
+
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
