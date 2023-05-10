@@ -67,17 +67,17 @@ public class ServerConnection {
 
 
     //POST - add a dish to specific table
-    public static void addDishToOrder( String tableId, String dishId, int amount, String firstOrMain, boolean allTogether)
+    public static void addDishToOrder( String tableId,TableDish td)
     {
         String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
         String postBody = "{\n" +
                 "    \"tableId\": \"" + tableId + "\",\n" +
                 "    \"dishArray\": [\n" +
                 "        {\n" +
-                "            \"dishid\": \"" + dishId + "\",\n" +
-                "            \"amount\": " + amount + ",\n" +
-                "            \"firstOrMain\": \"" + firstOrMain + "\",\n" +
-                "            \"allTogether\": " + allTogether + "\n" +
+                "            \"dishid\": \"" + td.dish.dishId + "\",\n" +
+                "            \"amount\": " + td.amount + ",\n" +
+                "            \"firstOrMain\": \"" + td.firstOrMain + "\",\n" +
+                "            \"allTogether\": " + td.allTogether + "\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";

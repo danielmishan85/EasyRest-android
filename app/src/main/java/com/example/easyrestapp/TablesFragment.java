@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyrestapp.databinding.FragmentTablesBinding;
+import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
 
 import java.util.ArrayList;
@@ -41,10 +42,7 @@ public class TablesFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Tables</font>"));
 
 
-        tables=new ArrayList<>();
-        for (int i=0;i<20;i++){
-            //tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
-        }
+        tables= Model.instance().getAllTables();
 
 
         binding = FragmentTablesBinding.inflate(inflater, container, false);
@@ -216,11 +214,11 @@ public class TablesFragment extends Fragment {
         }
 
         public void bind(Table table) {
-//            tNum.setText(table.tNum);
-//            tNote.setText(table.tNote);
-//            tDinners.setText(table.tDinners);
-//            tTotal.setText(String.valueOf(table.tTotal));
-//            tAvg.setText(String.valueOf( table.tAvg));
+            tNum.setText(table.tableNumber);
+            tNote.setText(table.getComments().get(0));
+            tDinners.setText(Integer.toString(table.numberOfPeople));
+            tTotal.setText(String.valueOf(table.avgPerPerson*table.numberOfPeople));
+            tAvg.setText(String.valueOf( table.getAvgPerPerson()));
         }
     }
     //---------------------OnItemClickListener ---------------------------

@@ -20,40 +20,6 @@ import okhttp3.Response;
 
 public class StartActivity extends AppCompatActivity {
 
-    //------------------getByCategory-----------------------//
-    //POST EXAMPLE
-    /*
-    public String postUrl= "http://10.0.2.2:3001/dish/getByCategory";
-    public String postBody="{\n" +
-            "    \"dishCategory\": \"starter\"\n" +
-            "}";
-
-     */
-
-    //------------------addToOrder-----------------------//
-    //POST EXAMPLE
-
-    public String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
-    public String postBody = "{\n" +
-            "    \"tableId\": \"644ebbf4a3858a31d1eb1c2e\",\n" +
-            "    \"dishArray\": [\n" +
-            "        {\n" +
-            "            \"dishid\": \"643ef9d662cdc37f5379e504\",\n" +
-            "            \"amount\": 1,\n" +
-            "            \"firstOrMain\": \"F\",\n" +
-            "            \"allTogether\": true\n" +
-            "        }\n" +
-            "    ]\n" +
-            "}";
-
-    //------------------categoryList-----------------------//
-    //GET EXAMPLE
-    //public String postUrl= "http://10.0.2.2:3001/dish/categoryList";
-
-
-
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,62 +34,13 @@ public class StartActivity extends AppCompatActivity {
         });
 
         kitchen_btn.setOnClickListener((v)->{
-            //ServerConnection.addDishToOrder("644ecbee5062641bd0352946","643ef9d662cdc37f5379e504",1,"F",true);
-            Model.instance().getDishById("643ef91662cdc37f5379e502");
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
 
     }
 
-    void postRequest(String postUrl,String postBody) throws IOException {
 
-        OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(JSON, postBody);
 
-        Request request = new Request.Builder()
-                .url(postUrl)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("server", e.getMessage() );
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("server",  response.body().string());
-                Log.d("server", response + "");
-                Log.d("server", response.body() + "");
-            }
-        });
-    }
-
-    void getRequest(String postUrl) throws IOException {
-
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(postUrl)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("server", e.getMessage() );
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("server", "get" + response.body().string());
-                Log.d("server","get" + response + "");
-                Log.d("server","fet" + response.body() + "");
-            }
-        });
-    }
 }

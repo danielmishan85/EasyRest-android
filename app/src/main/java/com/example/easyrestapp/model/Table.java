@@ -10,8 +10,8 @@ public class Table {
     public String openTime;
     public String update;
     public String tableNumber;
-    public String numberOfPeople;
-    public String avgPerPerson;
+    public int numberOfPeople;
+    public double avgPerPerson;
     public String restaurantName;
     public boolean fire;
     public boolean gluten;
@@ -21,7 +21,10 @@ public class Table {
     public boolean askForWaiter;
     public List<TableDish> orderList;
 
-    public Table(String id, String openTime, String update, String tableNumber, String numberOfPeople, String avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie, ArrayList<String> comments, boolean askForWaiter, List<TableDish> orderList) {
+    public Table() {
+    }
+
+    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie, ArrayList<String> comments, boolean askForWaiter, List<TableDish> orderList) {
         this.id = id;
         this.openTime = openTime;
         this.update = update;
@@ -44,6 +47,10 @@ public class Table {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<TableDish> getOrderList() {
+        return orderList;
     }
 
     public String getOpenTime() {
@@ -70,19 +77,19 @@ public class Table {
         this.tableNumber = tableNumber;
     }
 
-    public String getNumberOfPeople() {
+    public int getNumberOfPeople() {
         return numberOfPeople;
     }
 
-    public void setNumberOfPeople(String numberOfPeople) {
+    public void setNumberOfPeople(int numberOfPeople) {
         this.numberOfPeople = numberOfPeople;
     }
 
-    public String getAvgPerPerson() {
+    public double getAvgPerPerson() {
         return avgPerPerson;
     }
 
-    public void setAvgPerPerson(String avgPerPerson) {
+    public void setAvgPerPerson(double avgPerPerson) {
         this.avgPerPerson = avgPerPerson;
     }
 

@@ -40,7 +40,64 @@ public class Model {
     }
 
     public List<Table> getAllTables(){
-        return null;
+
+        List<Table> tableList = new ArrayList<>();
+            // Adding first table
+            Table table1 = new Table();
+            table1.id = "644ea719a3858a31d1eb1b94";
+            table1.openTime = "1682876185691";
+            table1.update = "1682876185691";
+            table1.tableNumber = "7";
+            table1.numberOfPeople = 2;
+            table1.avgPerPerson = 0;
+            table1.restaurantName = "EasyRest";
+            table1.fire = false;
+            table1.gluten = false;
+            table1.lactose = true;
+            table1.isVeggie = false;
+            table1.comments = new ArrayList<>();
+            table1.comments.add("");
+            table1.askForWaiter = false;
+            table1.orderList = new ArrayList<>();
+            tableList.add(table1);
+            // Adding second table
+            Table table2 = new Table();
+            table2.id = "644ea7c7a3858a31d1eb1b98";
+            table2.openTime = "1682876359233";
+            table2.update = "1682876359233";
+            table2.tableNumber = "6";
+            table2.numberOfPeople = 1;
+            table2.avgPerPerson = 0;
+            table2.restaurantName = "EasyRest";
+            table2.fire = false;
+            table2.gluten = false;
+            table2.lactose = false;
+            table2.isVeggie = false;
+            table2.comments = new ArrayList<>();
+            table2.comments.add("");
+            table2.askForWaiter = false;
+            table2.orderList = new ArrayList<>();
+            tableList.add(table2);
+            // Adding third table
+            Table table3 = new Table();
+            table3.id = "644eab53a3858a31d1eb1baf";
+            table3.openTime = "1682877267605";
+            table3.update = "1682877267605";
+            table3.tableNumber = "8";
+            table3.numberOfPeople = 2;
+            table3.avgPerPerson = 0;
+            table3.restaurantName = "EasyRest";
+            table3.fire = false;
+            table3.gluten = false;
+            table3.lactose = false;
+            table3.isVeggie = false;
+            table3.comments = new ArrayList<>();
+            table3.comments.add("");
+            table3.askForWaiter = false;
+            table3.orderList = new ArrayList<>();
+            tableList.add(table3);
+            return tableList;
+
     }
 
     public Dish getDishById(String id){
@@ -61,8 +118,8 @@ public class Model {
         return null;
     }
 
-    public void addDishToOrder(Dish dish, String tableId){
-
+    public void addDishToOrder(TableDish td, String tableId){
+        ServerConnection.addDishToOrder(tableId,td);
     }
 
     public ArrayList<Dish> getDishesByCategory(String category) {

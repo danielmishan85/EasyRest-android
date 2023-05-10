@@ -27,6 +27,13 @@ public class TableDish {
         this.ready = ready;
     }
 
+    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether) {
+        this.dish = dish;
+        this.amount = amount;
+        this.firstOrMain = firstOrMain;
+        this.allTogether = allTogether;
+    }
+
     public Dish getDish() {
         return dish;
     }
