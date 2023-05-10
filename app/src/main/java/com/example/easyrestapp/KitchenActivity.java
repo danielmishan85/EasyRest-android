@@ -32,7 +32,7 @@ public class KitchenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen);
 
-        tables = Model.instance().getTables();
+//        tables = Model.instance().getTables();
         openTablesList = findViewById(R.id.kitchen_tablesList);
         openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),3,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
         kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
@@ -62,7 +62,7 @@ public class KitchenActivity extends AppCompatActivity {
         }
 
         public void bind(Table t) {
-            tableNumber.setText("Table Number " + t.gettNum());
+//            tableNumber.setText("Table Number " + t.gettNum());
             orderList.setLayoutManager(new LinearLayoutManager(MyApplication.getMyContext()));  //define the recycler view to be a list
             tableOrderAdapter = new OrderRecyclerAdapter(getLayoutInflater(), t.orderList);
             orderList.setAdapter(tableOrderAdapter);
@@ -135,9 +135,9 @@ public class KitchenActivity extends AppCompatActivity {
         }
 
         public void bind(TableDish td) {
-            dishType.setText(td.dish.getType());
-            dishName.setText(td.dish.getName());
-            time.setText("no time yet");
+//            dishType.setText(td.dish.getType());
+//            dishName.setText(td.dish.getName());
+//            time.setText("no time yet");
         }
     }
 

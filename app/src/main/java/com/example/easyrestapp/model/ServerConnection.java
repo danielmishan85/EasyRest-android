@@ -1,93 +1,152 @@
-//package com.example.easyrestapp.model;
-//
-//import android.util.Log;
-//import com.google.gson.Gson;
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.io.OutputStream;
-//import java.net.HttpURLConnection;
-//import java.net.URL;
-//import java.util.concurrent.ExecutorService;
-//import java.util.concurrent.Executors;
-//
-//public class ServerConnection {
-//    private ExecutorService executorService;
-//    private String serverAddress;
-//    private int serverPort;
-//    private HttpURLConnection connection;
-//    private Gson gson;
-//
-//    public ServerConnection(final String serverAddress, final int serverPort) {
-//        this.serverAddress = serverAddress;
-//        this.serverPort = serverPort;
-//        executorService = Executors.newSingleThreadExecutor();
-//        gson = new Gson();
-//        executorService.execute(() -> {
-//            try {
-//                // Establish the connection with the server
-//                connection = (HttpURLConnection) new URL("http://" + serverAddress + ":" + serverPort).openConnection();
-//                Log.d("server", "Connection successful!");
-//            } catch (IOException e) {
-//                // Handle IO exception
-//                Log.d("server", e + "");
-//            }
-//        });
-//    }
-//
-//    public void getDishesByCategory(String dishCategory) {
-//        if (connection == null) {
-//            Log.d("server", "Connection not established!");
-//            return;
+package com.example.easyrestapp.model;
+
+import android.util.Log;
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class ServerConnection {
+
+    //GET - get all category list
+    public static CompletableFuture<String> categoryList() {
+        String url = "http://10.0.2.2:3001/dish/categoryList";
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        getRequest(url, new RequestCallback() {
+            @Override
+            public void onSuccess(String response) {
+                future.complete(response);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                future.completeExceptionally(new Exception(error));
+            }
+        });
+
+        return future;
+    }
+
+
+    //POST - get list of dishes by his category
+    public static CompletableFuture<String> getDishByCategory(String dishCategory) {
+        String postUrl = "http://10.0.2.2:3001/dish/getByCategory";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"dishCategory\": \"" + dishCategory + "\"\n" +
+                "}";
+
+
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return future;
+
+    }
+
+
+    //POST - add a dish to specific table
+    public static void addDishToOrder( String tableId, String dishId, int amount, String firstOrMain, boolean allTogether)
+    {
+        String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
+        String postBody = "{\n" +
+                "    \"tableId\": \"" + tableId + "\",\n" +
+                "    \"dishArray\": [\n" +
+                "        {\n" +
+                "            \"dishid\": \"" + dishId + "\",\n" +
+                "            \"amount\": " + amount + ",\n" +
+                "            \"firstOrMain\": \"" + firstOrMain + "\",\n" +
+                "            \"allTogether\": " + allTogether + "\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+//        try {
+//          //  postRequest(postUrl, postBody);
+//        } catch (IOException e) {
+//            e.printStackTrace();
 //        }
-//        executorService.execute(() -> {
-//            try {
-//                // Construct request URL
-//                URL url = new URL("http://127.0.0.1:3001/dish/getByCategory");
-//
-//                // Open HTTP connection
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//
-//                // Set request method and headers
-//                connection.setRequestMethod("POST");
-//                connection.setRequestProperty("Content-Type", "application/json");
-//                connection.setDoOutput(true);
-//
-//                // Create request body
-//                RequestBody requestBody = new RequestBody(dishCategory);
-//                Gson gson = new Gson();
-//                String requestBodyJson = gson.toJson(requestBody);
-//                Log.d("server", "GSON: " + requestBodyJson);
-//                // Write request body to output stream
-//                OutputStream outputStream = connection.getOutputStream();
-//                outputStream.write(requestBodyJson.getBytes());
-//                outputStream.flush();
-//                outputStream.close();
-//
-//                // Read response from input stream
-//                InputStream inputStream = connection.getInputStream();
-//                Log.d("server", "before reader: " + inputStream + "");
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-//                String response = bufferedReader.readLine();
-//                bufferedReader.close();
-//                inputStream.close();
-//
-//                // Log response
-//                Log.d("server", "after reader: "+ response);
-//            } catch (IOException e) {
-//                // Handle IO exception
-//                Log.d("server", e + "");
-//            }
-//        });
-//    }
-//
-//    private static class RequestBody {
-//        private String dishCategory;
-//
-//        public RequestBody(String dishCategory) {
-//            this.dishCategory = dishCategory;
-//        }
-//    }
-//
-//}
+    }
+
+
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    static void postRequest(String postUrl,String postBody,RequestCallback callback) throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, postBody);
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(e.getMessage());
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                callback.onSuccess(responseBody);
+                //Log.d("server", "getRequest" + responseBody);
+            }
+        });
+    }
+
+    interface RequestCallback {
+        void onSuccess(String response);
+        void onFailure(String error);
+    }
+
+    static void getRequest(String postUrl, RequestCallback callback) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(e.getMessage());
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                callback.onSuccess(responseBody);
+                Log.d("server", "getRequest" + responseBody);
+            }
+        });
+    }
+
+
+}

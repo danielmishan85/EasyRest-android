@@ -4,58 +4,145 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
-    public String gettNum() {
-        return tNum;
-    }
 
-    public String tNum;
-    public String tNote;
-    public String tDinners;
-    public String tTime;
-    public double tTotal;
-    public double tAvg;
+
+    public String id;
+    public String openTime;
+    public String update;
+    public String tableNumber;
+    public String numberOfPeople;
+    public String avgPerPerson;
+    public String restaurantName;
+    public boolean fire;
+    public boolean gluten;
+    public boolean lactose;
+    public boolean isVeggie;
+    public ArrayList<String> comments;
+    public boolean askForWaiter;
     public List<TableDish> orderList;
 
-
-    public Table(String tNum, String tNote, String tDinners, double tTotal, double tAvg) {
-        this.tNum = tNum;
-        this.tNote = tNote;
-        this.tDinners = tDinners;
-        this.tTotal = tTotal;
-        this.tAvg = tAvg;
-        this.orderList= new ArrayList<>();
-        //demo order list for each table
-        for (int i=0;i<2;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Start", new ArrayList<>()), "no comments yet"));
-        }
-        for (int i=10;i<12;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Main", new ArrayList<>()), "no comments yet"));
-        }
-        for (int i=20;i<22;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Dessert", new ArrayList<>()), "no comments yet"));
-        }
-    }
-    public Table(String tNum, String tNote, String tTime, String tDinners, double tTotal, double tAvg) {
-        this.tNum = tNum;
-        this.tNote = tNote;
-        this.tTime = tTime;
-        this.tDinners = tDinners;
-        this.tTotal = tTotal;
-        this.tAvg = tAvg;
-        this.orderList= new ArrayList<>();
-        //demo order list for each table
-        for (int i=0;i<2;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Start", new ArrayList<>()), "no comments yet"));
-        }
-        for (int i=10;i<12;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Main", new ArrayList<>()), "no comments yet"));
-        }
-        for (int i=20;i<22;i++){
-            orderList.add(new TableDish(new Dish("No " + Integer.toString(i), "Dessert", new ArrayList<>()), "no comments yet"));
-        }
+    public Table(String id, String openTime, String update, String tableNumber, String numberOfPeople, String avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie, ArrayList<String> comments, boolean askForWaiter, List<TableDish> orderList) {
+        this.id = id;
+        this.openTime = openTime;
+        this.update = update;
+        this.tableNumber = tableNumber;
+        this.numberOfPeople = numberOfPeople;
+        this.avgPerPerson = avgPerPerson;
+        this.restaurantName = restaurantName;
+        this.fire = fire;
+        this.gluten = gluten;
+        this.lactose = lactose;
+        this.isVeggie = isVeggie;
+        this.comments = comments;
+        this.askForWaiter = askForWaiter;
+        this.orderList = orderList;
     }
 
-    public List<TableDish> getOrderList() {
-        return orderList;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
+    }
+
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(String tableNumber) {
+        this.tableNumber = tableNumber;
+    }
+
+    public String getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(String numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
+    public String getAvgPerPerson() {
+        return avgPerPerson;
+    }
+
+    public void setAvgPerPerson(String avgPerPerson) {
+        this.avgPerPerson = avgPerPerson;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public boolean isFire() {
+        return fire;
+    }
+
+    public void setFire(boolean fire) {
+        this.fire = fire;
+    }
+
+    public boolean isGluten() {
+        return gluten;
+    }
+
+    public void setGluten(boolean gluten) {
+        this.gluten = gluten;
+    }
+
+    public boolean isLactose() {
+        return lactose;
+    }
+
+    public void setLactose(boolean lactose) {
+        this.lactose = lactose;
+    }
+
+    public boolean isVeggie() {
+        return isVeggie;
+    }
+
+    public void setVeggie(boolean veggie) {
+        isVeggie = veggie;
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<String> comments) {
+        this.comments = comments;
+    }
+
+    public boolean isAskForWaiter() {
+        return askForWaiter;
+    }
+
+    public void setAskForWaiter(boolean askForWaiter) {
+        this.askForWaiter = askForWaiter;
+    }
+
+    public void setOrderList(List<TableDish> orderList) {
+        this.orderList = orderList;
     }
 }

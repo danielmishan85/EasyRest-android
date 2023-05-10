@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+
+import com.example.easyrestapp.model.Model;
+import com.example.easyrestapp.model.ServerConnection;
+
 import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,10 +35,10 @@ public class StartActivity extends AppCompatActivity {
 
     public String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
     public String postBody = "{\n" +
-            "    \"tableId\": \"644ecbee5062641bd0352946\",\n" +
+            "    \"tableId\": \"644ebbf4a3858a31d1eb1c2e\",\n" +
             "    \"dishArray\": [\n" +
             "        {\n" +
-            "            \"dishid\": \"643ef91662cdc37f5379e502\",\n" +
+            "            \"dishid\": \"643ef9d662cdc37f5379e504\",\n" +
             "            \"amount\": 1,\n" +
             "            \"firstOrMain\": \"F\",\n" +
             "            \"allTogether\": true\n" +
@@ -64,12 +68,8 @@ public class StartActivity extends AppCompatActivity {
         });
 
         kitchen_btn.setOnClickListener((v)->{
-            try {
-                postRequest(postUrl,postBody);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            //ServerConnection.addDishToOrder("644ecbee5062641bd0352946","643ef9d662cdc37f5379e504",1,"F",true);
+            Model.instance().getDishById("643ef91662cdc37f5379e502");
             Intent i= new Intent(this,KitchenActivity.class);
             startActivity(i);
         });
@@ -96,9 +96,9 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("server", "litalllll" + response.body().string());
-                Log.d("server","litalllll" + response + "");
-                Log.d("server","litalllll" + response.body() + "");
+                Log.d("server",  response.body().string());
+                Log.d("server", response + "");
+                Log.d("server", response.body() + "");
             }
         });
     }

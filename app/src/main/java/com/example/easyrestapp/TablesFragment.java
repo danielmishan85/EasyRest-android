@@ -43,7 +43,7 @@ public class TablesFragment extends Fragment {
 
         tables=new ArrayList<>();
         for (int i=0;i<20;i++){
-            tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
+            //tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
         }
 
 
@@ -216,11 +216,11 @@ public class TablesFragment extends Fragment {
         }
 
         public void bind(Table table) {
-            tNum.setText(table.tNum);
-            tNote.setText(table.tNote);
-            tDinners.setText(table.tDinners);
-            tTotal.setText(String.valueOf(table.tTotal));
-            tAvg.setText(String.valueOf( table.tAvg));
+//            tNum.setText(table.tNum);
+//            tNote.setText(table.tNote);
+//            tDinners.setText(table.tDinners);
+//            tTotal.setText(String.valueOf(table.tTotal));
+//            tAvg.setText(String.valueOf( table.tAvg));
         }
     }
     //---------------------OnItemClickListener ---------------------------

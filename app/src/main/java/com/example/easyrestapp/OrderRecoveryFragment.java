@@ -33,7 +33,7 @@ public class OrderRecoveryFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Order Recovery</font>"));
         lastOrders=new ArrayList<>();
         for (int i=0;i<20;i++){
-            lastOrders.add(new Table(String.valueOf(i), "Note " + i, "Time " + i,String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
+            //lastOrders.add(new Table(String.valueOf(i), "Note " + i, "Time " + i,String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
         }
         binding = FragmentOrderRecoveryBinding.inflate(inflater, container, false);
         View view =binding.getRoot();
@@ -81,12 +81,12 @@ public class OrderRecoveryFragment extends Fragment {
         }
 
         public void bind(Table table) {
-            tNum.setText(table.tNum);
-            tNote.setText(table.tNote);
-            tTime.setText(table.tTime);
-            tDinners.setText(table.tDinners);
-            tTotal.setText(String.valueOf(table.tTotal));
-            tAvg.setText(String.valueOf( table.tAvg));
+//            tNum.setText(table.tNum);
+//            tNote.setText(table.tNote);
+//            tTime.setText(table.tTime);
+//            tDinners.setText(table.tDinners);
+//            tTotal.setText(String.valueOf(table.tTotal));
+//            tAvg.setText(String.valueOf( table.tAvg));
         }
     }
     //---------------------OnItemClickListener ---------------------------
