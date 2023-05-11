@@ -14,8 +14,7 @@ import java.util.concurrent.ExecutionException;
 public class Model {
 
     private static final Model _instance = new Model();
-    public List<Dish> menu;
-    public List<Table> tables;
+
 
     public static Model instance(){
         return _instance;
