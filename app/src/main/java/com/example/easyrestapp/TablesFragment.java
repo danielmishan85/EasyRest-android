@@ -215,7 +215,8 @@ public class TablesFragment extends Fragment {
 
         public void bind(Table table) {
             tNum.setText(table.tableNumber);
-            tNote.setText(table.getComments().get(0));
+           if(table.getComments()!=null)
+                tNote.setText(table.getComments().get(0));
             tDinners.setText(Integer.toString(table.numberOfPeople));
             tTotal.setText(String.valueOf(table.avgPerPerson*table.numberOfPeople));
             tAvg.setText(String.valueOf( table.getAvgPerPerson()));

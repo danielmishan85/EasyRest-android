@@ -152,4 +152,24 @@ public class Table {
     public void setOrderList(List<TableDish> orderList) {
         this.orderList = orderList;
     }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "id='" + id + '\'' +
+                ", openTime='" + openTime + '\'' +
+                ", update='" + update + '\'' +
+                ", tableNumber='" + tableNumber + '\'' +
+                ", numberOfPeople=" + numberOfPeople +
+                ", avgPerPerson=" + avgPerPerson +
+                ", restaurantName='" + restaurantName + '\'' +
+                ", fire=" + fire +
+                ", gluten=" + gluten +
+                ", lactose=" + lactose +
+                ", isVeggie=" + isVeggie +
+                ", comments=" + comments +
+                ", askForWaiter=" + askForWaiter +
+                ", orderList=" + orderList +
+                '}';
+    }
 }

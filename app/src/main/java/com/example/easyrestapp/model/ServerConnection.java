@@ -89,6 +89,25 @@ public class ServerConnection {
 //        }
     }
 
+    public static CompletableFuture<String> getAllTables(){
+
+        String postUrl = "http://10.0.2.2:3001/openTable/getTables";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        getRequest(postUrl, new RequestCallback() {
+            @Override
+            public void onSuccess(String response) {
+                future.complete(response);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                future.completeExceptionally(new Exception(error));
+            }
+        });
+
+        return future;
+    }
+
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 

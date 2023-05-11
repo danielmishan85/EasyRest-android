@@ -5,16 +5,13 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class Model {
 
     private static final Model _instance = new Model();
-
 
     public static Model instance(){
         return _instance;
@@ -40,62 +37,73 @@ public class Model {
 
     public List<Table> getAllTables(){
 
-        List<Table> tableList = new ArrayList<>();
+        String tables="";
+        try {
+            tables = ServerConnection.getAllTables().get();
+            Log.d("server","tables: "+ tables);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        return parseTablesFromJson(tables);
             // Adding first table
-            Table table1 = new Table();
-            table1.id = "644ea719a3858a31d1eb1b94";
-            table1.openTime = "1682876185691";
-            table1.update = "1682876185691";
-            table1.tableNumber = "7";
-            table1.numberOfPeople = 2;
-            table1.avgPerPerson = 0;
-            table1.restaurantName = "EasyRest";
-            table1.fire = false;
-            table1.gluten = false;
-            table1.lactose = true;
-            table1.isVeggie = false;
-            table1.comments = new ArrayList<>();
-            table1.comments.add("");
-            table1.askForWaiter = false;
-            table1.orderList = new ArrayList<>();
-            tableList.add(table1);
-            // Adding second table
-            Table table2 = new Table();
-            table2.id = "644ea7c7a3858a31d1eb1b98";
-            table2.openTime = "1682876359233";
-            table2.update = "1682876359233";
-            table2.tableNumber = "6";
-            table2.numberOfPeople = 1;
-            table2.avgPerPerson = 0;
-            table2.restaurantName = "EasyRest";
-            table2.fire = false;
-            table2.gluten = false;
-            table2.lactose = false;
-            table2.isVeggie = false;
-            table2.comments = new ArrayList<>();
-            table2.comments.add("");
-            table2.askForWaiter = false;
-            table2.orderList = new ArrayList<>();
-            tableList.add(table2);
-            // Adding third table
-            Table table3 = new Table();
-            table3.id = "644eab53a3858a31d1eb1baf";
-            table3.openTime = "1682877267605";
-            table3.update = "1682877267605";
-            table3.tableNumber = "8";
-            table3.numberOfPeople = 2;
-            table3.avgPerPerson = 0;
-            table3.restaurantName = "EasyRest";
-            table3.fire = false;
-            table3.gluten = false;
-            table3.lactose = false;
-            table3.isVeggie = false;
-            table3.comments = new ArrayList<>();
-            table3.comments.add("");
-            table3.askForWaiter = false;
-            table3.orderList = new ArrayList<>();
-            tableList.add(table3);
-            return tableList;
+//            Table table1 = new Table();
+//            table1.id = "644ea719a3858a31d1eb1b94";
+//            table1.openTime = "1682876185691";
+//            table1.update = "1682876185691";
+//            table1.tableNumber = "7";
+//            table1.numberOfPeople = 2;
+//            table1.avgPerPerson = 0;
+//            table1.restaurantName = "EasyRest";
+//            table1.fire = false;
+//            table1.gluten = false;
+//            table1.lactose = true;
+//            table1.isVeggie = false;
+//            table1.comments = new ArrayList<>();
+//            table1.comments.add("");
+//            table1.askForWaiter = false;
+//            table1.orderList = new ArrayList<>();
+//            tableList.add(table1);
+//            // Adding second table
+//            Table table2 = new Table();
+//            table2.id = "644ea7c7a3858a31d1eb1b98";
+//            table2.openTime = "1682876359233";
+//            table2.update = "1682876359233";
+//            table2.tableNumber = "6";
+//            table2.numberOfPeople = 1;
+//            table2.avgPerPerson = 0;
+//            table2.restaurantName = "EasyRest";
+//            table2.fire = false;
+//            table2.gluten = false;
+//            table2.lactose = false;
+//            table2.isVeggie = false;
+//            table2.comments = new ArrayList<>();
+//            table2.comments.add("");
+//            table2.askForWaiter = false;
+//            table2.orderList = new ArrayList<>();
+//            tableList.add(table2);
+//            // Adding third table
+//            Table table3 = new Table();
+//            table3.id = "644eab53a3858a31d1eb1baf";
+//            table3.openTime = "1682877267605";
+//            table3.update = "1682877267605";
+//            table3.tableNumber = "8";
+//            table3.numberOfPeople = 2;
+//            table3.avgPerPerson = 0;
+//            table3.restaurantName = "EasyRest";
+//            table3.fire = false;
+//            table3.gluten = false;
+//            table3.lactose = false;
+//            table3.isVeggie = false;
+//            table3.comments = new ArrayList<>();
+//            table3.comments.add("");
+//            table3.askForWaiter = false;
+//            table3.orderList = new ArrayList<>();
+//            tableList.add(table3);
+
 
     }
 
@@ -168,6 +176,70 @@ public class Model {
         }
         return dishes;
     }
+    public static ArrayList<Table> parseTablesFromJson(String json) {
+        ArrayList<Table> tables = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            Log.d("server", "" + jsonArray.length());
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Table table = new Table();
+                table.id = jsonObject.getString("_id");
+                table.openTime = jsonObject.getString("openTime");
+                table.update = jsonObject.getString("udate");
+                table.tableNumber = jsonObject.getString("numTable");
+                table.numberOfPeople = jsonObject.getInt("numberOfPeople");
+                table.avgPerPerson = jsonObject.getDouble("avgPerPerson");
+                table.restaurantName = jsonObject.getString("ResturantName");
+                table.fire = jsonObject.getBoolean("fire");
+                table.gluten = jsonObject.getBoolean("gluten");
+                table.lactose = jsonObject.getBoolean("lactuse");
+                table.isVeggie = jsonObject.getBoolean("isVegi");
+
+                if (jsonObject.has("others")) {
+                    JSONArray commentsArray = jsonObject.getJSONArray("others");
+                    ArrayList<String> comments = new ArrayList<>();
+//                    for (int j = 0; j < commentsArray.length(); j++) {
+//                        comments.add(commentsArray.getString(j));
+//                        Log.d("server", "" + commentsArray.getString(j));
+//
+//                    }
+                    table.comments = comments;
+                }
+
+                table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
+
+//                JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
+//                List<TableDish> orderList = new ArrayList<>();
+//                for (int j = 0; j < orderListArray.length(); j++) {
+//                    JSONObject orderListObject = orderListArray.getJSONObject(j);
+//                    TableDish tableDish = new TableDish();
+//                    Dish dish = new Dish();
+//                    dish.setDishId(orderListObject.getString("dishId"));
+//                    tableDish.setDish(dish);
+//                    tableDish.amount = orderListObject.getInt("amount");
+//                    tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
+//                    tableDish.readyTime = orderListObject.optString("readyTime"); // Change if necessary
+//                    tableDish.allTogether = orderListObject.getBoolean("allTogether");
+//                    tableDish.price = orderListObject.getInt("price");
+//                    tableDish.orderTime = orderListObject.getJSONObject("orderTime").getString("$date"); // Change if necessary
+//                    tableDish.ready = orderListObject.getBoolean("ready");
+//                    orderList.add(tableDish);
+//                }
+//                table.orderList = orderList;
+                tables.add(table);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("server", "" + tables.size());
+
+        return tables;
+    }
+
+
+
 
 
 //    private Model() {

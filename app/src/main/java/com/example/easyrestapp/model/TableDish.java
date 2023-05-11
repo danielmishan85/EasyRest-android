@@ -15,6 +15,8 @@ public class TableDish {
     public String orderTime; //consider to change
     public boolean ready;
 
+    public TableDish() {
+    }
 
     public TableDish(Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready) {
         this.dish = dish;
