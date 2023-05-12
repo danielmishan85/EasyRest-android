@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,7 +46,7 @@ public class OpenTableFragment extends Fragment {
     int currentTable;
     List<Table> tables;
     double totalAmount = 0;
-    double numOfDiners = 0;
+    int numOfDiners = 0;
     int chosenTableDish = 0;
 
     @Nullable
@@ -59,7 +60,7 @@ public class OpenTableFragment extends Fragment {
         menu = Model.instance().getAllDishes();
         filterMenu = new ArrayList<>(); //filter menu by type
         tables = Model.instance().getAllOpenTables();
-        orderList = tables.get(currentTable).getOrderList();
+        orderList = Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
 
 
         //calculate the amount of the specific table
@@ -78,7 +79,7 @@ public class OpenTableFragment extends Fragment {
         binding.menuRV.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
-            showOpenTableDishPopup(tables.get(currentTable), menuAdapter.getData().get(pos));
+            showOpenTableDishPopup(Model.instance().getTableByNumber(String.valueOf(currentTable)), menuAdapter.getData().get(pos));
             Log.d("chosenDish", Integer.toString(pos));
         });
 
@@ -125,17 +126,19 @@ public class OpenTableFragment extends Fragment {
 
         });
 
-        //**************************************total amount, avg per person, send reservation, fire, payment*******************
-        totalAmount=tables.get(currentTable).getAvgPerPerson()*tables.get(currentTable).getNumberOfPeople();
-        numOfDiners = Double.valueOf(tables.get(currentTable).getNumberOfPeople());
+        refreshAmountDetails();
+        return v;
+    }
+
+    //**************************************total amount, avg per person, send reservation, fire, payment*******************
+    public void refreshAmountDetails(){
+        totalAmount=Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson()*Model.instance().getTableByNumber(String.valueOf(currentTable)).getNumberOfPeople();
+        numOfDiners = Model.instance().getTableByNumber(String.valueOf(currentTable)).getNumberOfPeople();
 
         binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount)+ " ₪");
-        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(tables.get(currentTable).getAvgPerPerson())  + " ₪");
+        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson())  + " ₪");
         binding.openTableNumOfDinersTv.setText("Number of diners: " + numOfDiners);
 
-
-
-        return v;
     }
 
     public void menuButtonsColorReset(){
@@ -147,67 +150,67 @@ public class OpenTableFragment extends Fragment {
     }
 
     public void showPaymentPopup() {
-        // Create the popup dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
-        View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
-        builder.setView(popupView);
-
-        // Get references to the user input fields
-        EditText editText1 = popupView.findViewById(R.id.editText1);
-        EditText editText2 = popupView.findViewById(R.id.editText2);
-        EditText editText3 = popupView.findViewById(R.id.editText3);
-        EditText editText4 = popupView.findViewById(R.id.editText4);
-        //change the text when we have a real DB
-//        editText1.setText(Integer.toString(totalAmount));
-        editText2.setText("0");
-        editText3.setText("0");
-        editText4.setText("0");
-
-        TextView tv1 = popupView.findViewById(R.id.textView);
-        TextView tv2 = popupView.findViewById(R.id.textView7);
-        TextView tv3 = popupView.findViewById(R.id.textView9);
-        TextView tv4 = popupView.findViewById(R.id.textView10);
-        tv1.setText("Amount: ");
-        tv2.setText("Discount: ");
-        tv3.setText("Service: ");
-        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
-        tv4.setText("Total: ");
-        double amount = Double.parseDouble(editText1.getText().toString());
-        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
-
-        double totalAmount = amount * (1 - discount) * (1 + tax);
-        editText4.setText(Double.toString(totalAmount));
-
-
-        // Set up the buttons
-        builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Save the user input
-                String field1 = editText1.getText().toString();
-                String field2 = editText2.getText().toString();
-                String field3 = editText3.getText().toString();
-                String field4 = editText4.getText().toString();
-
-                // Do something with the user input
-                // ...
-
-
-            }
-        });
-
-        builder.setNeutralButton("Credit Card", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel the dialog
-                dialog.dismiss();
-            }
-        });
-
-
-
-        // Show the popup dialog
-        builder.show();
+//        // Create the popup dialog
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+//        View popupView = getLayoutInflater().inflate(R.layout.payment_popup, null);
+//        builder.setView(popupView);
+//
+////        // Get references to the user input fields
+////        EditText editText1 = popupView.findViewById(R.id.editText1);
+////        EditText editText2 = popupView.findViewById(R.id.editText2);
+////        EditText editText3 = popupView.findViewById(R.id.editText3);
+////        EditText editText4 = popupView.findViewById(R.id.editText4);
+////        //change the text when we have a real DB
+//////        editText1.setText(Integer.toString(totalAmount));
+////        editText2.setText("0");
+////        editText3.setText("0");
+////        editText4.setText("0");
+////
+////        TextView tv1 = popupView.findViewById(R.id.textView);
+////        TextView tv2 = popupView.findViewById(R.id.textView7);
+////        TextView tv3 = popupView.findViewById(R.id.textView9);
+////        TextView tv4 = popupView.findViewById(R.id.textView10);
+////        tv1.setText("Amount: ");
+//        tv2.setText("Discount: ");
+//        tv3.setText("Service: ");
+//        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
+//        tv4.setText("Total: ");
+//        double amount = Double.parseDouble(editText1.getText().toString());
+//        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
+//
+//        double totalAmount = amount * (1 - discount) * (1 + tax);
+//        editText4.setText(Double.toString(totalAmount));
+//
+//
+//        // Set up the buttons
+//        builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Save the user input
+//                String field1 = editText1.getText().toString();
+//                String field2 = editText2.getText().toString();
+//                String field3 = editText3.getText().toString();
+//                String field4 = editText4.getText().toString();
+//
+//                // Do something with the user input
+//                // ...
+//
+//
+//            }
+//        });
+//
+//        builder.setNeutralButton("Credit Card", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Cancel the dialog
+//                dialog.dismiss();
+//            }
+//        });
+//
+//
+//
+//        // Show the popup dialog
+//        builder.show();
     }
 
 
@@ -254,7 +257,7 @@ public class OpenTableFragment extends Fragment {
                 Model.instance().addDishToOrder(td,table.getId());
 
                 tables = Model.instance().getAllOpenTables();
-                orderList = tables.get(currentTable).getOrderList();
+                orderList =Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
                 tableOrderAdapter.setData(orderList);
                 binding.tableOrderRV.setAdapter(tableOrderAdapter);
 
@@ -293,6 +296,7 @@ public class OpenTableFragment extends Fragment {
         // Show the popup dialog
         builder.show();
     }
+
 
 
 
@@ -460,6 +464,7 @@ public class OpenTableFragment extends Fragment {
 
         public void setData(List<TableDish> data){
             this.tableOrderList = data;
+            refreshAmountDetails();
             notifyDataSetChanged();
         }
         public TableOrderRecyclerAdapter(LayoutInflater inflater, List<TableDish> data){

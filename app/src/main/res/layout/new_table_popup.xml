@@ -9,95 +9,102 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="28dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/editText1"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:hint="Field 1"
-                app:layout_constraintStart_toStartOf="@+id/editText2"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-
-            <EditText
-                android:id="@+id/editText2"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:hint="Field 2"
-                app:layout_constraintStart_toStartOf="@+id/editText3"
-                app:layout_constraintTop_toBottomOf="@+id/editText1"
-                tools:ignore="MissingConstraints" />
-
-            <EditText
-                android:id="@+id/editText3"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:hint="Field 3"
-                app:layout_constraintStart_toStartOf="@+id/editText4"
-                app:layout_constraintTop_toBottomOf="@+id/editText2"
-                tools:ignore="MissingConstraints" />
-
-            <EditText
-                android:id="@+id/editText4"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
-                android:hint="Field 4"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/editText3"
-                tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/titleTextView"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="Please check their sensitivities:"
+                android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold|italic"
-                android:layout_height="wrap_content"
-                android:text="table's number"
-                app:layout_constraintBottom_toTopOf="@+id/textView7"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/newTable_popup_glutenCheckBox"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/newTable_popup_numTableEditText"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold|italic"
-                android:text="Number of dinner"
-                app:layout_constraintBottom_toTopOf="@+id/textView9"
+                android:layout_marginStart="70dp"
+                android:hint="Table Number"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/newTable_popup_numberOfPeopleEditText"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold|italic"
-                android:text="Notes"
-                app:layout_constraintBottom_toTopOf="@+id/textView10"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                android:hint="Number of Dinner"
+                app:layout_constraintEnd_toEndOf="@+id/newTable_popup_numTableEditText"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_numTableEditText" />
 
-            <TextView
-                android:id="@+id/textView10"
+            <EditText
+                android:id="@+id/newTable_popup_notesEditText"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="Notes (special events)"
+                app:layout_constraintEnd_toEndOf="@+id/newTable_popup_numberOfPeopleEditText"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_numberOfPeopleEditText" />
+
+            <EditText
+                android:id="@+id/newTable_popup_othersEditText"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="Other"
+                app:layout_constraintEnd_toEndOf="@+id/newTable_popup_notesEditText"
+                app:layout_constraintStart_toStartOf="@+id/newTable_popup_notesEditText"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_notesEditText" />
+
+            <CheckBox
+                android:id="@+id/newTable_popup_glutenCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold|italic"
-                android:text="Allergies"
-                app:layout_constraintBottom_toBottomOf="@+id/editText4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                android:layout_marginEnd="70dp"
+                android:text="Gluten"
+                app:layout_constraintBaseline_toBaselineOf="@+id/newTable_popup_numTableEditText"
+                app:layout_constraintEnd_toStartOf="@+id/newTable_popup_numTableEditText"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <CheckBox
+                android:id="@+id/newTable_popup_lactoseCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lactose"
+                app:layout_constraintStart_toStartOf="@+id/newTable_popup_glutenCheckBox"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_glutenCheckBox" />
+
+
+            <CheckBox
+                android:id="@+id/newTable_popup_vegetarianCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vegetarian"
+                app:layout_constraintStart_toStartOf="@+id/newTable_popup_lactoseCheckBox"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_lactoseCheckBox" />
+
+
+            <CheckBox
+                android:id="@+id/newTable_popup_veganCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vegan"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/newTable_popup_vegetarianCheckBox"
+                app:layout_constraintTop_toBottomOf="@+id/newTable_popup_vegetarianCheckBox" />
+
+            <!-- Rest of your layout code -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

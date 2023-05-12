@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -53,7 +54,7 @@ public class TablesFragment extends Fragment {
         });
 
         binding.newTableBtn.setOnClickListener(V->{
-            showOpenTablePopup();
+            showDialogAndAddTable();
         });
 
         binding.orderRecoveryBtn.setOnClickListener(V->{
@@ -82,113 +83,110 @@ public class TablesFragment extends Fragment {
 
 
 
-    public void showOpenTablePopup() {
-        // Create the popup dialog
-        AlertDialog.Builder  builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
-        View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
-        builder.setView(popupView);
+    public void showDialogAndAddTable() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+        View dialogView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
+        builder.setView(dialogView);
 
-        // Get references to the user input fields
-        EditText editText1 = popupView.findViewById(R.id.editText1);
-        EditText editText2 = popupView.findViewById(R.id.editText2);
-        EditText editText3 = popupView.findViewById(R.id.editText3);
-        EditText editText4 = popupView.findViewById(R.id.editText4);
+        EditText tableNumberEditText = dialogView.findViewById(R.id.newTable_popup_numTableEditText);
+        EditText numberOfDinnerEditText = dialogView.findViewById(R.id.newTable_popup_numberOfPeopleEditText);
+        EditText notesEditText = dialogView.findViewById(R.id.newTable_popup_notesEditText);
+        EditText othersEditText = dialogView.findViewById(R.id.newTable_popup_othersEditText);
+        CheckBox glutenCheckBox = dialogView.findViewById(R.id.newTable_popup_glutenCheckBox);
+        CheckBox lactoseCheckBox = dialogView.findViewById(R.id.newTable_popup_lactoseCheckBox);
+        CheckBox veganCheckBox = dialogView.findViewById(R.id.newTable_popup_veganCheckBox);
+        CheckBox vegetarianCheckBox = dialogView.findViewById(R.id.newTable_popup_vegetarianCheckBox);
 
-        // Set up the buttons
-        builder.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Save the user input
-                String field1 = editText1.getText().toString();
-                String field2 = editText2.getText().toString();
-                String field3 = editText3.getText().toString();
-                String field4 = editText4.getText().toString();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String tableNumber = tableNumberEditText.getText().toString();
+                String numberOfDinner = numberOfDinnerEditText.getText().toString();
+                String notes = notesEditText.getText().toString();
+                String others = notesEditText.getText().toString();
+                boolean glutenFree = glutenCheckBox.isChecked();
+                boolean lactoseFree = lactoseCheckBox.isChecked();
+                boolean isVegan = veganCheckBox.isChecked();
+                boolean isVegetarian = vegetarianCheckBox.isChecked();
+                String restaurantName="EasyRest";
 
-                // Do something with the user input
-                // ...
-
-
+                // Call the addTable function with the obtained details
+                Table t= new Table(tableNumber, Integer.parseInt(numberOfDinner),restaurantName, glutenFree, lactoseFree, isVegan, isVegetarian,others,notes);
+                Model.instance().addNewTable(t);
             }
         });
 
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel the dialog
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton("Cancel", null);
 
-
-
-        // Show the popup dialog
-        builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
+
     public void showPaymentPopup() {
-        // Create the popup dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
-        View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
-        builder.setView(popupView);
-
-        // Get references to the user input fields
-        EditText editText1 = popupView.findViewById(R.id.editText1);
-        EditText editText2 = popupView.findViewById(R.id.editText2);
-        EditText editText3 = popupView.findViewById(R.id.editText3);
-        EditText editText4 = popupView.findViewById(R.id.editText4);
-        //change the text when we have a real DB
-        editText1.setText("0");
-        editText2.setText("0");
-        editText3.setText("0");
-        editText4.setText("0");
-
-        TextView tv1 = popupView.findViewById(R.id.textView);
-        TextView tv2 = popupView.findViewById(R.id.textView7);
-        TextView tv3 = popupView.findViewById(R.id.textView9);
-        TextView tv4 = popupView.findViewById(R.id.textView10);
-        tv1.setText("Amount: ");
-        tv2.setText("Discount: ");
-        tv3.setText("Service: ");
-        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
-        tv4.setText("Total: ");
-        double amount = Double.parseDouble(editText1.getText().toString());
-        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
-
-        double totalAmount = amount * (1 - discount) * (1 + tax);
-        editText4.setText(Double.toString(totalAmount));
-
-
-        // Set up the buttons
-        builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Save the user input
-                String field1 = editText1.getText().toString();
-                String field2 = editText2.getText().toString();
-                String field3 = editText3.getText().toString();
-                String field4 = editText4.getText().toString();
-
-                // Do something with the user input
-                // ...
-
-
-            }
-        });
-
-        builder.setNeutralButton("Credit Card", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel the dialog
-                dialog.dismiss();
-            }
-        });
-
-
-
-        // Show the popup dialog
-        builder.show();
+//        // Create the popup dialog
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+//        View popupView = getLayoutInflater().inflate(R.layout.new_table_popup, null);
+//        builder.setView(popupView);
+//
+//        // Get references to the user input fields
+//        EditText editText1 = popupView.findViewById(R.id.editText1);
+//        EditText editText2 = popupView.findViewById(R.id.editText2);
+//        EditText editText3 = popupView.findViewById(R.id.editText3);
+//        EditText editText4 = popupView.findViewById(R.id.editText4);
+//        //change the text when we have a real DB
+//        editText1.setText("0");
+//        editText2.setText("0");
+//        editText3.setText("0");
+//        editText4.setText("0");
+//
+//        TextView tv1 = popupView.findViewById(R.id.textView);
+//        TextView tv2 = popupView.findViewById(R.id.textView7);
+//        TextView tv3 = popupView.findViewById(R.id.textView9);
+//        TextView tv4 = popupView.findViewById(R.id.textView10);
+//        tv1.setText("Amount: ");
+//        tv2.setText("Discount: ");
+//        tv3.setText("Service: ");
+//        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
+//        tv4.setText("Total: ");
+//        double amount = Double.parseDouble(editText1.getText().toString());
+//        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
+//
+//        double totalAmount = amount * (1 - discount) * (1 + tax);
+//        editText4.setText(Double.toString(totalAmount));
+//
+//
+//        // Set up the buttons
+//        builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Save the user input
+//                String field1 = editText1.getText().toString();
+//                String field2 = editText2.getText().toString();
+//                String field3 = editText3.getText().toString();
+//                String field4 = editText4.getText().toString();
+//
+//                // Do something with the user input
+//                // ...
+//
+//
+//            }
+//        });
+//
+//        builder.setNeutralButton("Credit Card", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Cancel the dialog
+//                dialog.dismiss();
+//            }
+//        });
+//
+//
+//
+//        // Show the popup dialog
+//        builder.show();
     }
 
 

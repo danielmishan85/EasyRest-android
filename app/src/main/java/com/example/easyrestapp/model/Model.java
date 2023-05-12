@@ -63,6 +63,18 @@ public class Model {
         return new Dish();
     }
 
+
+    public Table getTableByNumber(String tableNum){
+
+        ArrayList<Table> tables = this.getAllOpenTables();
+        for(Table table : tables)
+        {
+            if(table.getTableNumber().equals(tableNum)) {
+                return table;
+
+            }
+        }
+        return new Table();    }
     public Table getTableById(String id){
 
         ArrayList<Table> tables = this.getAllOpenTables();
@@ -78,6 +90,16 @@ public class Model {
     public void addDishToOrder(TableDish td, String tableId){
         try {
             ServerConnection.addDishToOrder(tableId,td).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addNewTable(Table table){
+        try {
+            ServerConnection.addTable(table).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -151,7 +173,7 @@ public class Model {
                 table.fire = jsonObject.getBoolean("fire");
                 table.gluten = jsonObject.getBoolean("gluten");
                 table.lactose = jsonObject.getBoolean("lactuse");
-                table.isVeggie = jsonObject.getBoolean("isVegi");
+                table.veggie = jsonObject.getBoolean("isVegi");
                 table.others = jsonObject.getString("others");
                 table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
 
@@ -171,6 +193,7 @@ public class Model {
                         tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary
                     tableDish.allTogether = orderListObject.getBoolean("allTogether");
                     tableDish.price = orderListObject.getInt("price");
+                    tableDish.comments=orderListObject.getString("changes");
                     tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
                     tableDish.ready = orderListObject.getBoolean("ready");
                     orderList.add(tableDish);

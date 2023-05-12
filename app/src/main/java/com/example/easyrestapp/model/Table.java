@@ -1,6 +1,5 @@
 package com.example.easyrestapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
@@ -16,15 +15,31 @@ public class Table {
     public boolean fire;
     public boolean gluten;
     public boolean lactose;
-    public boolean isVeggie;
+    public boolean vegan;
+    public boolean veggie;
     public String others;
+    public String notes;
     public boolean askForWaiter;
     public List<TableDish> orderList;
 
     public Table() {
     }
 
-    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie,String others, boolean askForWaiter, List<TableDish> orderList) {
+
+
+    public Table(String tableNumber, int numberOfPeople, String restaurantName, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes) {
+        this.tableNumber = tableNumber;
+        this.numberOfPeople = numberOfPeople;
+        this.restaurantName = restaurantName;
+        this.gluten = gluten;
+        this.lactose = lactose;
+        this.vegan = vegan;
+        this.veggie = veggie;
+        this.others = others;
+        this.notes = notes;
+    }
+
+    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean veggie, boolean vegan, String others, String notes, boolean askForWaiter, List<TableDish> orderList) {
         this.id = id;
         this.openTime = openTime;
         this.update = update;
@@ -35,10 +50,20 @@ public class Table {
         this.fire = fire;
         this.gluten = gluten;
         this.lactose = lactose;
-        this.isVeggie = isVeggie;
+        this.vegan=vegan;
+        this.veggie = veggie;
         this.others = others;
         this.askForWaiter = askForWaiter;
         this.orderList = orderList;
+        this.notes=notes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public String getId() {
@@ -51,6 +76,14 @@ public class Table {
 
     public List<TableDish> getOrderList() {
         return orderList;
+    }
+
+    public boolean isVegan() {
+        return vegan;
+    }
+
+    public void setVegan(boolean vegan) {
+        this.vegan = vegan;
     }
 
     public String getOpenTime() {
@@ -126,11 +159,11 @@ public class Table {
     }
 
     public boolean isVeggie() {
-        return isVeggie;
+        return veggie;
     }
 
     public void setVeggie(boolean veggie) {
-        isVeggie = veggie;
+        this.veggie = veggie;
     }
 
     public String getOthers() {
@@ -166,7 +199,7 @@ public class Table {
                 ", fire=" + fire +
                 ", gluten=" + gluten +
                 ", lactose=" + lactose +
-                ", isVeggie=" + isVeggie +
+                ", isVeggie=" + veggie +
                 ", others=" + others +
                 ", askForWaiter=" + askForWaiter +
                 ", orderList=" + orderList +

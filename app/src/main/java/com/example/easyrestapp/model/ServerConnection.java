@@ -69,16 +69,54 @@ public class ServerConnection {
     }
 
 
+    public static CompletableFuture<Boolean> addTable(Table table) {
+        String postUrl = "http://10.0.2.2:3001/openTable/open";
+        String postBody = "{\n" +
+                "    \"numTable\": " + table.getTableNumber() + ",\n" +
+                "    \"numberOfPeople\": " + table.getNumberOfPeople() + ",\n" +
+                "    \"gluten\": " + table.isGluten() + ",\n" +
+                "    \"lactuse\": " + table.isLactose() + ",\n" +
+                "    \"isVagan\": " + table.isVegan() + ",\n" +
+                "    \"isVegi\": " + table.isVeggie() + ",\n" +
+                "    \"others\": \"" + table.getOthers() + "\",\n" +
+                "    \"notes\": \"" + table.getNotes() + "\",\n" +
+                "    \"ResturantName\": \"" + table.getRestaurantName() + "\"\n" +
+                "}";
+
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    future.complete(true);
+                    Log.d("server connection","addTable finish with response: "+response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.complete(false);
+                    Log.d("server connection","addTable failed with response: "+error);
+                    new Exception(error);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return future;
+    }
+
+
     //POST - add a dish to specific table
-    public static CompletableFuture<Boolean> addDishToOrder( String tableId,TableDish td)
-    {
-        String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
+    public static CompletableFuture<Boolean> addDishToOrder(String tableId, TableDish td) {
+        String postUrl = "http://10.0.2.2:3001/openTable/addToOrder";
         String postBody = "{\n" +
                 "    \"tableId\": \"" + tableId + "\",\n" +
                 "    \"dishArray\": [\n" +
                 "        {\n" +
                 "            \"dishid\": \"" + td.dish.dishId + "\",\n" +
                 "            \"amount\": " + td.amount + ",\n" +
+                "            \"changes\": \"" + td.comments + "\",\n" +
                 "            \"firstOrMain\": \"" + td.firstOrMain + "\",\n" +
                 "            \"allTogether\": " + td.allTogether + "\n" +
                 "        }\n" +
@@ -88,9 +126,8 @@ public class ServerConnection {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         try {
-            postRequest(postUrl, postBody , new RequestCallback() {
+            postRequest(postUrl, postBody, new RequestCallback() {
                 @Override
-
                 public void onSuccess(String response) {
                     future.complete(true);
                     Log.d("server connection","addDishToOrder finish with response: "+response);
@@ -108,6 +145,7 @@ public class ServerConnection {
         }
         return future;
     }
+
 
     public static CompletableFuture<String> getAllOpenTables(){
 
