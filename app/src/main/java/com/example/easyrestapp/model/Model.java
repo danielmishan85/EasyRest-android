@@ -174,6 +174,8 @@ public class Model {
                 table.gluten = jsonObject.getBoolean("gluten");
                 table.lactose = jsonObject.getBoolean("lactuse");
                 table.veggie = jsonObject.getBoolean("isVegi");
+//                table.notes = jsonObject.getString("notes");
+
                 table.others = jsonObject.getString("others");
                 table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
 
