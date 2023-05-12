@@ -14,11 +14,12 @@ public class TableDish {
     public double price;
     public String orderTime; //consider to change
     public boolean ready;
+    public String comments;
 
     public TableDish() {
     }
 
-    public TableDish(Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready) {
+    public TableDish(Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,String comments) {
         this.dish = dish;
         this.amount = amount;
         this.firstOrMain = firstOrMain;
@@ -27,13 +28,15 @@ public class TableDish {
         this.price = price;
         this.orderTime = orderTime;
         this.ready = ready;
+        this.comments=comments;
     }
 
-    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether) {
+    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether,String comments) {
         this.dish = dish;
         this.amount = amount;
         this.firstOrMain = firstOrMain;
         this.allTogether = allTogether;
+        this.comments=comments;
     }
 
     public Dish getDish() {

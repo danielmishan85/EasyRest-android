@@ -1,5 +1,6 @@
 package com.example.easyrestapp;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -220,30 +221,42 @@ public class OpenTableFragment extends Fragment {
         builder.setView(popupView);
 
         // Get references to the dish fields
-        ImageView dishImg = popupView.findViewById(R.id.tableDish_img);
         TextView dishName = popupView.findViewById(R.id.tableDish_name);
         TextView dishIngredients = popupView.findViewById(R.id.tableDish_ingredients);
         EditText tableComments = popupView.findViewById(R.id.tableDish_comments);
-        dishImg.setImageResource(R.drawable.no_img);
+        EditText amountET=popupView.findViewById(R.id.table_dish_popup_amount);
+        Button fOrM=popupView.findViewById(R.id.td_popup_ForM_btn);
         dishName.setText(dish.getDishName());
         dishIngredients.setText("will be written the dish ingredients...");
 //        tableComments.setHint("will be written the allergic of table... and we can add more comments");
 
+        fOrM.setOnClickListener((v)->{
+            if(fOrM.getText().toString().equals("F"))
+                fOrM.setText("M");
+            else
+                fOrM.setText("F");
+        });
 
         // Set up the buttons
         builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Save the waiter input
-                String comments = tableComments.getText().toString();
-                ArrayList<String> newArray = dish.getPossibleChanges();
-                newArray.add(comments);
-                dish.setPossibleChanges(newArray);
-                // Do something with the table dish input
-                TableDish td = new TableDish(dish,1,1,true);
+
+                String comments="";
+                comments=tableComments.getText().toString();
+                int firstOrMain=0,amount=1;
+                if(fOrM.getText().equals("M"))
+                    firstOrMain=1;
+                amount= Integer.parseInt(amountET.getText().toString());
+
+                TableDish td = new TableDish(dish,amount,firstOrMain,true,comments);
                 Model.instance().addDishToOrder(td,table.getId());
-                //orderList.add(td);
-                setTableOrderAdapter(tableOrderAdapter, orderList);
+
+                tables = Model.instance().getAllOpenTables();
+                orderList = tables.get(currentTable).getOrderList();
+                tableOrderAdapter.setData(orderList);
+                binding.tableOrderRV.setAdapter(tableOrderAdapter);
 
             }
         });

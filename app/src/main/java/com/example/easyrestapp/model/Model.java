@@ -76,7 +76,13 @@ public class Model {
         return new Table();    }
 
     public void addDishToOrder(TableDish td, String tableId){
-        ServerConnection.addDishToOrder(tableId,td);
+        try {
+            ServerConnection.addDishToOrder(tableId,td).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<Dish> getDishesByCategory(String category) {

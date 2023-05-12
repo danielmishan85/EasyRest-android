@@ -22,6 +22,7 @@ public class ServerConnection {
         getRequest(url, new RequestCallback() {
             @Override
             public void onSuccess(String response) {
+                Log.d("server connection","categoryList success with response: "+response);
                 future.complete(response);
             }
 
@@ -48,6 +49,8 @@ public class ServerConnection {
             postRequest(postUrl, postBody, new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
+                    Log.d("server connection","getDishByCategory success with response: "+response);
+
                     future.complete(response);
                 }
 
@@ -67,7 +70,7 @@ public class ServerConnection {
 
 
     //POST - add a dish to specific table
-    public static void addDishToOrder( String tableId,TableDish td)
+    public static CompletableFuture<Boolean> addDishToOrder( String tableId,TableDish td)
     {
         String postUrl= "http://10.0.2.2:3001/openTable/addToOrder";
         String postBody = "{\n" +
@@ -82,11 +85,27 @@ public class ServerConnection {
                 "    ]\n" +
                 "}";
 
-//        try {
-//          //  postRequest(postUrl, postBody);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        try {
+            postRequest(postUrl, postBody , new RequestCallback() {
+                @Override
+
+                public void onSuccess(String response) {
+                    future.complete(true);
+                    Log.d("server connection","addDishToOrder success with response: "+response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.complete(false);
+                    new Exception(error);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return future;
     }
 
     public static CompletableFuture<String> getAllOpenTables(){
