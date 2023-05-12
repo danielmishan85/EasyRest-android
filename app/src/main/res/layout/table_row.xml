@@ -23,6 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/table_num_tv"
             android:layout_width="match_parent"
@@ -36,38 +37,49 @@
             <TextView
                 android:id="@+id/table_num"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:layout_marginTop="10dp"
                 android:text="1"
                 android:textAlignment="center"
                 android:textColor="#575353"
                 android:textSize="20sp"
                 android:textStyle="bold|italic"
-                app:layout_constraintEnd_toStartOf="@+id/notes_tv"
+                app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/notes_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:text="no notes"
-                android:textColor="#575353"
-                android:textSize="20sp"
-                android:textStyle="bold|italic"
+            <HorizontalScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/dinners_num"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/table_num"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/notes_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="no notes"
+                        android:textColor="#575353"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </HorizontalScrollView>
 
             <TextView
                 android:id="@+id/dinners_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_width="50dp"
+                android:layout_height="28dp"
                 android:text="1"
                 android:textColor="#575353"
                 android:textSize="20sp"
@@ -75,14 +87,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/amount_tv"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/notes_tv"
+                app:layout_constraintStart_toEndOf="@+id/scrollView2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/amount_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_width="50dp"
+                android:layout_height="28dp"
                 android:text="0"
                 android:textColor="#575353"
                 android:textSize="20sp"
@@ -95,9 +106,8 @@
 
             <TextView
                 android:id="@+id/avg_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_width="50dp"
+                android:layout_height="28dp"
                 android:text="0"
                 android:textColor="#575353"
                 android:textSize="20sp"

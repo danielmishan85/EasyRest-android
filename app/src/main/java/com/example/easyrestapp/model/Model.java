@@ -35,11 +35,11 @@ public class Model {
         return arrayAllDishes;
     }
 
-    public List<Table> getAllTables(){
+    public ArrayList<Table> getAllOpenTables(){
 
         String tables="";
         try {
-            tables = ServerConnection.getAllTables().get();
+            tables = ServerConnection.getAllOpenTables().get();
             Log.d("server","tables: "+ tables);
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -47,64 +47,7 @@ public class Model {
             e.printStackTrace();
         }
 
-
         return parseTablesFromJson(tables);
-            // Adding first table
-//            Table table1 = new Table();
-//            table1.id = "644ea719a3858a31d1eb1b94";
-//            table1.openTime = "1682876185691";
-//            table1.update = "1682876185691";
-//            table1.tableNumber = "7";
-//            table1.numberOfPeople = 2;
-//            table1.avgPerPerson = 0;
-//            table1.restaurantName = "EasyRest";
-//            table1.fire = false;
-//            table1.gluten = false;
-//            table1.lactose = true;
-//            table1.isVeggie = false;
-//            table1.comments = new ArrayList<>();
-//            table1.comments.add("");
-//            table1.askForWaiter = false;
-//            table1.orderList = new ArrayList<>();
-//            tableList.add(table1);
-//            // Adding second table
-//            Table table2 = new Table();
-//            table2.id = "644ea7c7a3858a31d1eb1b98";
-//            table2.openTime = "1682876359233";
-//            table2.update = "1682876359233";
-//            table2.tableNumber = "6";
-//            table2.numberOfPeople = 1;
-//            table2.avgPerPerson = 0;
-//            table2.restaurantName = "EasyRest";
-//            table2.fire = false;
-//            table2.gluten = false;
-//            table2.lactose = false;
-//            table2.isVeggie = false;
-//            table2.comments = new ArrayList<>();
-//            table2.comments.add("");
-//            table2.askForWaiter = false;
-//            table2.orderList = new ArrayList<>();
-//            tableList.add(table2);
-//            // Adding third table
-//            Table table3 = new Table();
-//            table3.id = "644eab53a3858a31d1eb1baf";
-//            table3.openTime = "1682877267605";
-//            table3.update = "1682877267605";
-//            table3.tableNumber = "8";
-//            table3.numberOfPeople = 2;
-//            table3.avgPerPerson = 0;
-//            table3.restaurantName = "EasyRest";
-//            table3.fire = false;
-//            table3.gluten = false;
-//            table3.lactose = false;
-//            table3.isVeggie = false;
-//            table3.comments = new ArrayList<>();
-//            table3.comments.add("");
-//            table3.askForWaiter = false;
-//            table3.orderList = new ArrayList<>();
-//            tableList.add(table3);
-
-
     }
 
     public Dish getDishById(String id){
@@ -122,8 +65,15 @@ public class Model {
 
     public Table getTableById(String id){
 
-        return null;
-    }
+        ArrayList<Table> tables = this.getAllOpenTables();
+        for(Table table : tables)
+        {
+            if(table.getId().equals(id)) {
+                return table;
+
+            }
+        }
+        return new Table();    }
 
     public void addDishToOrder(TableDish td, String tableId){
         ServerConnection.addDishToOrder(tableId,td);
@@ -196,38 +146,29 @@ public class Model {
                 table.gluten = jsonObject.getBoolean("gluten");
                 table.lactose = jsonObject.getBoolean("lactuse");
                 table.isVeggie = jsonObject.getBoolean("isVegi");
-
-                if (jsonObject.has("others")) {
-                    JSONArray commentsArray = jsonObject.getJSONArray("others");
-                    ArrayList<String> comments = new ArrayList<>();
-//                    for (int j = 0; j < commentsArray.length(); j++) {
-//                        comments.add(commentsArray.getString(j));
-//                        Log.d("server", "" + commentsArray.getString(j));
-//
-//                    }
-                    table.comments = comments;
-                }
-
+                table.others = jsonObject.getString("others");
                 table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
 
-//                JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
-//                List<TableDish> orderList = new ArrayList<>();
-//                for (int j = 0; j < orderListArray.length(); j++) {
-//                    JSONObject orderListObject = orderListArray.getJSONObject(j);
-//                    TableDish tableDish = new TableDish();
-//                    Dish dish = new Dish();
-//                    dish.setDishId(orderListObject.getString("dishId"));
-//                    tableDish.setDish(dish);
-//                    tableDish.amount = orderListObject.getInt("amount");
-//                    tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
-//                    tableDish.readyTime = orderListObject.optString("readyTime"); // Change if necessary
-//                    tableDish.allTogether = orderListObject.getBoolean("allTogether");
-//                    tableDish.price = orderListObject.getInt("price");
-//                    tableDish.orderTime = orderListObject.getJSONObject("orderTime").getString("$date"); // Change if necessary
-//                    tableDish.ready = orderListObject.getBoolean("ready");
-//                    orderList.add(tableDish);
-//                }
-//                table.orderList = orderList;
+                JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
+
+                List<TableDish> orderList = new ArrayList<>();
+                for (int j = 0; j < orderListArray.length(); j++) {
+                    JSONObject orderListObject = orderListArray.getJSONObject(j);
+                    TableDish tableDish = new TableDish();
+                    Dish dish = new Dish();
+                    dish.setDishId(orderListObject.getString("dishId"));
+                    tableDish.setDish(dish);
+                    tableDish.amount = orderListObject.getInt("amount");
+                    tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
+                    if(orderListObject.getString("readyTime")!=null)
+                        tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary
+                    tableDish.allTogether = orderListObject.getBoolean("allTogether");
+                    tableDish.price = orderListObject.getInt("price");
+                    tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
+                    tableDish.ready = orderListObject.getBoolean("ready");
+                    orderList.add(tableDish);
+                }
+                table.orderList = orderList;
                 tables.add(table);
             }
         } catch (JSONException e) {

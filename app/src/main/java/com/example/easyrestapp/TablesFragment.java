@@ -23,7 +23,6 @@ import com.example.easyrestapp.databinding.FragmentTablesBinding;
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +41,7 @@ public class TablesFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Tables</font>"));
 
 
-        tables= Model.instance().getAllTables();
+        tables= Model.instance().getAllOpenTables();
 
 
         binding = FragmentTablesBinding.inflate(inflater, container, false);
@@ -215,8 +214,7 @@ public class TablesFragment extends Fragment {
 
         public void bind(Table table) {
             tNum.setText(table.tableNumber);
-           if(table.getComments()!=null)
-                tNote.setText(table.getComments().get(0));
+            tNote.setText(table.getOthers());
             tDinners.setText(Integer.toString(table.numberOfPeople));
             tTotal.setText(String.valueOf(table.avgPerPerson*table.numberOfPeople));
             tAvg.setText(String.valueOf( table.getAvgPerPerson()));

@@ -57,7 +57,7 @@ public class OpenTableFragment extends Fragment {
 
         menu = Model.instance().getAllDishes();
         filterMenu = new ArrayList<>(); //filter menu by type
-        tables = Model.instance().getAllTables();
+        tables = Model.instance().getAllOpenTables();
         orderList = tables.get(currentTable).getOrderList();
 
         //calculate the amount of the specific table
@@ -294,12 +294,10 @@ public class OpenTableFragment extends Fragment {
     class MenuViewHolder extends RecyclerView.ViewHolder {
 
         TextView dishName;
-        ImageView avatarImg;
 
         public MenuViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             dishName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
-            avatarImg = itemView.findViewById(R.id.dishRow_img);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -312,7 +310,6 @@ public class OpenTableFragment extends Fragment {
 
         public void bind(Dish d) {
             dishName.setText(d.getDishName());
-            avatarImg.setImageResource(R.drawable.no_img);
         }
     }
 

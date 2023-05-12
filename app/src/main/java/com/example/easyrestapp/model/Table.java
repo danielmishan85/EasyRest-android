@@ -17,14 +17,14 @@ public class Table {
     public boolean gluten;
     public boolean lactose;
     public boolean isVeggie;
-    public ArrayList<String> comments;
+    public String others;
     public boolean askForWaiter;
     public List<TableDish> orderList;
 
     public Table() {
     }
 
-    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie, ArrayList<String> comments, boolean askForWaiter, List<TableDish> orderList) {
+    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean isVeggie,String others, boolean askForWaiter, List<TableDish> orderList) {
         this.id = id;
         this.openTime = openTime;
         this.update = update;
@@ -36,7 +36,7 @@ public class Table {
         this.gluten = gluten;
         this.lactose = lactose;
         this.isVeggie = isVeggie;
-        this.comments = comments;
+        this.others = others;
         this.askForWaiter = askForWaiter;
         this.orderList = orderList;
     }
@@ -133,12 +133,12 @@ public class Table {
         isVeggie = veggie;
     }
 
-    public ArrayList<String> getComments() {
-        return comments;
+    public String getOthers() {
+        return others;
     }
 
-    public void setComments(ArrayList<String> comments) {
-        this.comments = comments;
+    public void setOthers(String others) {
+        this.others = others;
     }
 
     public boolean isAskForWaiter() {
@@ -167,7 +167,7 @@ public class Table {
                 ", gluten=" + gluten +
                 ", lactose=" + lactose +
                 ", isVeggie=" + isVeggie +
-                ", comments=" + comments +
+                ", others=" + others +
                 ", askForWaiter=" + askForWaiter +
                 ", orderList=" + orderList +
                 '}';

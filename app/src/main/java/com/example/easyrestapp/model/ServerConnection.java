@@ -89,11 +89,11 @@ public class ServerConnection {
 //        }
     }
 
-    public static CompletableFuture<String> getAllTables(){
+    public static CompletableFuture<String> getAllOpenTables(){
 
-        String postUrl = "http://10.0.2.2:3001/openTable/getTables";
+        String url = "http://10.0.2.2:3001/openTable/getTables";
         CompletableFuture<String> future = new CompletableFuture<>();
-        getRequest(postUrl, new RequestCallback() {
+        getRequest(url, new RequestCallback() {
             @Override
             public void onSuccess(String response) {
                 future.complete(response);
