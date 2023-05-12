@@ -93,12 +93,13 @@ public class ServerConnection {
 
                 public void onSuccess(String response) {
                     future.complete(true);
-                    Log.d("server connection","addDishToOrder success with response: "+response);
+                    Log.d("server connection","addDishToOrder finish with response: "+response);
                 }
 
                 @Override
                 public void onFailure(String error) {
                     future.complete(false);
+                    Log.d("server connection","addDishToOrder failed with response: "+error);
                     new Exception(error);
                 }
             });

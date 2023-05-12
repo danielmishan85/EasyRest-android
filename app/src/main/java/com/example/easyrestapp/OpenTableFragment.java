@@ -371,6 +371,7 @@ public class OpenTableFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
             Dish dish = menu.get(position);
+            //Log.d("server", "dishName: " + dish.getDishName());
             holder.bind(dish);
         }
 
@@ -387,7 +388,7 @@ public class OpenTableFragment extends Fragment {
         TextView dishName;
         Button dishType;
         ImageButton dishDelete;
-        ImageButton dishFire;
+        Button orderFire;
         ImageButton dishComment;
 
 
@@ -396,9 +397,8 @@ public class OpenTableFragment extends Fragment {
             dishName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
             dishType = itemView.findViewById(R.id.tableDishRow_FirstOrMainBtb);
             dishDelete = itemView.findViewById(R.id.deleteDish_btn);
-            dishFire = itemView.findViewById(R.id.fireDish_btn);
             dishComment = itemView.findViewById(R.id.commentsDish_btn);
-
+            orderFire = itemView.findViewById(R.id.openTable_fire_btn);
 
             dishType.setOnClickListener(v->{
                 if(dishType.getText().toString().equals("F")) {
@@ -411,14 +411,16 @@ public class OpenTableFragment extends Fragment {
                     //orderList.get(getAdapterPosition()).dish.type = "F";
                 }
             });
+
+
             dishDelete.setOnClickListener(v->{
                 orderList.remove(getAdapterPosition());
                 setTableOrderAdapter(tableOrderAdapter, orderList);
             });
 
-            dishFire.setOnClickListener(v->{
-                //continue from here
-            });
+//            orderFire.setOnClickListener(v->{
+//                //continue from here
+//            });
 
             dishComment.setOnClickListener(v->{
                 //continue from here
@@ -435,8 +437,16 @@ public class OpenTableFragment extends Fragment {
         }
 
         public void bind(TableDish td) {
+            Log.d("server", "dishID: " + td.dish.getDishId());
+            Dish d = Model.instance().getDishById(td.dish.getDishId());
+            td.setDish(d);
             dishName.setText(td.dish.getDishName());
-            dishType.setText(Integer.toString(td.getFirstOrMain()));
+            //Log.d("server", "dishName: " + td.getFirstOrMain());
+
+            if(td.getFirstOrMain() == 1)
+                dishType.setText("F");
+            else
+                dishType.setText("M");
 
 
         }

@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/TableDishRow_dishName_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
                 android:text="Dish Name"
@@ -33,6 +33,7 @@
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/checkBox"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/deleteDish_btn"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,6 +44,8 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/TableDishRow_dishName_tv"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -52,6 +55,8 @@
                 android:layout_marginStart="30dp"
                 android:text="F"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/commentsDish_btn"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,6 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
+                app:layout_constraintEnd_toStartOf="@+id/deleteDish_btn"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tableDishRow_FirstOrMainBtb"
                 app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
                 app:srcCompat="@drawable/ic_baseline_comment_24" />
@@ -68,19 +75,11 @@
                 android:id="@+id/deleteDish_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                app:layout_constraintStart_toEndOf="@+id/fireDish_btn"
-                app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:srcCompat="@drawable/ic_baseline_delete_24" />
-
-            <ImageButton
-                android:id="@+id/fireDish_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                app:layout_constraintEnd_toStartOf="@+id/TableDishRow_dishName_tv"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/commentsDish_btn"
                 app:layout_constraintTop_toTopOf="@+id/tableDishRow_FirstOrMainBtb"
-                app:srcCompat="@drawable/ic_baseline_local_fire_department_24" />
+                app:srcCompat="@drawable/ic_baseline_delete_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
