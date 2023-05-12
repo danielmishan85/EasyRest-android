@@ -165,6 +165,7 @@ public class Model {
                     dish.setDishId(orderListObject.getString("dishId"));
                     tableDish.setDish(dish);
                     tableDish.amount = orderListObject.getInt("amount");
+                    tableDish.setId(orderListObject.getString("_id"));
                     tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
                     if(orderListObject.getString("readyTime")!=null)
                         tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary

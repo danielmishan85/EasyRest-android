@@ -44,7 +44,7 @@ public class OpenTableFragment extends Fragment {
     TableOrderRecyclerAdapter tableOrderAdapter;
     int currentTable;
     List<Table> tables;
-    int totalAmount = 0;
+    double totalAmount = 0;
     double numOfDiners = 0;
     int chosenTableDish = 0;
 
@@ -120,23 +120,20 @@ public class OpenTableFragment extends Fragment {
             chosenTableDish = pos;
             Log.d("chosenTableDish", Integer.toString(pos));
         });
-
         binding.openTablePaymentBtn.setOnClickListener(V -> {
             showPaymentPopup();
 
         });
 
-
-
-        binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount) + " ₪");
-
+        //**************************************total amount, avg per person, send reservation, fire, payment*******************
+        totalAmount=tables.get(currentTable).getAvgPerPerson()*tables.get(currentTable).getNumberOfPeople();
         numOfDiners = Double.valueOf(tables.get(currentTable).getNumberOfPeople());
-        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(totalAmount/numOfDiners)  + " ₪");
 
-        binding.openTableNumOfDinersTv.setText("Number of diners: " + tables.get(currentTable).getNumberOfPeople());
+        binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount)+ " ₪");
+        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(tables.get(currentTable).getAvgPerPerson())  + " ₪");
+        binding.openTableNumOfDinersTv.setText("Number of diners: " + numOfDiners);
 
 
-        Log.d("tag"," "+currentTable);
 
         return v;
     }
@@ -161,7 +158,7 @@ public class OpenTableFragment extends Fragment {
         EditText editText3 = popupView.findViewById(R.id.editText3);
         EditText editText4 = popupView.findViewById(R.id.editText4);
         //change the text when we have a real DB
-        editText1.setText(Integer.toString(totalAmount));
+//        editText1.setText(Integer.toString(totalAmount));
         editText2.setText("0");
         editText3.setText("0");
         editText4.setText("0");
@@ -227,7 +224,10 @@ public class OpenTableFragment extends Fragment {
         EditText amountET=popupView.findViewById(R.id.table_dish_popup_amount);
         Button fOrM=popupView.findViewById(R.id.td_popup_ForM_btn);
         dishName.setText(dish.getDishName());
-        dishIngredients.setText("will be written the dish ingredients...");
+        StringBuilder sb=new StringBuilder("possible changes: \n" );
+        for (String change: dish.possibleChanges)
+            sb.append(change+ "\n");
+        dishIngredients.setText(sb.toString());
 //        tableComments.setHint("will be written the allergic of table... and we can add more comments");
 
         fOrM.setOnClickListener((v)->{

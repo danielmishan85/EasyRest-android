@@ -71,8 +71,9 @@ public class TablesFragment extends Fragment {
         binding.tablesRv.setAdapter(adapter);
 
         adapter.setOnItemClickListener((int pos)-> {
-            chosenTable=pos;
-            binding.chosenTableTv.setText("Chosen table: "+pos);
+            List<Table> tables=Model.instance().getAllOpenTables();
+            chosenTable=Integer.parseInt(tables.get(pos).getTableNumber());
+            binding.chosenTableTv.setText("Chosen table: "+chosenTable);
         });
 
 

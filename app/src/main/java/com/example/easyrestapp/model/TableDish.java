@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class TableDish {
 
     public Dish dish;
+    String id;
     public int amount;
     public int firstOrMain;
     public String readyTime; //consider to change
@@ -19,7 +20,9 @@ public class TableDish {
     public TableDish() {
     }
 
-    public TableDish(Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,String comments) {
+    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,String comments) {
+
+        this.id=id;
         this.dish = dish;
         this.amount = amount;
         this.firstOrMain = firstOrMain;
@@ -37,6 +40,22 @@ public class TableDish {
         this.firstOrMain = firstOrMain;
         this.allTogether = allTogether;
         this.comments=comments;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public Dish getDish() {
