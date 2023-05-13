@@ -1,6 +1,9 @@
 package com.example.easyrestapp.model;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.easyrestapp.MyApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +11,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Model {
 
@@ -75,6 +80,7 @@ public class Model {
             }
         }
         return new Table();    }
+
     public Table getTableById(String id){
 
         ArrayList<Table> tables = this.getAllOpenTables();
@@ -99,7 +105,13 @@ public class Model {
 
     public void addNewTable(Table table){
         try {
-            ServerConnection.addTable(table).get();
+            String response = ServerConnection.addTable(table).get();
+            if(response.contains("message"))
+            {
+                Toast.makeText(MyApplication.getMyContext(), response, Toast.LENGTH_SHORT).show();
+            }
+
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -195,7 +207,15 @@ public class Model {
                         tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary
                     tableDish.allTogether = orderListObject.getBoolean("allTogether");
                     tableDish.price = orderListObject.getInt("price");
-                    tableDish.comments=orderListObject.getString("changes");
+                    //tableDish.comments=orderListObject.get
+                    ArrayList<String> commentsList = new ArrayList<>();
+                    JSONArray commentsListJson = orderListObject.getJSONArray("changes");
+                    for (int k = 0; k < commentsListJson.length(); k++) {
+                        String commentsListObject = commentsListJson.getString(k);
+                        Log.d("server", commentsListObject);
+                        commentsList.add(commentsListObject);
+                    }
+                    tableDish.comments = commentsList;
                     tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
                     tableDish.ready = orderListObject.getBoolean("ready");
                     orderList.add(tableDish);
@@ -210,9 +230,6 @@ public class Model {
 
         return tables;
     }
-
-
-
 
 
 //    private Model() {

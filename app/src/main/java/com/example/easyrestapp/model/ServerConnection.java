@@ -1,8 +1,16 @@
 package com.example.easyrestapp.model;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.easyrestapp.MyApplication;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,7 +77,7 @@ public class ServerConnection {
     }
 
 
-    public static CompletableFuture<Boolean> addTable(Table table) {
+    public static CompletableFuture<String> addTable(Table table) {
         String postUrl = "http://10.0.2.2:3001/openTable/open";
         String postBody = "{\n" +
                 "    \"numTable\": " + table.getTableNumber() + ",\n" +
@@ -83,19 +91,21 @@ public class ServerConnection {
                 "    \"ResturantName\": \"" + table.getRestaurantName() + "\"\n" +
                 "}";
 
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        CompletableFuture<String> future = new CompletableFuture<>();
 
         try {
             postRequest(postUrl, postBody, new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
-                    future.complete(true);
+                    future.complete(response);
+
                     Log.d("server connection","addTable finish with response: "+response);
                 }
 
                 @Override
                 public void onFailure(String error) {
-                    future.complete(false);
+                    future.complete(error);
+                    //Toast.makeText(MyApplication.getMyContext(), "Table is unavailable: " + error, Toast.LENGTH_SHORT).show();
                     Log.d("server connection","addTable failed with response: "+error);
                     new Exception(error);
                 }
@@ -116,7 +126,7 @@ public class ServerConnection {
                 "        {\n" +
                 "            \"dishid\": \"" + td.dish.dishId + "\",\n" +
                 "            \"amount\": " + td.amount + ",\n" +
-                "            \"changes\": \"" + td.comments + "\",\n" +
+                "            \"changes\": \"" + td.comments.get(0) + "\",\n" +
                 "            \"firstOrMain\": \"" + td.firstOrMain + "\",\n" +
                 "            \"allTogether\": " + td.allTogether + "\n" +
                 "        }\n" +

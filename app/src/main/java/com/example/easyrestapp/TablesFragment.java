@@ -55,6 +55,7 @@ public class TablesFragment extends Fragment {
 
         binding.newTableBtn.setOnClickListener(V->{
             showDialogAndAddTable();
+
         });
 
         binding.orderRecoveryBtn.setOnClickListener(V->{
@@ -103,7 +104,7 @@ public class TablesFragment extends Fragment {
                 String tableNumber = tableNumberEditText.getText().toString();
                 String numberOfDinner = numberOfDinnerEditText.getText().toString();
                 String notes = notesEditText.getText().toString();
-                String others = notesEditText.getText().toString();
+                String others = othersEditText.getText().toString();
                 boolean glutenFree = glutenCheckBox.isChecked();
                 boolean lactoseFree = lactoseCheckBox.isChecked();
                 boolean isVegan = veganCheckBox.isChecked();
@@ -113,6 +114,11 @@ public class TablesFragment extends Fragment {
                 // Call the addTable function with the obtained details
                 Table t= new Table(tableNumber, Integer.parseInt(numberOfDinner),restaurantName, glutenFree, lactoseFree, isVegan, isVegetarian,others,notes);
                 Model.instance().addNewTable(t);
+
+                // Refresh the table data
+                List<Table> tables = Model.instance().getAllOpenTables();
+                adapter.setData(tables);
+
             }
         });
 

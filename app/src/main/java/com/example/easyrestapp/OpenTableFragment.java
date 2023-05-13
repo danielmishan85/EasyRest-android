@@ -136,7 +136,10 @@ public class OpenTableFragment extends Fragment {
         numOfDiners = Model.instance().getTableByNumber(String.valueOf(currentTable)).getNumberOfPeople();
 
         binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount)+ " ₪");
-        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + Double.toString(Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson())  + " ₪");
+        double avgPerPerson = Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson();
+        String avgPerPersonStr = String.format("%.1f", avgPerPerson);
+        binding.openTableAvgPerDinerTv.setText("Avg per diner: " + avgPerPersonStr + " ₪");
+
         binding.openTableNumOfDinersTv.setText("Number of diners: " + numOfDiners);
 
     }
@@ -252,8 +255,9 @@ public class OpenTableFragment extends Fragment {
                 if(fOrM.getText().equals("M"))
                     firstOrMain=1;
                 amount= Integer.parseInt(amountET.getText().toString());
-
-                TableDish td = new TableDish(dish,amount,firstOrMain,true,comments);
+                ArrayList<String> arrComments = new ArrayList<>();
+                arrComments.add(comments);
+                TableDish td = new TableDish(dish,amount,firstOrMain,true,arrComments);
                 Model.instance().addDishToOrder(td,table.getId());
 
                 tables = Model.instance().getAllOpenTables();
@@ -282,7 +286,14 @@ public class OpenTableFragment extends Fragment {
         // Create the popup dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         builder.setTitle("Comments for " + tableDish.dish.getDishName()); // Set the title of the popup dialog
-        builder.setMessage(tableDish.dish.getPossibleChanges().get(0)); // Set the comments as the message of the popup dialog
+        List<String> possibleChanges = tableDish.getComments();
+        StringBuilder messageBuilder = new StringBuilder();
+        for (String change : possibleChanges) {
+            messageBuilder.append(change).append("\n");
+        }
+        builder.setMessage(messageBuilder.toString());
+
+        //builder.setMessage(tableDish.dish.getPossibleChanges().get(0)); // Set the comments as the message of the popup dialog
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

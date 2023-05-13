@@ -15,12 +15,12 @@ public class TableDish {
     public double price;
     public String orderTime; //consider to change
     public boolean ready;
-    public String comments;
+    public ArrayList<String> comments;
 
     public TableDish() {
     }
 
-    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,String comments) {
+    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,ArrayList<String> comments) {
 
         this.id=id;
         this.dish = dish;
@@ -34,7 +34,7 @@ public class TableDish {
         this.comments=comments;
     }
 
-    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether,String comments) {
+    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether,ArrayList<String> comments) {
         this.dish = dish;
         this.amount = amount;
         this.firstOrMain = firstOrMain;
@@ -50,11 +50,11 @@ public class TableDish {
         this.id = id;
     }
 
-    public String getComments() {
+    public ArrayList<String> getComments() {
         return comments;
     }
 
-    public void setComments(String comments) {
+    public void setComments(ArrayList<String> comments) {
         this.comments = comments;
     }
 
