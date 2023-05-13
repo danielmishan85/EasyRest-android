@@ -21,7 +21,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.easyrestapp.databinding.FragmentOpenTableBinding;
 import com.example.easyrestapp.model.Dish;
@@ -153,67 +156,59 @@ public class OpenTableFragment extends Fragment {
     }
 
     public void showPaymentPopup() {
-//        // Create the popup dialog
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
-//        View popupView = getLayoutInflater().inflate(R.layout.payment_popup, null);
-//        builder.setView(popupView);
-//
-////        // Get references to the user input fields
-////        EditText editText1 = popupView.findViewById(R.id.editText1);
-////        EditText editText2 = popupView.findViewById(R.id.editText2);
-////        EditText editText3 = popupView.findViewById(R.id.editText3);
-////        EditText editText4 = popupView.findViewById(R.id.editText4);
-////        //change the text when we have a real DB
-//////        editText1.setText(Integer.toString(totalAmount));
-////        editText2.setText("0");
-////        editText3.setText("0");
-////        editText4.setText("0");
-////
-////        TextView tv1 = popupView.findViewById(R.id.textView);
-////        TextView tv2 = popupView.findViewById(R.id.textView7);
-////        TextView tv3 = popupView.findViewById(R.id.textView9);
-////        TextView tv4 = popupView.findViewById(R.id.textView10);
-////        tv1.setText("Amount: ");
-//        tv2.setText("Discount: ");
-//        tv3.setText("Service: ");
-//        double discount = Double.parseDouble(editText2.getText().toString()) / 100;
-//        tv4.setText("Total: ");
-//        double amount = Double.parseDouble(editText1.getText().toString());
-//        double tax = Double.parseDouble(editText3.getText().toString()) / 100;
-//
-//        double totalAmount = amount * (1 - discount) * (1 + tax);
-//        editText4.setText(Double.toString(totalAmount));
-//
-//
-//        // Set up the buttons
-//        builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Save the user input
-//                String field1 = editText1.getText().toString();
-//                String field2 = editText2.getText().toString();
-//                String field3 = editText3.getText().toString();
-//                String field4 = editText4.getText().toString();
-//
-//                // Do something with the user input
-//                // ...
-//
-//
-//            }
-//        });
-//
-//        builder.setNeutralButton("Credit Card", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Cancel the dialog
-//                dialog.dismiss();
-//            }
-//        });
-//
-//
-//
-//        // Show the popup dialog
-//        builder.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
+        View paymentPopup = getLayoutInflater().inflate(R.layout.payment_popup, null);
+        builder.setView(paymentPopup);
+
+
+        // Initialize views
+        EditText editTextPrice = paymentPopup.findViewById(R.id.payment_popup_editTextPrice);
+        EditText editTextDiscount = paymentPopup.findViewById(R.id.payment_popup_editTextDiscount);
+        EditText editTextService = paymentPopup.findViewById(R.id.payment_popup_editTextService);
+        RadioGroup radioGroupDiscount = paymentPopup.findViewById(R.id.payment_popup_radioGroupDiscount);
+        RadioGroup radioGroupService = paymentPopup.findViewById(R.id.payment_popup_radioGroupService);
+        RadioButton radioButtonPercentage = paymentPopup.findViewById(R.id.payment_popup_radioButtonPercentage);
+        RadioButton radioButtonAmount = paymentPopup.findViewById(R.id.payment_popup_radioButtonAmount);
+        RadioButton radioButtonServicePercentage = paymentPopup.findViewById(R.id.payment_popup_radioButtonServicePercentage);
+        RadioButton radioButtonServiceAmount = paymentPopup.findViewById(R.id.payment_popup_radioButtonServiceAmount);
+        Button buttonCalculate = paymentPopup.findViewById(R.id.payment_popup_buttonCalculate);
+        TextView textViewTotalPrice = paymentPopup.findViewById(R.id.payment_popup_textViewTotalPrice);
+
+
+        Table t=Model.instance().getTableByNumber(String.valueOf(currentTable));
+        if (currentTable!=0)
+            editTextPrice.setText(t.getAvgPerPerson()*t.numberOfPeople+"");
+        // Set click listener for the Calculate button
+        buttonCalculate.setOnClickListener((v)-> {
+            String priceStr = editTextPrice.getText().toString().trim();
+            String discountStr = editTextDiscount.getText().toString().trim();
+            String serviceStr = editTextService.getText().toString().trim();
+
+            if (priceStr.isEmpty()) {
+                Toast.makeText(MyApplication.getMyContext(), "Please enter the price.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double price = Double.parseDouble(priceStr);
+            double discount = discountStr.isEmpty() ? 0.0 : Double.parseDouble(discountStr);
+            double service = serviceStr.isEmpty() ? 0.0 : Double.parseDouble(serviceStr);
+
+            if (radioButtonPercentage.isChecked()) {
+                discount = price * (discount / 100.0);
+            }
+
+            if (radioButtonServicePercentage.isChecked()) {
+                service = price * (service / 100.0);
+            }
+
+            double totalPrice = price - discount + service;
+            textViewTotalPrice.setText(String.format("Total Price: %.2f", totalPrice));
+
+        });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
