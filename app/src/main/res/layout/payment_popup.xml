@@ -71,7 +71,7 @@
             android:id="@+id/payment_popup_radioButtonAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$" />
+            android:text="₪" />
 
     </RadioGroup>
 
@@ -104,7 +104,7 @@
             android:id="@+id/payment_popup_radioButtonServiceAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$" />
+            android:text="₪" />
 
     </RadioGroup>
 

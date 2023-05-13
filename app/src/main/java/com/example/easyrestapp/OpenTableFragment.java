@@ -34,6 +34,8 @@ import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,7 +132,17 @@ public class OpenTableFragment extends Fragment {
         });
 
         refreshAmountDetails();
+        getSensitivityAndFire();
+
         return v;
+    }
+
+    public void getSensitivityAndFire(){
+        Table t=Model.instance().getTableByNumber(String.valueOf(currentTable));
+        binding.fireCb.setChecked(t.isFire());
+        binding.glutenCb.setChecked(t.isGluten());
+        binding.isVegetarianCb.setChecked(t.isVegan());
+        binding.LactoseCb.setChecked(t.isLactose());
     }
 
     //**************************************total amount, avg per person, send reservation, fire, payment*******************
@@ -408,17 +420,13 @@ public class OpenTableFragment extends Fragment {
             dishType = itemView.findViewById(R.id.tableDishRow_FirstOrMainBtb);
             dishDelete = itemView.findViewById(R.id.deleteDish_btn);
             dishComment = itemView.findViewById(R.id.commentsDish_btn);
-            orderFire = itemView.findViewById(R.id.openTable_fire_btn);
 
             dishType.setOnClickListener(v->{
                 if(dishType.getText().toString().equals("F")) {
                     dishType.setText("M");
-
-                    //orderList.get(getAdapterPosition()).dish. = "M";
                 }
                 else{
                     dishType.setText("F");
-                    //orderList.get(getAdapterPosition()).dish.type = "F";
                 }
             });
 
@@ -503,6 +511,8 @@ public class OpenTableFragment extends Fragment {
             if (tableOrderList == null) return 0;
             return tableOrderList.size();
         }
+
+
     }
 
 
