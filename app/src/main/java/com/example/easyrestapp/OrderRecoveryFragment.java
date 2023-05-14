@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.easyrestapp.databinding.FragmentOrderRecoveryBinding;
+import com.example.easyrestapp.model.ClosedTable;
+import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
 
 import java.util.ArrayList;
@@ -25,16 +27,14 @@ public class OrderRecoveryFragment extends Fragment {
     FragmentOrderRecoveryBinding binding;
     OrderRecoveryRecyclerAdapter adapter;
 
-    List<Table> lastOrders;
+    List<ClosedTable> lastOrders;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Order Recovery</font>"));
-        lastOrders=new ArrayList<>();
-        for (int i=0;i<20;i++){
-            //lastOrders.add(new Table(String.valueOf(i), "Note " + i, "Time " + i,String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
-        }
+        lastOrders= Model.instance().getAllClosedTables();
+
         binding = FragmentOrderRecoveryBinding.inflate(inflater, container, false);
         View view =binding.getRoot();
         binding.orderRecoveryBtn.setOnClickListener(V->{
@@ -80,13 +80,13 @@ public class OrderRecoveryFragment extends Fragment {
             });
         }
 
-        public void bind(Table table) {
-//            tNum.setText(table.tNum);
-//            tNote.setText(table.tNote);
-//            tTime.setText(table.tTime);
-//            tDinners.setText(table.tDinners);
-//            tTotal.setText(String.valueOf(table.tTotal));
-//            tAvg.setText(String.valueOf( table.tAvg));
+        public void bind(ClosedTable table) {
+            tNum.setText(table.getT().getTableNumber());
+            tNote.setText(table.getT().getNotes());
+            tTime.setText(table.getT().getOpenTime());
+            tDinners.setText(String.valueOf(table.getT().getNumberOfPeople()));
+            tTotal.setText(String.valueOf(table.getT().getAvgPerPerson()*table.getT().getNumberOfPeople()));
+            tAvg.setText(String.valueOf(table.getT().getAvgPerPerson()));
         }
     }
     //---------------------OnItemClickListener ---------------------------
@@ -100,13 +100,13 @@ public class OrderRecoveryFragment extends Fragment {
     class OrderRecoveryRecyclerAdapter extends RecyclerView.Adapter<OrderRecoveryFragment.OrderRecoveryViewHolder>{
         OrderRecoveryFragment.OnItemClickListener listener;
         LayoutInflater inflater;
-        List<Table> data;
+        List<ClosedTable> data;
 
-        public void setData(List<Table> data){
+        public void setData(List<ClosedTable> data){
             this.data = data;
             notifyDataSetChanged();
         }
-        public OrderRecoveryRecyclerAdapter(LayoutInflater inflater, List<Table> data){
+        public OrderRecoveryRecyclerAdapter(LayoutInflater inflater, List<ClosedTable> data){
             this.inflater = inflater;
             this.data = data;
         }
@@ -128,7 +128,7 @@ public class OrderRecoveryFragment extends Fragment {
         // Bind the data to the view holder
         @Override
         public void onBindViewHolder(@NonNull OrderRecoveryViewHolder holder, int position) {
-            Table re = data.get(position);
+            ClosedTable re = data.get(position);
             holder.bind(re);
         }
 

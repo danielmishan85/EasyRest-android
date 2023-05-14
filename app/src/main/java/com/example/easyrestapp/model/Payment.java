@@ -10,6 +10,10 @@ public class Payment {
         this.price = price;
     }
 
+    public Payment() {
+
+    }
+
     public String getPaymentMethod() {
         return paymentMethod;
     }

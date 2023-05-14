@@ -55,7 +55,7 @@ public class Model {
         return parseTablesFromJson(tables);
     }
 
-    public ArrayList<Table> getAllClosedTables(){
+    public ArrayList<ClosedTable> getAllClosedTables(){
 
         String closedTables="";
         try {
@@ -67,7 +67,7 @@ public class Model {
             e.printStackTrace();
         }
 
-        return parseTablesFromJson(closedTables);
+        return parseClosedTablesFromJson(closedTables);
     }
 
     public Dish getDishById(String id){
@@ -147,6 +147,7 @@ public class Model {
         return parseDishesFromJson(dishes);
     }
 
+
     public static ArrayList<Dish> parseDishesFromJson(String json) {
         ArrayList<Dish> dishes = new ArrayList<>();
         try {
@@ -181,93 +182,122 @@ public class Model {
         }
         return dishes;
     }
+
+
     public static ArrayList<Table> parseTablesFromJson(String json) {
         ArrayList<Table> tables = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(json);
-            Log.d("server", "" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++)
+                tables.add(parseTable(jsonArray.getJSONObject(i),true));
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Table table = new Table();
-                table.id = jsonObject.getString("_id");
-                table.openTime = jsonObject.getString("openTime");
-                table.update = jsonObject.getString("udate");
-                table.tableNumber = jsonObject.getString("numTable");
-                table.numberOfPeople = jsonObject.getInt("numberOfPeople");
-                table.avgPerPerson = jsonObject.getDouble("avgPerPerson");
-                table.restaurantName = jsonObject.getString("ResturantName");
-                table.fire = jsonObject.getBoolean("fire");
-                table.gluten = jsonObject.getBoolean("gluten");
-                table.lactose = jsonObject.getBoolean("lactuse");
-                table.veggie = jsonObject.getBoolean("isVegi");
-//                table.notes = jsonObject.getString("notes");
-
-                table.others = jsonObject.getString("others");
-                table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
-
-                JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
-
-                List<TableDish> orderList = new ArrayList<>();
-                for (int j = 0; j < orderListArray.length(); j++) {
-                    JSONObject orderListObject = orderListArray.getJSONObject(j);
-                    TableDish tableDish = new TableDish();
-                    Dish dish = new Dish();
-                    dish.setDishId(orderListObject.getString("dishId"));
-                    tableDish.setDish(dish);
-                    tableDish.amount = orderListObject.getInt("amount");
-                    tableDish.setId(orderListObject.getString("_id"));
-                    tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
-                    if(orderListObject.getString("readyTime")!=null)
-                        tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary
-                    tableDish.allTogether = orderListObject.getBoolean("allTogether");
-                    tableDish.price = orderListObject.getInt("price");
-                    //tableDish.comments=orderListObject.get
-                    ArrayList<String> commentsList = new ArrayList<>();
-                    JSONArray commentsListJson = orderListObject.getJSONArray("changes");
-                    for (int k = 0; k < commentsListJson.length(); k++) {
-                        String commentsListObject = commentsListJson.getString(k);
-                        Log.d("server", commentsListObject);
-                        commentsList.add(commentsListObject);
-                    }
-                    tableDish.comments = commentsList;
-                    tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
-                    tableDish.ready = orderListObject.getBoolean("ready");
-                    orderList.add(tableDish);
-                }
-                table.orderList = orderList;
-                tables.add(table);
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("server", "" + tables.size());
-
         return tables;
     }
 
 
-//    private Model() {
-//        menu = new ArrayList<>();
-//        //menu
-//        for (int i=0;i<10;i++){
-//            menu.add(new Dish("Dish id " + (i+" "), i,"F",true,true,50,"time"));
-//        }
-//        for (int i=10;i<20;i++){
-//            menu.add(new Dish("Dish id " + (i+" "), i,"F",true,true,50,"time"));
-//        }
-//        for (int i=20;i<30;i++){
-//            menu.add(new Dish("Dish id " + (i+" "), i,"F",true,true,50,"time"));
-//        }
-//        for (int i=30;i<34;i++){
-//            menu.add(new Dish("Dish id " + (i+" "), i,"F",true,true,50,"time"));
-//        }
-//        //tables
-//        tables = new ArrayList<>();
-//        for (int i=0;i<20;i++){
-//            tables.add(new Table(String.valueOf(i), "Note " + i, String.valueOf(i+1), i*10.0, (int)(i*10.0)/(i+1)));
-//        }
-//    }
+    public static ArrayList<ClosedTable> parseClosedTablesFromJson(String json) {
+        ArrayList<ClosedTable> closedTables = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                ClosedTable closedTable = new ClosedTable();
+
+                closedTable.id = jsonObject.getString("_id");
+                Log.d("server","closed id: "+ closedTable.id);
+                closedTable.t = parseTable(jsonObject,false);
+                closedTable.closeTime = jsonObject.getString("closeTime");
+                closedTable.tip = jsonObject.getDouble("pTip");
+                Log.d("server","closed time: "+ closedTable.closeTime +","+closedTable.tip);
+
+                closedTable.paymentArray = parsePaymentArray(jsonObject.getJSONArray("payment"));
+                closedTables.add(closedTable);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return closedTables;
+    }
+
+    // parseTable get 2 values : openTable -> a boolean that shows us if we work on a regular open table or on a close table because open table has more values
+    private static Table parseTable(JSONObject jsonTable,boolean openTable) throws JSONException {
+        JSONObject jsonObject = jsonTable;
+        Table table = new Table();
+        table.id = jsonObject.getString("_id");
+        table.openTime = jsonObject.getString("openTime");
+
+        if(openTable) {
+            table.update = jsonObject.getString("udate");
+            table.fire = jsonObject.getBoolean("fire");
+            table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
+
+        }
+        table.tableNumber = jsonObject.getString("numTable");
+        table.numberOfPeople = jsonObject.getInt("numberOfPeople");
+        table.avgPerPerson = jsonObject.getDouble("avgPerPerson");
+        table.restaurantName = jsonObject.getString("ResturantName");
+        table.gluten = jsonObject.getBoolean("gluten");
+        table.lactose = jsonObject.getBoolean("lactuse");
+        table.veggie = jsonObject.getBoolean("isVegi");
+//       table.notes = jsonObject.getString("notes");
+        table.others = jsonObject.getString("others");
+
+        JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
+        List<TableDish> orderList = new ArrayList<>();
+        for (int j = 0; j < orderListArray.length(); j++) {
+            orderList.add(parseTableDish(orderListArray.getJSONObject(j),openTable));
+        }
+        table.orderList=orderList;
+        return table;
+    }
+
+    // parseTableDish get 2 values : openTable -> a boolean that shows us if we work on a regular open table or on a close table because open table has more values
+    private static TableDish parseTableDish(JSONObject orderListObject,boolean openTable) throws JSONException {
+
+            TableDish tableDish = new TableDish();
+            Dish dish = new Dish();
+            if(openTable) {
+                ArrayList<String> commentsList = new ArrayList<>();
+                JSONArray commentsListJson = orderListObject.getJSONArray("changes");
+                for (int k = 0; k < commentsListJson.length(); k++) {
+                    String commentsListObject = commentsListJson.getString(k);
+                    commentsList.add(commentsListObject);
+                }
+                tableDish.comments = commentsList;
+
+            }
+            dish.setDishId(orderListObject.getString("dishId"));
+            tableDish.setDish(dish);
+            tableDish.amount = orderListObject.getInt("amount");
+            tableDish.setId(orderListObject.getString("_id"));
+            tableDish.firstOrMain = orderListObject.getInt("firstOrMain");
+            if(orderListObject.getString("readyTime")!=null)
+                tableDish.readyTime = orderListObject.getString("readyTime"); // Change if necessary
+            tableDish.allTogether = orderListObject.getBoolean("allTogether");
+            //tableDish.comments=orderListObject.get
+
+            tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
+            tableDish.ready = orderListObject.getBoolean("ready");
+
+        return tableDish;
+    }
+
+    private static ArrayList<Payment> parsePaymentArray(JSONArray jsonPayments) throws JSONException {
+        ArrayList<Payment> paymentArray = new ArrayList<>();
+        for (int i = 0; i < jsonPayments.length(); i++) {
+            JSONObject jsonPayment = jsonPayments.getJSONObject(i);
+            Payment payment = new Payment();
+            payment.paymentMethod = jsonPayment.getString("paymentMethod");
+            payment.price = jsonPayment.getDouble("amountPaid");
+            paymentArray.add(payment);
+        }
+        return paymentArray;
+    }
 
 
 }

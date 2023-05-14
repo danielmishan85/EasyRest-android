@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ClosedTable {
 
+    String id;
     Table t;
     String closeTime;
     Double tip;
@@ -16,6 +17,28 @@ public class ClosedTable {
         this.tip = tip;
         this.paymentArray = paymentArray;
     }
+
+    public ClosedTable() {
+
+    }
+
+    public ClosedTable(String id, Table t, String closeTime, Double tip, ArrayList<Payment> paymentArray) {
+        this.id = id;
+        this.t = t;
+        this.closeTime = closeTime;
+        this.tip = tip;
+        this.paymentArray = paymentArray;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
 
     public Table getT() {
         return t;
