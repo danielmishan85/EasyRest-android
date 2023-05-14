@@ -55,6 +55,21 @@ public class Model {
         return parseTablesFromJson(tables);
     }
 
+    public ArrayList<Table> getAllClosedTables(){
+
+        String closedTables="";
+        try {
+            closedTables = ServerConnection.getAllClosedTables().get();
+            Log.d("server","closed tables: "+ closedTables);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return parseTablesFromJson(closedTables);
+    }
+
     public Dish getDishById(String id){
         ArrayList<Dish> dishes = this.getAllDishes();
         for(Dish dish : dishes)

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class TablesFragment extends Fragment {
         binding.orderRecoveryBtn.setOnClickListener(V->{
             NavDirections action = TablesFragmentDirections.actionTablesFragmentToOrderRecoveryFragment();
             Navigation.findNavController(getActivity(), R.id.main_navhost).navigate(action);
+            //Log.d("server", Model.instance().getAllClosedTables().get(0).tableNumber);
         });
 
         binding.paymentBtn.setOnClickListener(V->{

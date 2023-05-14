@@ -4,8 +4,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.easyrestapp.MyApplication;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -175,6 +177,27 @@ public class ServerConnection {
 
         return future;
     }
+
+
+    public static CompletableFuture<String> getAllClosedTables(){
+
+        String url = "http://10.0.2.2:3001/closeTable/getCloseTables";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        getRequest(url, new RequestCallback() {
+            @Override
+            public void onSuccess(String response) {
+                future.complete(response);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                future.completeExceptionally(new Exception(error));
+            }
+        });
+
+        return future;
+    }
+
 
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");

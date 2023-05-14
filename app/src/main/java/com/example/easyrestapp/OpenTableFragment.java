@@ -134,6 +134,11 @@ public class OpenTableFragment extends Fragment {
         refreshAmountDetails();
         getSensitivityAndFire();
 
+        //***************************************Requests*******************************************
+//        binding.closeTableBtn.setOnClickListener(V->{
+//            Log.d("server","close tables");
+//        });
+
         return v;
     }
 
