@@ -5,34 +5,33 @@ import com.example.easyrestapp.model.Dish;
 import java.util.ArrayList;
 
 public class TableDish {
-
+    public String id;
     public Dish dish;
-    String id;
     public int amount;
     public int firstOrMain;
+    public ArrayList<String> comments;
+    public boolean ready;
     public String readyTime; //consider to change
     public boolean allTogether;
     public double price;
     public String orderTime; //consider to change
-    public boolean ready;
-    public ArrayList<String> comments;
 
     public TableDish() {
     }
 
-    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,ArrayList<String> comments) {
-
-        this.id=id;
-        this.dish = dish;
-        this.amount = amount;
-        this.firstOrMain = firstOrMain;
-        this.readyTime = readyTime;
-        this.allTogether = allTogether;
-        this.price = price;
-        this.orderTime = orderTime;
-        this.ready = ready;
-        this.comments=comments;
-    }
+//    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,ArrayList<String> comments) {
+//
+//        this.id=id;
+//        this.dish = dish;
+//        this.amount = amount;
+//        this.firstOrMain = firstOrMain;
+//        this.readyTime = readyTime;
+//        this.allTogether = allTogether;
+//        this.price = price;
+//        this.orderTime = orderTime;
+//        this.ready = ready;
+//        this.comments=comments;
+//    }
 
     public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether,ArrayList<String> comments) {
         this.dish = dish;

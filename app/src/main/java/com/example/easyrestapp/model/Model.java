@@ -148,6 +148,8 @@ public class Model {
     }
 
 
+
+
     public static ArrayList<Dish> parseDishesFromJson(String json) {
         ArrayList<Dish> dishes = new ArrayList<>();
         try {
@@ -286,6 +288,66 @@ public class Model {
 
         return tableDish;
     }
+/*
+    String id;
+    String drinkName;
+    String drinkCategory;
+    String drinkDescription;
+    String drinkImage;
+    String possibleChanges;
+    Double drinkPrice;
+    String RestaurantName;
+ */
+public static ArrayList<Drink> parseDrinksFromJson(String json) {
+    ArrayList<Drink> drinks = new ArrayList<>();
+    try {
+        JSONArray jsonArray = new JSONArray(json);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Drink drink = new Drink();
+            drink.setId(jsonObject.getString("_id"));
+            drink.setDrinkName(jsonObject.getString("drinkName"));
+            drink.setDrinkCategory(jsonObject.getString("drinkCategory"));
+            drink.setDrinkDescription(jsonObject.getString("drinkDescription"));
+            drink.setDrinkImage(jsonObject.getString("drinkImage"));
+            JSONArray possibleChangesArray = jsonObject.getJSONArray("possibleChanges");
+            ArrayList<String> possibleChanges = new ArrayList<>();
+            for (int j = 0; j < possibleChangesArray.length(); j++) {
+                possibleChanges.add(possibleChangesArray.getString(j));
+            }
+            drink.setDrinkPrice(jsonObject.getDouble("drinkPrice"));
+            drink.setRestaurantName(jsonObject.getString("ResturantName"));
+            drinks.add(drink);
+        }
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+    return drinks;
+}
+
+    private static TableDrink parseTableDrink(JSONObject orderListObject,boolean openTable) throws JSONException {
+
+        TableDrink tableDrink = new TableDrink();
+        Drink drink = new Drink();
+        if(openTable) {
+            ArrayList<String> commentsList = new ArrayList<>();
+            JSONArray commentsListJson = orderListObject.getJSONArray("changes");
+            for (int k = 0; k < commentsListJson.length(); k++) {
+                String commentsListObject = commentsListJson.getString(k);
+                commentsList.add(commentsListObject);
+            }
+            tableDrink.comments = commentsList;
+        }
+        drink.setId(orderListObject.getString("drinkId"));
+        tableDrink.setDrink(drink);
+        tableDrink.setAmount(orderListObject.getInt("amount"));
+        tableDrink.setDrinkId(orderListObject.getString("_id"));
+        tableDrink.setReady(orderListObject.getBoolean("ready"));
+        tableDrink.setPrice(orderListObject.getDouble("price"));
+
+        return tableDrink;
+    }
+
 
     private static ArrayList<Payment> parsePaymentArray(JSONArray jsonPayments) throws JSONException {
         ArrayList<Payment> paymentArray = new ArrayList<>();

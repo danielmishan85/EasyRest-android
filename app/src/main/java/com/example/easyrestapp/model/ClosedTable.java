@@ -11,6 +11,7 @@ public class ClosedTable {
     ArrayList<Payment> paymentArray;
 
 
+
     public ClosedTable(Table t, String closeTime, Double tip, ArrayList<Payment> paymentArray) {
         this.t = t;
         this.closeTime = closeTime;

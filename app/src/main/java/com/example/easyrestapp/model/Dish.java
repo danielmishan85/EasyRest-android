@@ -19,6 +19,7 @@ public class Dish {
     public boolean isLactoseFree;
     public double dishPrice;
     public String restaurantName;
+    //public int orderAmount;
 
     public Dish() {}
 
@@ -39,6 +40,7 @@ public class Dish {
         this.isLactoseFree = isLactoseFree;
         this.dishPrice = dishPrice;
         this.restaurantName = restaurantName;
+
     }
     public String getDishId() {
         return dishId;

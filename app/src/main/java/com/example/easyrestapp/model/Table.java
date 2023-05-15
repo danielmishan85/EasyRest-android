@@ -6,12 +6,14 @@ public class Table {
 
 
     public String id;
+    public String tableNumber;
     public String openTime;
     public String update;
-    public String tableNumber;
     public int numberOfPeople;
+    public Double totalPrice;
     public double avgPerPerson;
-    public String restaurantName;
+    public List<TableDish> orderList;
+    public List<TableDrink> drinkArray;
     public boolean fire;
     public boolean gluten;
     public boolean lactose;
@@ -20,43 +22,64 @@ public class Table {
     public String others;
     public String notes;
     public boolean askForWaiter;
-    public List<TableDish> orderList;
+    public String restaurantName;
+    public Double leftToPay;
 
     public Table() {
     }
 
-
-
-    public Table(String tableNumber, int numberOfPeople, String restaurantName, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes) {
+    public Table(String id, String tableNumber, String openTime, String update, int numberOfPeople, Double totalPrice, double avgPerPerson, List<TableDish> orderList, List<TableDrink> drinkArray, boolean fire, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes, boolean askForWaiter, String restaurantName, Double leftToPay) {
+        this.id = id;
         this.tableNumber = tableNumber;
+        this.openTime = openTime;
+        this.update = update;
         this.numberOfPeople = numberOfPeople;
-        this.restaurantName = restaurantName;
+        this.totalPrice = totalPrice;
+        this.avgPerPerson = avgPerPerson;
+        this.orderList = orderList;
+        this.drinkArray = drinkArray;
+        this.fire = fire;
         this.gluten = gluten;
         this.lactose = lactose;
         this.vegan = vegan;
         this.veggie = veggie;
         this.others = others;
         this.notes = notes;
+        this.askForWaiter = askForWaiter;
+        this.restaurantName = restaurantName;
+        this.leftToPay = leftToPay;
     }
 
-    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean veggie, boolean vegan, String others, String notes, boolean askForWaiter, List<TableDish> orderList) {
-        this.id = id;
-        this.openTime = openTime;
-        this.update = update;
-        this.tableNumber = tableNumber;
-        this.numberOfPeople = numberOfPeople;
-        this.avgPerPerson = avgPerPerson;
-        this.restaurantName = restaurantName;
-        this.fire = fire;
-        this.gluten = gluten;
-        this.lactose = lactose;
-        this.vegan=vegan;
-        this.veggie = veggie;
-        this.others = others;
-        this.askForWaiter = askForWaiter;
-        this.orderList = orderList;
-        this.notes=notes;
-    }
+//    public Table(String tableNumber, int numberOfPeople, String restaurantName, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes) {
+//        this.tableNumber = tableNumber;
+//        this.numberOfPeople = numberOfPeople;
+//        this.restaurantName = restaurantName;
+//        this.gluten = gluten;
+//        this.lactose = lactose;
+//        this.vegan = vegan;
+//        this.veggie = veggie;
+//        this.others = others;
+//        this.notes = notes;
+//    }
+
+//    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean veggie, boolean vegan, String others, String notes, boolean askForWaiter, List<TableDish> orderList) {
+//        this.id = id;
+//        this.openTime = openTime;
+//        this.update = update;
+//        this.tableNumber = tableNumber;
+//        this.numberOfPeople = numberOfPeople;
+//        this.avgPerPerson = avgPerPerson;
+//        this.restaurantName = restaurantName;
+//        this.fire = fire;
+//        this.gluten = gluten;
+//        this.lactose = lactose;
+//        this.vegan=vegan;
+//        this.veggie = veggie;
+//        this.others = others;
+//        this.askForWaiter = askForWaiter;
+//        this.orderList = orderList;
+//        this.notes=notes;
+//    }
 
     public String getNotes() {
         return notes;
@@ -184,6 +207,30 @@ public class Table {
 
     public void setOrderList(List<TableDish> orderList) {
         this.orderList = orderList;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public List<TableDrink> getDrinkArray() {
+        return drinkArray;
+    }
+
+    public void setDrinkArray(List<TableDrink> drinkArray) {
+        this.drinkArray = drinkArray;
+    }
+
+    public Double getLeftToPay() {
+        return leftToPay;
+    }
+
+    public void setLeftToPay(Double leftToPay) {
+        this.leftToPay = leftToPay;
     }
 
     @Override
