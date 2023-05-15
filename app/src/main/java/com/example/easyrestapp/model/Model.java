@@ -22,6 +22,11 @@ public class Model {
         return _instance;
     }
 
+    public boolean isWaiterCalled(String id){
+        return getTableById(id).isAskForWaiter();
+    }
+
+
     public ArrayList<Dish> getAllDishes(){
         ArrayList<Dish> arrayAllDishes = new ArrayList<>();
         try {

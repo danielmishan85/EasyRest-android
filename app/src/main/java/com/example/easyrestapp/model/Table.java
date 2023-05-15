@@ -50,36 +50,36 @@ public class Table {
         this.leftToPay = leftToPay;
     }
 
-//    public Table(String tableNumber, int numberOfPeople, String restaurantName, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes) {
-//        this.tableNumber = tableNumber;
-//        this.numberOfPeople = numberOfPeople;
-//        this.restaurantName = restaurantName;
-//        this.gluten = gluten;
-//        this.lactose = lactose;
-//        this.vegan = vegan;
-//        this.veggie = veggie;
-//        this.others = others;
-//        this.notes = notes;
-//    }
+    public Table(String tableNumber, int numberOfPeople, String restaurantName, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes) {
+        this.tableNumber = tableNumber;
+        this.numberOfPeople = numberOfPeople;
+        this.restaurantName = restaurantName;
+        this.gluten = gluten;
+        this.lactose = lactose;
+        this.vegan = vegan;
+        this.veggie = veggie;
+        this.others = others;
+        this.notes = notes;
+    }
 
-//    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean veggie, boolean vegan, String others, String notes, boolean askForWaiter, List<TableDish> orderList) {
-//        this.id = id;
-//        this.openTime = openTime;
-//        this.update = update;
-//        this.tableNumber = tableNumber;
-//        this.numberOfPeople = numberOfPeople;
-//        this.avgPerPerson = avgPerPerson;
-//        this.restaurantName = restaurantName;
-//        this.fire = fire;
-//        this.gluten = gluten;
-//        this.lactose = lactose;
-//        this.vegan=vegan;
-//        this.veggie = veggie;
-//        this.others = others;
-//        this.askForWaiter = askForWaiter;
-//        this.orderList = orderList;
-//        this.notes=notes;
-//    }
+    public Table(String id, String openTime, String update, String tableNumber, int numberOfPeople, double avgPerPerson, String restaurantName, boolean fire, boolean gluten, boolean lactose, boolean veggie, boolean vegan, String others, String notes, boolean askForWaiter, List<TableDish> orderList) {
+        this.id = id;
+        this.openTime = openTime;
+        this.update = update;
+        this.tableNumber = tableNumber;
+        this.numberOfPeople = numberOfPeople;
+        this.avgPerPerson = avgPerPerson;
+        this.restaurantName = restaurantName;
+        this.fire = fire;
+        this.gluten = gluten;
+        this.lactose = lactose;
+        this.vegan=vegan;
+        this.veggie = veggie;
+        this.others = others;
+        this.askForWaiter = askForWaiter;
+        this.orderList = orderList;
+        this.notes=notes;
+    }
 
     public String getNotes() {
         return notes;
