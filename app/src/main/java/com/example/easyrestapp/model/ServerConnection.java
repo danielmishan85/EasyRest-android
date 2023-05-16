@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -194,6 +195,59 @@ public class ServerConnection {
                 future.completeExceptionally(new Exception(error));
             }
         });
+
+        return future;
+    }
+
+
+    public static CompletableFuture<String> getDrinkByCategory(String drinkCategory) {
+        String postUrl = "http://10.0.2.2:3001/drink/getByCategory";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"drinkCategory\": \"" + drinkCategory + "\"\n" +
+                "}";
+
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("server connection", "getDrinkByCategory success with response: " + response);
+
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
+
+        return future;
+    }
+
+    public static CompletableFuture<String> getCategoryDrinksList() {
+        String getUrl = "http://10.0.2.2:3001/drink/categoryList";
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        try {
+            getRequest(getUrl, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("server connection", "getCategoryDrinksList success with response: " + response);
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
 
         return future;
     }

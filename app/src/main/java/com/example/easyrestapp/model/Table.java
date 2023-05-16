@@ -22,10 +22,34 @@ public class Table {
     public String others;
     public String notes;
     public boolean askForWaiter;
+    public boolean askForBill;
     public String restaurantName;
     public Double leftToPay;
 
     public Table() {
+    }
+
+    public Table(String id, String tableNumber, String openTime, String update, int numberOfPeople, Double totalPrice, double avgPerPerson, List<TableDish> orderList, List<TableDrink> drinkArray, boolean fire, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes, boolean askForWaiter, boolean askForBill, String restaurantName, Double leftToPay) {
+        this.id = id;
+        this.tableNumber = tableNumber;
+        this.openTime = openTime;
+        this.update = update;
+        this.numberOfPeople = numberOfPeople;
+        this.totalPrice = totalPrice;
+        this.avgPerPerson = avgPerPerson;
+        this.orderList = orderList;
+        this.drinkArray = drinkArray;
+        this.fire = fire;
+        this.gluten = gluten;
+        this.lactose = lactose;
+        this.vegan = vegan;
+        this.veggie = veggie;
+        this.others = others;
+        this.notes = notes;
+        this.askForWaiter = askForWaiter;
+        this.askForBill = askForBill;
+        this.restaurantName = restaurantName;
+        this.leftToPay = leftToPay;
     }
 
     public Table(String id, String tableNumber, String openTime, String update, int numberOfPeople, Double totalPrice, double avgPerPerson, List<TableDish> orderList, List<TableDrink> drinkArray, boolean fire, boolean gluten, boolean lactose, boolean vegan, boolean veggie, String others, String notes, boolean askForWaiter, String restaurantName, Double leftToPay) {
@@ -79,6 +103,14 @@ public class Table {
         this.askForWaiter = askForWaiter;
         this.orderList = orderList;
         this.notes=notes;
+    }
+
+    public boolean isAskForBill() {
+        return askForBill;
+    }
+
+    public void setAskForBill(boolean askForBill) {
+        this.askForBill = askForBill;
     }
 
     public String getNotes() {

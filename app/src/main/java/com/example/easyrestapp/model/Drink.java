@@ -1,16 +1,18 @@
 package com.example.easyrestapp.model;
 
+import java.util.ArrayList;
+
 public class Drink {
     String id;
     String drinkName;
     String drinkCategory;
     String drinkDescription;
     String drinkImage;
-    String possibleChanges;
+    ArrayList<String> possibleChanges;
     Double drinkPrice;
     String RestaurantName;
 
-    public Drink(String id, String drinkName, String drinkCategory, String drinkDescription, String drinkImage, String possibleChanges, Double drinkPrice, String restaurantName) {
+    public Drink(String id, String drinkName, String drinkCategory, String drinkDescription, String drinkImage,   ArrayList<String> possibleChanges, Double drinkPrice, String restaurantName) {
         this.id = id;
         this.drinkName = drinkName;
         this.drinkCategory = drinkCategory;
@@ -62,11 +64,11 @@ public class Drink {
         this.drinkImage = drinkImage;
     }
 
-    public String getPossibleChanges() {
+    public ArrayList<String> getPossibleChanges() {
         return possibleChanges;
     }
 
-    public void setPossibleChanges(String possibleChanges) {
+    public void setPossibleChanges(ArrayList<String> possibleChanges) {
         this.possibleChanges = possibleChanges;
     }
 

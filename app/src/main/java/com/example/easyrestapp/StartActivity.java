@@ -35,6 +35,7 @@ public class StartActivity extends AppCompatActivity {
 
 
         waiter_btn.setOnClickListener((v)->{
+            Model.instance().getAllDrinks();
             Intent i= new Intent(this,WaiterActivity.class);
             startActivity(i);
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.MenuAdapter;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.easyrestapp.databinding.FragmentOpenTableBinding;
 import com.example.easyrestapp.model.Dish;
+import com.example.easyrestapp.model.Drink;
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.ServerConnection;
 import com.example.easyrestapp.model.Table;
@@ -43,10 +45,12 @@ import java.util.stream.Collectors;
 public class OpenTableFragment extends Fragment {
 
     List<Dish> menu;
+    List<Drink> drinksMenu;
     List<Dish> filterMenu;
     List<TableDish> orderList;
     FragmentOpenTableBinding binding;
     MenuRecyclerAdapter menuAdapter;
+    DrinkMenuRecyclerAdapter drinkMenuAdapter;
     TableOrderRecyclerAdapter tableOrderAdapter;
     int currentTable;
     List<Table> tables;
@@ -61,7 +65,7 @@ public class OpenTableFragment extends Fragment {
         binding = FragmentOpenTableBinding.inflate(inflater, container, false);
         View v=binding.getRoot();
         currentTable=OpenTableFragmentArgs.fromBundle(getArguments()).getChosenTable();
-
+        drinksMenu=Model.instance().getAllDrinks();
         menu = Model.instance().getAllDishes();
         filterMenu = new ArrayList<>(); //filter menu by type
         tables = Model.instance().getAllOpenTables();
@@ -81,30 +85,40 @@ public class OpenTableFragment extends Fragment {
         binding.openTableBtn1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
         filterMenu = menu.stream().filter(d -> d.dishCategory.equals("starter")).collect(Collectors.toList());
         menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), filterMenu);  //show all the dishes
+        drinkMenuAdapter = new DrinkMenuRecyclerAdapter(getLayoutInflater(), drinksMenu);  //show all the dishes
+
         binding.menuRV.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
             showOpenTableDishPopup(Model.instance().getTableByNumber(String.valueOf(currentTable)), menuAdapter.getData().get(pos));
-            Log.d("chosenDish", Integer.toString(pos));
         });
+
+        drinkMenuAdapter.setOnItemClickListener((int pos)->{
+
+
+        });
+
 
         //filter dishes by type, by press button
         binding.openTableBtn4.setOnClickListener(V -> {
             menuButtonsColorReset();
             binding.openTableBtn4.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
             filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Fish and Meat")).collect(Collectors.toList());
+            binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
         });
         binding.openTableBtn2.setOnClickListener(V -> {
             menuButtonsColorReset();
             binding.openTableBtn2.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
             filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Pasta")).collect(Collectors.toList());
+            binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
         });
         binding.openTableBtn3.setOnClickListener(V -> {
             menuButtonsColorReset();
             binding.openTableBtn3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
             filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Pizza")).collect(Collectors.toList());
+            binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
 
         });
@@ -112,10 +126,16 @@ public class OpenTableFragment extends Fragment {
             menuButtonsColorReset();
             binding.openTableBtn1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
             filterMenu = menu.stream().filter(d -> d.dishCategory.equals("starter")).collect(Collectors.toList());
+            binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
         });
 
-
+        binding.openTableBtn.setOnClickListener(V -> {
+            menuButtonsColorReset();
+            binding.openTableBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            binding.menuRV.setAdapter(drinkMenuAdapter);
+            drinkMenuAdapter.setData(drinksMenu);
+        });
 
         //************************************** table orders list***********************************
         binding.tableOrderRV.setLayoutManager(new LinearLayoutManager(getContext()));  //define the recycler view to be a list
@@ -165,6 +185,7 @@ public class OpenTableFragment extends Fragment {
     }
 
     public void menuButtonsColorReset(){
+        binding.openTableBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         binding.openTableBtn1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         binding.openTableBtn2.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         binding.openTableBtn3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
@@ -354,6 +375,8 @@ public class OpenTableFragment extends Fragment {
         public void bind(Dish d) {
             dishName.setText(d.getDishName());
         }
+
+
     }
 
     //--------------------- OnItemClickListener ---------------------------
@@ -407,6 +430,83 @@ public class OpenTableFragment extends Fragment {
             return menu.size();
         }
     }
+
+
+
+    //--------------------- DrinkMenu view holder ---------------------------
+    class DrinkMenuViewHolder extends RecyclerView.ViewHolder {
+
+        TextView drinkName;
+
+        public DrinkMenuViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+            drinkName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    listener.onItemClick(pos);
+                }
+            });
+        }
+
+        public void bind(Drink d) {
+            drinkName.setText(d.getDrinkName());
+        }
+    }
+
+
+    //--------------------- menu recycler adapter ---------------------------
+    class DrinkMenuRecyclerAdapter extends RecyclerView.Adapter<DrinkMenuViewHolder>{
+        OnItemClickListener listener;
+        LayoutInflater inflater;
+        List<Drink> menu;
+
+        public void setData(List<Drink> data){
+            this.menu = data;
+            notifyDataSetChanged();
+        }
+
+        public List<Drink> getData(){
+            return this.menu;
+        }
+        public DrinkMenuRecyclerAdapter(LayoutInflater inflater, List<Drink> data){
+            this.inflater = inflater;
+            this.menu = data;
+        }
+
+        // Set the OnItemClickListener
+        void setOnItemClickListener(OnItemClickListener listener){
+            this.listener = listener;
+        }
+        // Create a view holder
+        @NonNull
+        @Override
+        public DrinkMenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.dish_row,parent,false);
+            return new DrinkMenuViewHolder(view,listener);
+        }
+
+        // Bind the data to the view holder
+        @Override
+        public void onBindViewHolder(@NonNull DrinkMenuViewHolder holder, int position) {
+            Drink drink = menu.get(position);
+            //Log.d("server", "dishName: " + dish.getDishName());
+            holder.bind(drink);
+        }
+
+        // Return the number of items in the data
+        @Override
+        public int getItemCount() {
+            if (menu == null) return 0;
+            return menu.size();
+        }
+    }
+
+
+
+
 
     //--------------------- table order view holder ---------------------------
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
