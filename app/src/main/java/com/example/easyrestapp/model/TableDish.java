@@ -8,7 +8,7 @@ public class TableDish {
     public String id;
     public Dish dish;
     public int amount;
-    public int firstOrMain;
+    public String firstOrMain;
     public ArrayList<String> comments;
     public boolean ready;
     public String readyTime; //consider to change
@@ -33,7 +33,7 @@ public class TableDish {
 //        this.comments=comments;
 //    }
 
-    public TableDish(Dish dish, int amount, int firstOrMain, boolean allTogether,ArrayList<String> comments) {
+    public TableDish(Dish dish, int amount, String firstOrMain, boolean allTogether,ArrayList<String> comments) {
         this.dish = dish;
         this.amount = amount;
         this.firstOrMain = firstOrMain;
@@ -73,11 +73,11 @@ public class TableDish {
         this.amount = amount;
     }
 
-    public int getFirstOrMain() {
+    public String getFirstOrMain() {
         return firstOrMain;
     }
 
-    public void setFirstOrMain(int firstOrMain) {
+    public void setFirstOrMain(String firstOrMain) {
         this.firstOrMain = firstOrMain;
     }
 

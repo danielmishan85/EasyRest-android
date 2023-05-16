@@ -263,13 +263,11 @@ public class OpenTableFragment extends Fragment {
 
                 String comments="";
                 comments=tableComments.getText().toString();
-                int firstOrMain=0,amount=1;
-                if(fOrM.getText().equals("M"))
-                    firstOrMain=1;
+                int amount=1;
                 amount= Integer.parseInt(amountET.getText().toString());
                 ArrayList<String> arrComments = new ArrayList<>();
                 arrComments.add(comments);
-                TableDish td = new TableDish(dish,amount,firstOrMain,true,arrComments);
+                TableDish td = new TableDish(dish,amount,fOrM.getText().toString(),true,arrComments);
                 Model.instance().addDishToOrder(td,table.getId());
 
                 tables = Model.instance().getAllOpenTables();
@@ -466,12 +464,7 @@ public class OpenTableFragment extends Fragment {
             dishName.setText(td.dish.getDishName());
             //Log.d("server", "dishName: " + td.getFirstOrMain());
 
-            if(td.getFirstOrMain() == 1)
-                dishType.setText("F");
-            else
-                dishType.setText("M");
-
-
+            dishType.setText(td.getFirstOrMain());
         }
     }
 
