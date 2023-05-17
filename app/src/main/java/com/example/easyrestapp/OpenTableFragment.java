@@ -34,6 +34,7 @@ import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.ServerConnection;
 import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
+import com.example.easyrestapp.model.TableDrink;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,15 +49,20 @@ public class OpenTableFragment extends Fragment {
     List<Drink> drinksMenu;
     List<Dish> filterMenu;
     List<TableDish> orderList;
+    List<TableDrink> orderDrinkList;
+
     FragmentOpenTableBinding binding;
     MenuRecyclerAdapter menuAdapter;
     DrinkMenuRecyclerAdapter drinkMenuAdapter;
     TableOrderRecyclerAdapter tableOrderAdapter;
+    TableDrinkRecyclerAdapter tableDrinkRecyclerAdapter;
+
     int currentTable;
     List<Table> tables;
     double totalAmount = 0;
     int numOfDiners = 0;
     int chosenTableDish = 0;
+    boolean drink=false;
 
     @Nullable
     @Override
@@ -69,8 +75,9 @@ public class OpenTableFragment extends Fragment {
         menu = Model.instance().getAllDishes();
         filterMenu = new ArrayList<>(); //filter menu by type
         tables = Model.instance().getAllOpenTables();
-        orderList = Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
 
+        orderList = Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
+        orderDrinkList=Model.instance().getTableByNumber(String.valueOf(currentTable)).getDrinkArray();
 
         //calculate the amount of the specific table
         for (TableDish td: orderList){
@@ -90,12 +97,39 @@ public class OpenTableFragment extends Fragment {
         binding.menuRV.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
+            drink=false;
             showOpenTableDishPopup(Model.instance().getTableByNumber(String.valueOf(currentTable)), menuAdapter.getData().get(pos));
         });
 
         drinkMenuAdapter.setOnItemClickListener((int pos)->{
+            drink=true;
+            String comments="";
+            ArrayList<String> arrComments = new ArrayList<>();
+            arrComments.add(comments);
+            Drink d= drinksMenu.get(pos);
+            TableDrink td= new TableDrink( d,1, arrComments);
+            Model.instance().addDrinkToOrder(td,Model.instance().getTableByNumber(String.valueOf(currentTable)).getId());
+            tables = Model.instance().getAllOpenTables();
+            orderDrinkList =Model.instance().getTableByNumber(String.valueOf(currentTable)).getDrinkArray();
+            orderButtonsColorReset();
+            binding.openTableOrderBtnDrinks.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            tableDrinkRecyclerAdapter.setData(orderDrinkList);
+            binding.tableOrderRV.setAdapter(tableDrinkRecyclerAdapter);
 
+        });
 
+        binding.openTableOrderBtnFood.setOnClickListener((V)->{
+            orderButtonsColorReset();
+            binding.openTableOrderBtnFood.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            tableOrderAdapter.setData(orderList);
+            binding.tableOrderRV.setAdapter(tableOrderAdapter);
+        });
+
+        binding.openTableOrderBtnDrinks.setOnClickListener((V)->{
+            orderButtonsColorReset();
+            binding.openTableOrderBtnDrinks.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+            tableDrinkRecyclerAdapter.setData(orderDrinkList);
+            binding.tableOrderRV.setAdapter(tableDrinkRecyclerAdapter);
         });
 
 
@@ -191,6 +225,11 @@ public class OpenTableFragment extends Fragment {
         binding.openTableBtn3.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         binding.openTableBtn4.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
 
+    }
+
+    public void orderButtonsColorReset(){
+        binding.openTableOrderBtnFood.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        binding.openTableOrderBtnDrinks.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
     }
 
     public void showPaymentPopup() {
@@ -457,7 +496,7 @@ public class OpenTableFragment extends Fragment {
     }
 
 
-    //--------------------- menu recycler adapter ---------------------------
+    //--------------------- DrinkMenu recycler adapter ---------------------------
     class DrinkMenuRecyclerAdapter extends RecyclerView.Adapter<DrinkMenuViewHolder>{
         OnItemClickListener listener;
         LayoutInflater inflater;
@@ -507,8 +546,81 @@ public class OpenTableFragment extends Fragment {
 
 
 
+    //--------------------- TableDrink view holder ---------------------------
+    class TableDrinkViewHolder extends RecyclerView.ViewHolder {
 
-    //--------------------- table order view holder ---------------------------
+        TextView drinkName;
+
+        public TableDrinkViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+            drinkName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    listener.onItemClick(pos);
+                }
+            });
+        }
+
+        public void bind(TableDrink d) {
+            drinkName.setText(d.getDrink().getDrinkName());
+        }
+    }
+
+
+    //--------------------- TableDrink recycler adapter ---------------------------
+    class TableDrinkRecyclerAdapter extends RecyclerView.Adapter<TableDrinkViewHolder>{
+        OnItemClickListener listener;
+        LayoutInflater inflater;
+        List<TableDrink> menu;
+
+        public void setData(List<TableDrink> data){
+            this.menu = data;
+            notifyDataSetChanged();
+        }
+
+        public List<TableDrink> getData(){
+            return this.menu;
+        }
+        public TableDrinkRecyclerAdapter(LayoutInflater inflater, List<TableDrink> data){
+            this.inflater = inflater;
+            this.menu = data;
+        }
+
+        // Set the OnItemClickListener
+        void setOnItemClickListener(OnItemClickListener listener){
+            this.listener = listener;
+        }
+        // Create a view holder
+        @NonNull
+        @Override
+        public TableDrinkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.table_dish_row,parent,false);
+            return new TableDrinkViewHolder(view,listener);
+        }
+
+        // Bind the data to the view holder
+        @Override
+        public void onBindViewHolder(@NonNull TableDrinkViewHolder holder, int position) {
+            TableDrink drink = menu.get(position);
+            //Log.d("server", "dishName: " + dish.getDishName());
+            holder.bind(drink);
+        }
+
+        // Return the number of items in the data
+        @Override
+        public int getItemCount() {
+            if (menu == null) return 0;
+            return menu.size();
+        }
+    }
+
+
+
+
+    //--------------------- tableDish order view holder ---------------------------
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
         TextView dishName;
         Button dishType;
@@ -539,9 +651,6 @@ public class OpenTableFragment extends Fragment {
                 setTableOrderAdapter(tableOrderAdapter, orderList);
             });
 
-//            orderFire.setOnClickListener(v->{
-//                //continue from here
-//            });
 
             dishComment.setOnClickListener(v->{
                 //continue from here
@@ -568,7 +677,7 @@ public class OpenTableFragment extends Fragment {
         }
     }
 
-    //--------------------- table order recycler adapter ---------------------------
+    //--------------------- tableDish order recycler adapter ---------------------------
     class TableOrderRecyclerAdapter extends RecyclerView.Adapter<TableOrderViewHolder>{
         OnItemClickListener listener;
         LayoutInflater inflater;

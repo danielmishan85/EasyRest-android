@@ -1,19 +1,13 @@
 package com.example.easyrestapp.model;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.easyrestapp.MyApplication;
-import com.google.gson.Gson;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,7 +27,7 @@ public class ServerConnection {
         getRequest(url, new RequestCallback() {
             @Override
             public void onSuccess(String response) {
-                Log.d("server connection","categoryList success with response: "+response);
+                Log.d("server connection categoryList","categoryList success with response: "+response);
                 future.complete(response);
             }
 
@@ -60,7 +54,7 @@ public class ServerConnection {
             postRequest(postUrl, postBody, new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("server connection","getDishByCategory success with response: "+response);
+                    Log.d("server connection getDishByCategory","getDishByCategory success with response: "+response);
 
                     future.complete(response);
                 }
@@ -102,14 +96,14 @@ public class ServerConnection {
                 public void onSuccess(String response) {
                     future.complete(response);
 
-                    Log.d("server connection","addTable finish with response: "+response);
+                    Log.d("server connection addTable","addTable finish with response: "+response);
                 }
 
                 @Override
                 public void onFailure(String error) {
                     future.complete(error);
                     //Toast.makeText(MyApplication.getMyContext(), "Table is unavailable: " + error, Toast.LENGTH_SHORT).show();
-                    Log.d("server connection","addTable failed with response: "+error);
+                    Log.d("server connection addTable","addTable failed with response: "+error);
                     new Exception(error);
                 }
             });
@@ -120,36 +114,46 @@ public class ServerConnection {
     }
 
 
-    //POST - add a dish to specific table
     public static CompletableFuture<Boolean> addDishToOrder(String tableId, TableDish td) {
         String postUrl = "http://10.0.2.2:3001/openTable/addToOrder";
-        String postBody = "{\n" +
-                "    \"tableId\": \"" + tableId + "\",\n" +
-                "    \"dishArray\": [\n" +
-                "        {\n" +
-                "            \"dishid\": \"" + td.dish.dishId + "\",\n" +
-                "            \"amount\": " + td.amount + ",\n" +
-                "            \"changes\": \"" + td.comments.get(0) + "\",\n" +
-                "            \"firstOrMain\": \"" + td.firstOrMain + "\",\n" +
-                "            \"allTogether\": " + td.allTogether + "\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
+
+        JSONObject dishObject = new JSONObject();
+        try {
+            dishObject.put("dishid", td.dish.dishId);
+            dishObject.put("amount", td.amount);
+            dishObject.put("changes", td.getComments().get(0));
+            dishObject.put("firstOrMain", td.firstOrMain);
+            dishObject.put("allTogether", td.allTogether);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray dishArray = new JSONArray();
+        dishArray.put(dishObject);
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("tableId", tableId);
+            requestBody.put("dishArray", dishArray);
+            requestBody.put("drinkArray", new JSONArray());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         try {
-            postRequest(postUrl, postBody, new RequestCallback() {
+            postRequest(postUrl, requestBody.toString(), new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
                     future.complete(true);
-                    Log.d("server connection","addDishToOrder finish with response: "+response);
+                    Log.d("server connection", "addDishToOrder finish with response: " + response);
                 }
 
                 @Override
                 public void onFailure(String error) {
                     future.complete(false);
-                    Log.d("server connection","addDishToOrder failed with response: "+error);
+                    Log.d("server connection", "addDishToOrder failed with response: " + error);
                     new Exception(error);
                 }
             });
@@ -158,6 +162,57 @@ public class ServerConnection {
         }
         return future;
     }
+
+
+
+
+    public static CompletableFuture<Boolean> addDrinkToOrder(String tableId, TableDrink td) {
+        String postUrl = "http://10.0.2.2:3001/openTable/addToOrder";
+
+        JSONObject drinkObject = new JSONObject();
+        try {
+            drinkObject.put("drinkId", td.drink.getId());
+            drinkObject.put("amount", td.amount);
+            drinkObject.put("changes", td.comments.get(0));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray drinkArray = new JSONArray();
+        drinkArray.put(drinkObject);
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("tableId", tableId);
+            requestBody.put("dishArray", new JSONArray());
+            requestBody.put("drinkArray", drinkArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        try {
+            postRequest(postUrl, requestBody.toString(), new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    future.complete(true);
+                    Log.d("server connection", "addDrinkToOrder finish with response: " + response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.complete(false);
+                    Log.d("server connection", "addDrinkToOrder failed with response: " + error);
+                    new Exception(error);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return future;
+    }
+
 
 
     public static CompletableFuture<String> getAllOpenTables(){
@@ -211,7 +266,7 @@ public class ServerConnection {
             postRequest(postUrl, postBody, new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("server connection", "getDrinkByCategory success with response: " + response);
+                    Log.d("server connection getDrinkByCategory", "getDrinkByCategory success with response: " + response);
 
                     future.complete(response);
                 }
@@ -236,7 +291,7 @@ public class ServerConnection {
             getRequest(getUrl, new RequestCallback() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("server connection", "getCategoryDrinksList success with response: " + response);
+                    Log.d("server connection getCategoryDrinksList", "getCategoryDrinksList success with response: " + response);
                     future.complete(response);
                 }
 

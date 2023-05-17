@@ -3,7 +3,7 @@ package com.example.easyrestapp.model;
 import java.util.ArrayList;
 
 public class TableDrink {
-    String drinkId;
+    String Id;
     Drink drink;
     int amount;
     public ArrayList<String> comments;
@@ -11,7 +11,7 @@ public class TableDrink {
     Double price;
 
     public TableDrink(String drinkId, Drink drink, int amount, ArrayList<String> comments, Boolean ready, Double price) {
-        this.drinkId = drinkId;
+        this.Id = drinkId;
         this.drink = drink;
         this.amount = amount;
         this.comments = comments;
@@ -19,14 +19,20 @@ public class TableDrink {
         this.price = price;
     }
 
-    public TableDrink(){}
-
-    public String getDrinkId() {
-        return drinkId;
+    public TableDrink( Drink drink, int amount, ArrayList<String> comments) {
+        this.drink = drink;
+        this.amount = amount;
+        this.comments = comments;
     }
 
-    public void setDrinkId(String drinkId) {
-        this.drinkId = drinkId;
+    public TableDrink(){}
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        this.Id = id;
     }
 
     public Drink getDrink() {

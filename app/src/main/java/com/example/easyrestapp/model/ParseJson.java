@@ -1,7 +1,5 @@
 package com.example.easyrestapp.model;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -193,7 +191,7 @@ public class ParseJson {
         drink.setId(orderListObject.getString("drinkId"));
         tableDrink.setDrink(drink);
         tableDrink.setAmount(orderListObject.getInt("amount"));
-        tableDrink.setDrinkId(orderListObject.getString("_id"));
+        tableDrink.setId(orderListObject.getString("_id"));
         tableDrink.setReady(orderListObject.getBoolean("ready"));
         tableDrink.setPrice(orderListObject.getDouble("price"));
 

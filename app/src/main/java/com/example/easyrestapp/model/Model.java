@@ -141,6 +141,16 @@ public class Model {
         }
     }
 
+    public void addDrinkToOrder(TableDrink td, String tableId){
+        try {
+            ServerConnection.addDrinkToOrder(tableId,td).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addNewTable(Table table){
         try {
             String response = ServerConnection.addTable(table).get();

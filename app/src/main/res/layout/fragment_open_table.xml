@@ -71,9 +71,37 @@
         app:layout_constraintEnd_toStartOf="@+id/openTable_Btn1"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/openTable_orderBtnDrinks"
+        android:layout_width="101dp"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        android:text="Drinks"
+        android:textColor="@color/black"
+        android:textSize="13.5sp"
+        android:textStyle="bold"
+        app:cornerRadius="100dp"
+        app:layout_constraintStart_toEndOf="@+id/openTable_orderBtnFood"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/openTable_orderBtnFood"
+        android:layout_width="101dp"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        android:text="food"
+        android:textColor="@color/black"
+        android:textSize="13.5sp"
+        android:textStyle="bold"
+        app:cornerRadius="100dp"
+        app:layout_constraintEnd_toStartOf="@+id/openTable_orderBtnDrinks"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menuRV"
-        android:layout_width="520dp"
+        android:layout_width="500dp"
         android:layout_height="700dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openTable_Btn3" />
@@ -83,7 +111,7 @@
         android:layout_width="650dp"
         android:layout_height="350dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/openTable_orderBtnFood" />
 
     <Button
         android:id="@+id/openTable_manegerBtn"
@@ -114,7 +142,7 @@
 
     <Button
         android:id="@+id/button8"
-        android:layout_width="400dp"
+        android:layout_width="250dp"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
@@ -190,7 +218,7 @@
         app:layout_constraintStart_toStartOf="@+id/openTable_avgPerDiner_tv" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="650dp"
         android:layout_height="98dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/button8"
