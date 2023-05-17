@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.ServerConnection;
+import com.example.easyrestapp.model.TableDish;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -35,7 +36,7 @@ public class WaiterActivity extends AppCompatActivity {
         es.execute(() -> {
             boolean notCalled = true;
             while (notCalled) {
-                if (Model.instance().isWaiterCalled("64627605422e4c1341d22a30")) {
+                if (Model.instance().isWaiterCalled("64650d0e1f92b8b4fb302d7f")) {
                     //notCalled = false;
                     runOnUiThread(() -> {
                         // Create and show the popup
