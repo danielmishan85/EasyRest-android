@@ -119,6 +119,11 @@ public class TablesFragment extends Fragment {
 
                 // Call the addTable function with the obtained details
                 Table t= new Table(tableNumber, Integer.parseInt(numberOfDinner),restaurantName, glutenFree, lactoseFree, isVegan, isVegetarian,others,notes);
+
+                if(!Model.instance().isTableAvailable("646380760a12afbe17be0750",t.getTableNumber()))
+                {
+                    Toast.makeText(MyApplication.getMyContext(), "Table is unAvailable", Toast.LENGTH_SHORT).show();
+                }
                 Model.instance().addNewTable(t);
 
                 // Refresh the table data

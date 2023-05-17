@@ -154,11 +154,27 @@ public class Model {
     public void addNewTable(Table table){
         try {
             String response = ServerConnection.addTable(table).get();
-            if(response.contains("message"))
-            {
-                Toast.makeText(MyApplication.getMyContext(), response, Toast.LENGTH_SHORT).show();
-            }
 
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTable(Table table){
+        try {
+            String response = ServerConnection.updateTable(table).get();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateDishOrDrinkTable(Table table){
+        try {
+            String response = ServerConnection.updateDishOrDrinkTable(table).get();
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -191,6 +207,54 @@ public class Model {
             e.printStackTrace();
         }
         return ParseJson.parseDrinksFromJson(drinks);
+    }
+
+    public Drink getDrinkById(String id){
+        ArrayList<Drink> drinks = this.getAllDrinks();
+        for(Drink drink : drinks)
+        {
+            if(drink.getId().equals(id)) {
+                return drink;
+
+            }
+        }
+        return new Drink();
+    }
+
+    public Boolean isTableAvailable(String resId, String tableNumber) {
+        try {
+            String response = ServerConnection.getAvailableTablesByRestaurant(resId).get();
+            Log.d("tag", response);
+
+            // Parse the response as a JSON object
+            JSONObject json = new JSONObject(response);
+
+            // Get the "tables" array from the JSON object
+            JSONArray tablesArray = json.getJSONArray("tableArr");
+
+            // Iterate over each table object in the array
+            for (int i = 0; i < tablesArray.length(); i++) {
+                JSONObject tableObj = tablesArray.getJSONObject(i);
+
+                // Check if the table number matches the given tableNumber parameter
+                if (tableObj.getString("tableNum").equals(tableNumber)) {
+                    boolean isAvailable = tableObj.getBoolean("available");
+                    return isAvailable;
+                }
+            }
+
+            // Table not found in the list, consider it as unavailable
+            return false;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Return null or a default value if any exception occurs
+        return false;
     }
 
 

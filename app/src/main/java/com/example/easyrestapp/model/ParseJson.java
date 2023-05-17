@@ -113,6 +113,12 @@ public class ParseJson {
             table.askForWaiter = jsonObject.getBoolean("askedForBill");
             table.totalPrice = jsonObject.getDouble("TotalPrice");
             table.leftToPay = jsonObject.getDouble("leftToPay");
+            JSONArray orderListDrinkArray = jsonObject.getJSONArray("drinkArray");
+            List<TableDrink> orderDrinkList = new ArrayList<>();
+            for (int j = 0; j < orderListDrinkArray.length(); j++) {
+                orderDrinkList.add(parseTableDrink(orderListDrinkArray.getJSONObject(j),openTable));
+            }
+            table.drinkArray=orderDrinkList;
 
         }
 
@@ -189,6 +195,7 @@ public class ParseJson {
             tableDrink.comments = commentsList;
         }
         drink.setId(orderListObject.getString("drinkId"));
+
         tableDrink.setDrink(drink);
         tableDrink.setAmount(orderListObject.getInt("amount"));
         tableDrink.setId(orderListObject.getString("_id"));

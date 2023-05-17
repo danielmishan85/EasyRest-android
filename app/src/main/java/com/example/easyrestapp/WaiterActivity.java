@@ -12,7 +12,9 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.example.easyrestapp.model.Model;
+import com.example.easyrestapp.model.ServerConnection;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

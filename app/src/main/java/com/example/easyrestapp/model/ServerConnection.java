@@ -306,7 +306,183 @@ public class ServerConnection {
 
         return future;
     }
+    // POST - get list of tables by restaurant ID
+    public static CompletableFuture<String> getAvailableTablesByRestaurant(String restaurantId) {
+        String postUrl = "http://10.0.2.2:3001/res/getTableAavailable";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"resID\": \"" + restaurantId + "\"\n" +
+                "}";
 
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("Server connection", "getTable success with response: " + response);
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return future;
+    }
+
+
+
+
+    public static CompletableFuture<String> updateTable(Table table) {
+        String patchUrl = "http://10.0.2.2:3001/openTable/updateTable";
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        try {
+            JSONArray dishArray = new JSONArray();
+            for (TableDish td : table.getOrderList()) {
+                JSONObject dishObject = new JSONObject();
+                    //dishObject.put("_id", td.getId());
+                    dishObject.put("dishId", td.dish.dishId);
+                    dishObject.put("amount", td.amount);
+                    dishObject.put("firstOrMain", td.firstOrMain);
+                    dishObject.put("changes", td.getComments().get(0));
+                    dishObject.put("ready", td.isReady());
+                    dishObject.put("readyTime", td.getReadyTime());
+                    dishObject.put("allTogether", td.isAllTogether());
+                    dishObject.put("price", td.getPrice());
+                    dishObject.put("orderTime", td.getOrderTime());
+
+                    dishArray.put(dishObject);
+
+            }
+
+            JSONArray drinkArray = new JSONArray();
+            for (TableDrink drink : table.getDrinkArray()) {
+                JSONObject drinkObject = new JSONObject();
+                //drinkObject.put("_id", drink.getId());
+                drinkObject.put("drinkId", drink.getDrink().getId());
+                drinkObject.put("amount", drink.getAmount());
+                drinkObject.put("changes", drink.getComments().get(0));
+                drinkObject.put("ready", drink.getReady());
+                drinkObject.put("price", drink.getPrice());
+
+                drinkArray.put(drinkObject);
+            }
+
+            String patchBody = "{\n" +
+                    "    \"tableId\": \"" + table.getId() + "\",\n" +
+                    "    \"updates\": {\n" +
+                    "        \"numberOfPeople\": " + table.getNumberOfPeople() + ",\n" +
+                    "        \"TotalPrice\": " + table.getTotalPrice() + ",\n" +
+                    "        \"avgPerPerson\": " + table.getAvgPerPerson() + ",\n" +
+//                    "        \"dishArray\": " + dishArray.toString() + ",\n" +
+//                    "        \"drinkArray\": " + drinkArray.toString() + ",\n" +
+                    "        \"fire\": " + table.isFire() + ",\n" +
+                    "        \"gluten\": " + table.isGluten() + ",\n" +
+                    "        \"lactuse\": " + table.isLactose() + ",\n" +
+                    "        \"isVegan\": " + table.isVegan() + ",\n" +
+                    "        \"isVegi\": " + table.isVeggie() + ",\n" +
+                    "        \"others\": \"" + table.getOthers() + "\",\n" +
+                    "        \"notes\": \"" + table.getNotes() + "\",\n" +
+                    "        \"ResturantName\": \"" + table.getRestaurantName() + "\",\n" +
+                    "        \"leftToPay\": " + table.getLeftToPay() + "\n" +
+                    "    }\n" +
+                    "}";
+
+            patchRequest(patchUrl, patchBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("Server connection updateTable", "updateTable success with response: " + patchBody);
+
+                    Log.d("Server connection updateTable", "updateTable success with response: " + response);
+
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
+
+        return future;
+    }
+
+
+
+    public static CompletableFuture<String> updateDishOrDrinkTable(Table table) {
+        String patchUrl = "http://10.0.2.2:3001/openTable/updateTable";
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        try {
+            JSONArray dishArray = new JSONArray();
+            for (TableDish td : table.getOrderList()) {
+                JSONObject dishObject = new JSONObject();
+                dishObject.put("_id", td.getId());
+                dishObject.put("dishId", td.dish.dishId);
+                dishObject.put("amount", td.amount);
+                dishObject.put("firstOrMain", td.firstOrMain);
+                dishObject.put("changes", td.getComments().get(0));
+                dishObject.put("ready", td.isReady());
+                dishObject.put("readyTime", td.getReadyTime());
+                dishObject.put("allTogether", td.isAllTogether());
+                dishObject.put("price", td.getPrice());
+                dishObject.put("orderTime", td.getOrderTime());
+
+                dishArray.put(dishObject);
+
+            }
+
+            JSONArray drinkArray = new JSONArray();
+            for (TableDrink drink : table.getDrinkArray()) {
+                JSONObject drinkObject = new JSONObject();
+                drinkObject.put("_id", drink.getId());
+                drinkObject.put("drinkId", drink.getDrink().getId());
+                drinkObject.put("amount", drink.getAmount());
+                drinkObject.put("changes", drink.getComments().get(0));
+                drinkObject.put("ready", drink.getReady());
+                drinkObject.put("price", drink.getPrice());
+
+                drinkArray.put(drinkObject);
+            }
+
+            String patchBody = "{\n" +
+                    "    \"tableId\": \"" + table.getId() + "\",\n" +
+                    "    \"updates\": {\n" +
+                    "        \"dishArray\": " + dishArray+ ",\n" +
+                    "        \"drinkArray\": " + drinkArray + "\n" +
+                    "    }\n" +
+                    "}";
+
+            patchRequest(patchUrl, patchBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("Server connection updateTable", "updateTable success with response: " + patchBody);
+
+                    Log.d("Server connection updateTable", "updateTable success with response: " + response);
+
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
+
+        return future;
+    }
 
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -366,6 +542,33 @@ public class ServerConnection {
             }
         });
     }
+
+    public static void patchRequest(String patchUrl, String patchBody, RequestCallback callback) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, patchBody);
+
+        Request request = new Request.Builder()
+                .url(patchUrl)
+                .patch(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(e.getMessage());
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                callback.onSuccess(responseBody);
+            }
+        });
+    }
+
+
 
 
 }

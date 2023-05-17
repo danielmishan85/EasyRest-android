@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 
@@ -56,13 +58,14 @@ public class OpenTableFragment extends Fragment {
     DrinkMenuRecyclerAdapter drinkMenuAdapter;
     TableOrderRecyclerAdapter tableOrderAdapter;
     TableDrinkRecyclerAdapter tableDrinkRecyclerAdapter;
+    ExecutorService es;
+    Table currentT;
 
     int currentTable;
     List<Table> tables;
     double totalAmount = 0;
     int numOfDiners = 0;
     int chosenTableDish = 0;
-    boolean drink=false;
 
     @Nullable
     @Override
@@ -75,14 +78,10 @@ public class OpenTableFragment extends Fragment {
         menu = Model.instance().getAllDishes();
         filterMenu = new ArrayList<>(); //filter menu by type
         tables = Model.instance().getAllOpenTables();
-
-        orderList = Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
-        orderDrinkList=Model.instance().getTableByNumber(String.valueOf(currentTable)).getDrinkArray();
-
-        //calculate the amount of the specific table
-        for (TableDish td: orderList){
-            totalAmount += td.dish.getDishPrice();
-        }
+        currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
+        orderList = currentT.getOrderList();
+        orderDrinkList=currentT.getDrinkArray();
+        es= Executors.newSingleThreadExecutor();
 
 
         //*********************************menu list *********************************************
@@ -93,36 +92,44 @@ public class OpenTableFragment extends Fragment {
         filterMenu = menu.stream().filter(d -> d.dishCategory.equals("starter")).collect(Collectors.toList());
         menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), filterMenu);  //show all the dishes
         drinkMenuAdapter = new DrinkMenuRecyclerAdapter(getLayoutInflater(), drinksMenu);  //show all the dishes
-
+        tableDrinkRecyclerAdapter=new TableDrinkRecyclerAdapter((getLayoutInflater()), orderDrinkList);
         binding.menuRV.setAdapter(menuAdapter);
 
         menuAdapter.setOnItemClickListener((int pos) -> {
-            drink=false;
-            showOpenTableDishPopup(Model.instance().getTableByNumber(String.valueOf(currentTable)), menuAdapter.getData().get(pos));
+            showOpenTableDishPopup(currentT, menuAdapter.getData().get(pos));
         });
 
         drinkMenuAdapter.setOnItemClickListener((int pos)->{
-            drink=true;
             String comments="";
             ArrayList<String> arrComments = new ArrayList<>();
             arrComments.add(comments);
             Drink d= drinksMenu.get(pos);
             TableDrink td= new TableDrink( d,1, arrComments);
-            Model.instance().addDrinkToOrder(td,Model.instance().getTableByNumber(String.valueOf(currentTable)).getId());
-            tables = Model.instance().getAllOpenTables();
-            orderDrinkList =Model.instance().getTableByNumber(String.valueOf(currentTable)).getDrinkArray();
-            orderButtonsColorReset();
-            binding.openTableOrderBtnDrinks.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            tableDrinkRecyclerAdapter.setData(orderDrinkList);
-            binding.tableOrderRV.setAdapter(tableDrinkRecyclerAdapter);
+            Model.instance().addDrinkToOrder(td,currentT.getId());
+
+            es.execute(()->{
+                currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
+                orderList = currentT.getOrderList();
+                orderDrinkList =currentT.getDrinkArray();
+                getActivity().runOnUiThread(() -> {
+                    orderButtonsColorReset();
+                    binding.openTableOrderBtnDrinks.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+                    tableDrinkRecyclerAdapter.setData(orderDrinkList);
+                    binding.tableOrderRV.setAdapter(tableDrinkRecyclerAdapter);
+                });
+            });
+
 
         });
 
         binding.openTableOrderBtnFood.setOnClickListener((V)->{
-            orderButtonsColorReset();
-            binding.openTableOrderBtnFood.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            tableOrderAdapter.setData(orderList);
-            binding.tableOrderRV.setAdapter(tableOrderAdapter);
+            getActivity().runOnUiThread(() -> {
+                orderButtonsColorReset();
+                binding.openTableOrderBtnFood.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
+                tableOrderAdapter.setData(orderList);
+                binding.tableOrderRV.setAdapter(tableOrderAdapter);
+            });
+
         });
 
         binding.openTableOrderBtnDrinks.setOnClickListener((V)->{
@@ -131,7 +138,6 @@ public class OpenTableFragment extends Fragment {
             tableDrinkRecyclerAdapter.setData(orderDrinkList);
             binding.tableOrderRV.setAdapter(tableDrinkRecyclerAdapter);
         });
-
 
         //filter dishes by type, by press button
         binding.openTableBtn4.setOnClickListener(V -> {
@@ -188,11 +194,22 @@ public class OpenTableFragment extends Fragment {
         refreshAmountDetails();
         getSensitivityAndFire();
 
-        //***************************************Requests*******************************************
-//        binding.closeTableBtn.setOnClickListener(V->{
-//            Log.d("server","close tables");
-//        });
 
+        binding.sendResBtn.setOnClickListener((V)->{
+
+
+            currentT.setOrderList(orderList);
+            currentT.setDrinkArray(orderDrinkList);
+            currentT.setFire(binding.fireCb.isChecked());
+            currentT.setGluten(binding.glutenCb.isChecked());
+            currentT.setLactose(binding.LactoseCb.isChecked());
+            currentT.setVeggie(binding.isVegetarianCb.isChecked());
+            currentT.setFire(binding.fireCb.isChecked());
+            Model.instance().updateTable(currentT);
+            //Table updatedTable = new Table();
+
+
+        });
         return v;
     }
 
@@ -200,21 +217,19 @@ public class OpenTableFragment extends Fragment {
         Table t=Model.instance().getTableByNumber(String.valueOf(currentTable));
         binding.fireCb.setChecked(t.isFire());
         binding.glutenCb.setChecked(t.isGluten());
-        binding.isVegetarianCb.setChecked(t.isVegan());
+        binding.isVegetarianCb.setChecked(t.isVeggie());
         binding.LactoseCb.setChecked(t.isLactose());
     }
 
     //**************************************total amount, avg per person, send reservation, fire, payment*******************
     public void refreshAmountDetails(){
-        totalAmount=Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson()*Model.instance().getTableByNumber(String.valueOf(currentTable)).getNumberOfPeople();
-        numOfDiners = Model.instance().getTableByNumber(String.valueOf(currentTable)).getNumberOfPeople();
 
-        binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(totalAmount)+ " ₪");
-        double avgPerPerson = Model.instance().getTableByNumber(String.valueOf(currentTable)).getAvgPerPerson();
+        binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(currentT.getTotalPrice())+ " ₪");
+        double avgPerPerson = currentT.getAvgPerPerson();
         String avgPerPersonStr = String.format("%.1f", avgPerPerson);
         binding.openTableAvgPerDinerTv.setText("Avg per diner: " + avgPerPersonStr + " ₪");
 
-        binding.openTableNumOfDinersTv.setText("Number of diners: " + numOfDiners);
+        binding.openTableNumOfDinersTv.setText("Number of diners: " + currentT.getNumberOfPeople());
 
     }
 
@@ -251,10 +266,8 @@ public class OpenTableFragment extends Fragment {
         Button buttonCalculate = paymentPopup.findViewById(R.id.payment_popup_buttonCalculate);
         TextView textViewTotalPrice = paymentPopup.findViewById(R.id.payment_popup_textViewTotalPrice);
 
-
-        Table t=Model.instance().getTableByNumber(String.valueOf(currentTable));
         if (currentTable!=0)
-            editTextPrice.setText(t.getAvgPerPerson()*t.numberOfPeople+"");
+            editTextPrice.setText(currentT.getAvgPerPerson()*currentT.numberOfPeople+"");
         // Set click listener for the Calculate button
         buttonCalculate.setOnClickListener((v)-> {
             String priceStr = editTextPrice.getText().toString().trim();
@@ -328,12 +341,20 @@ public class OpenTableFragment extends Fragment {
                 ArrayList<String> arrComments = new ArrayList<>();
                 arrComments.add(comments);
                 TableDish td = new TableDish(dish,amount,fOrM.getText().toString(),true,arrComments);
+
                 Model.instance().addDishToOrder(td,table.getId());
 
-                tables = Model.instance().getAllOpenTables();
-                orderList =Model.instance().getTableByNumber(String.valueOf(currentTable)).getOrderList();
-                tableOrderAdapter.setData(orderList);
-                binding.tableOrderRV.setAdapter(tableOrderAdapter);
+
+                es.execute(()->{
+                    tables = Model.instance().getAllOpenTables();
+                    currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
+                    orderList =currentT.getOrderList();
+                    getActivity().runOnUiThread(() -> {
+                        tableOrderAdapter.setData(orderList);
+                        binding.tableOrderRV.setAdapter(tableOrderAdapter);
+                    });
+                });
+
 
             }
         });
@@ -550,10 +571,18 @@ public class OpenTableFragment extends Fragment {
     class TableDrinkViewHolder extends RecyclerView.ViewHolder {
 
         TextView drinkName;
+        Button drinkType;
+        ImageButton drinkDelete;
+        ImageButton drinkComment;
+        TextView amount;
 
         public TableDrinkViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             drinkName = itemView.findViewById(R.id.TableDishRow_dishName_tv);
+            drinkType = itemView.findViewById(R.id.tableDishRow_FirstOrMainBtb);
+            drinkDelete = itemView.findViewById(R.id.deleteDish_btn);
+            drinkComment = itemView.findViewById(R.id.commentsDish_btn);
+            amount = itemView.findViewById(R.id.tableDishRow_amount_tv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -562,10 +591,25 @@ public class OpenTableFragment extends Fragment {
                     listener.onItemClick(pos);
                 }
             });
+
+            drinkDelete.setOnClickListener(v -> {
+                orderDrinkList.remove(getAdapterPosition());
+                tableDrinkRecyclerAdapter.setData(orderDrinkList);
+                currentT.drinkArray=orderDrinkList;
+                Model.instance().updateDishOrDrinkTable(currentT);
+            });
         }
 
+
+
+
         public void bind(TableDrink d) {
-            drinkName.setText(d.getDrink().getDrinkName());
+            Drink drink = Model.instance().getDrinkById(d.getDrink().getId());
+            drinkName.setText(drink.getDrinkName());
+            drinkType.setVisibility(View.GONE);
+            drinkComment.setVisibility(View.GONE);
+            amount.setText("Amount: " + d.getAmount());
+
         }
     }
 
@@ -627,6 +671,7 @@ public class OpenTableFragment extends Fragment {
         ImageButton dishDelete;
         Button orderFire;
         ImageButton dishComment;
+        TextView amount;
 
 
         public TableOrderViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -635,24 +680,19 @@ public class OpenTableFragment extends Fragment {
             dishType = itemView.findViewById(R.id.tableDishRow_FirstOrMainBtb);
             dishDelete = itemView.findViewById(R.id.deleteDish_btn);
             dishComment = itemView.findViewById(R.id.commentsDish_btn);
-
-            dishType.setOnClickListener(v->{
-                if(dishType.getText().toString().equals("F")) {
-                    dishType.setText("M");
-                }
-                else{
-                    dishType.setText("F");
-                }
-            });
+            amount = itemView.findViewById(R.id.tableDishRow_amount_tv);
 
 
-            dishDelete.setOnClickListener(v->{
+
+            dishDelete.setOnClickListener(v -> {
                 orderList.remove(getAdapterPosition());
                 setTableOrderAdapter(tableOrderAdapter, orderList);
+                currentT.orderList=orderList;
+                Model.instance().updateDishOrDrinkTable(currentT);
             });
 
 
-            dishComment.setOnClickListener(v->{
+            dishComment.setOnClickListener(v -> {
                 //continue from here
                 showDishCommentsPopup(getAdapterPosition());
             });
@@ -667,13 +707,12 @@ public class OpenTableFragment extends Fragment {
         }
 
         public void bind(TableDish td) {
-            Log.d("server", "dishID: " + td.dish.getDishId());
             Dish d = Model.instance().getDishById(td.dish.getDishId());
             td.setDish(d);
             dishName.setText(td.dish.getDishName());
-            //Log.d("server", "dishName: " + td.getFirstOrMain());
-
             dishType.setText(td.getFirstOrMain());
+            amount.setText("Amount: " + td.getAmount());
+
         }
     }
 
