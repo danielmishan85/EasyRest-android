@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.easyrestapp.model.Dish;
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
@@ -32,9 +34,9 @@ public class KitchenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen);
 
-//        tables = Model.instance().getTables();
+        tables = Model.instance().getAllOpenTables();
         openTablesList = findViewById(R.id.kitchen_tablesList);
-        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),3,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
+        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
         kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
         openTablesList.setAdapter(kitchenAdapter);
     }
@@ -62,9 +64,9 @@ public class KitchenActivity extends AppCompatActivity {
         }
 
         public void bind(Table t) {
-//            tableNumber.setText("Table Number " + t.gettNum());
+            tableNumber.setText("Table Number " + t.getTableNumber());
             orderList.setLayoutManager(new LinearLayoutManager(MyApplication.getMyContext()));  //define the recycler view to be a list
-            tableOrderAdapter = new OrderRecyclerAdapter(getLayoutInflater(), t.orderList);
+            tableOrderAdapter = new OrderRecyclerAdapter(getLayoutInflater(), t);
             orderList.setAdapter(tableOrderAdapter);
         }
     }
@@ -124,20 +126,36 @@ public class KitchenActivity extends AppCompatActivity {
         TextView time;
         CheckBox checkBox;
 
-        public OrderViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+        public OrderViewHolder(@NonNull View itemView, OnItemClickListener listener,Table t) {
             super(itemView);
             dishType = itemView.findViewById(R.id.kitchenGridRow_FirstOrMainBtb);
             dishName = itemView.findViewById(R.id.kitchenGridRow_dishName_tv);
             time = itemView.findViewById(R.id.kitchenGridRow_timeTV);
             checkBox = itemView.findViewById(R.id.kitchenGridRow_checkBox);
 
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox.setChecked(true);
+                    int pos = getAdapterPosition();
+                    t.getOrderList().get(pos).setReady(true);
+                    Model.instance().updateTable(t);
+                    System.out.println("update succeed");
+                }
+            });
+
 
         }
 
         public void bind(TableDish td) {
-//            dishType.setText(td.dish.getType());
-//            dishName.setText(td.dish.getName());
-//            time.setText("no time yet");
+            Dish d = Model.instance().getDishById(td.dish.getDishId());
+            td.setDish(d);
+            dishType.setText(td.getFirstOrMain());
+            dishName.setText(td.dish.getDishName());
+            if(td.ready){
+                checkBox.setChecked(true);
+            }
+            time.setText("no time yet");
         }
     }
 
@@ -145,15 +163,17 @@ public class KitchenActivity extends AppCompatActivity {
     class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderViewHolder>{
         OnItemClickListener listener;
         LayoutInflater inflater;
+        Table currentTable;
         List<TableDish> orderList;
 
         public void setData(List<TableDish> data){
             this.orderList = data;
             notifyDataSetChanged();
         }
-        public OrderRecyclerAdapter(LayoutInflater inflater, List<TableDish> data){
+        public OrderRecyclerAdapter(LayoutInflater inflater, Table t){
             this.inflater = inflater;
-            this.orderList = data;
+            currentTable = t;
+            this.orderList = t.getOrderList();
         }
 
         // Set the OnItemClickListener
@@ -165,7 +185,7 @@ public class KitchenActivity extends AppCompatActivity {
         @Override
         public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.kitchen_grid_row,parent,false);
-            return new OrderViewHolder(view,listener);
+            return new OrderViewHolder(view,listener, currentTable);
         }
 
         // Bind the data to the view holder
