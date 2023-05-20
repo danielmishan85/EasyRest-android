@@ -68,7 +68,6 @@ public class Model {
         String tables="";
         try {
             tables = ServerConnection.getAllOpenTables().get();
-            Log.d("server","tables: "+ tables);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -172,9 +171,19 @@ public class Model {
             e.printStackTrace();
         }
     }
+
+    public void fire(String tableID){
+        try {
+            ServerConnection.fire(tableID).get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void updateDishOrDrinkTable(Table table){
         try {
-            String response = ServerConnection.updateDishOrDrinkTable(table).get();
+            ServerConnection.updateDishOrDrinkTable(table).get();
 
         } catch (ExecutionException e) {
             e.printStackTrace();

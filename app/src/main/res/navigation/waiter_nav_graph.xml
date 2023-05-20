@@ -21,7 +21,11 @@
         android:id="@+id/orderRecoveryFragment"
         android:name="com.example.easyrestapp.OrderRecoveryFragment"
         android:label="fragment_order_recovery"
-        tools:layout="@layout/fragment_order_recovery" />
+        tools:layout="@layout/fragment_order_recovery" >
+        <action
+            android:id="@+id/action_orderRecoveryFragment_to_closeTableDetailsFragment"
+            app:destination="@id/closeTableDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/openTableFragment"
         android:name="com.example.easyrestapp.OpenTableFragment"
@@ -29,6 +33,15 @@
         tools:layout="@layout/fragment_open_table" >
         <argument
             android:name="chosenTable"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/closeTableDetailsFragment"
+        android:name="com.example.easyrestapp.CloseTableDetailsFragment"
+        android:label="fragment_close_table_details"
+        tools:layout="@layout/fragment_close_table_details" >
+        <argument
+            android:name="pos"
             app:argType="integer" />
     </fragment>
 </navigation>

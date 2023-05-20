@@ -1,11 +1,15 @@
 package com.example.easyrestapp;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,9 +20,15 @@ import com.example.easyrestapp.databinding.FragmentOrderRecoveryBinding;
 import com.example.easyrestapp.model.ClosedTable;
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
+import com.example.easyrestapp.model.TableDish;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -37,24 +47,23 @@ public class OrderRecoveryFragment extends Fragment {
 
         binding = FragmentOrderRecoveryBinding.inflate(inflater, container, false);
         View view =binding.getRoot();
-        binding.orderRecoveryBtn.setOnClickListener(V->{
-//            NavDirections action = OrderRecoveryFragmentDirections.actionOrderRecoveryFragmentToOrderRecoveryFragment();
-//            Navigation.findNavController(getActivity(), R.id.main_navhost).navigate(action);
-            //create the order again from DB
-        });
+
 
         binding.lastOrdersRv.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
         adapter = new OrderRecoveryRecyclerAdapter(getLayoutInflater(),lastOrders);
         binding.lastOrdersRv.setAdapter(adapter);
 
         adapter.setOnItemClickListener((int pos)-> {
+            NavDirections action = OrderRecoveryFragmentDirections.actionOrderRecoveryFragmentToCloseTableDetailsFragment(pos);
+            Navigation.findNavController(getActivity(), R.id.main_navhost).navigate(action);
+            });
 
-            //in order to find the rec position in all rec list so that i can use the same recInfo frag
 
-        });
 
         return view;
     }
+
+
 
 
 
@@ -81,12 +90,22 @@ public class OrderRecoveryFragment extends Fragment {
         }
 
         public void bind(ClosedTable table) {
-            tNum.setText(table.getT().getTableNumber());
+            tNum.setText(getAdapterPosition()+ "");
             tNote.setText(table.getT().getNotes());
-            tTime.setText(table.getT().getOpenTime());
             tDinners.setText(String.valueOf(table.getT().getNumberOfPeople()));
-            tTotal.setText(String.valueOf(table.getT().getAvgPerPerson()*table.getT().getNumberOfPeople()));
-            tAvg.setText(String.valueOf(table.getT().getAvgPerPerson()));
+            tTotal.setText(String.format("%.1f",table.getT().getAvgPerPerson()*table.getT().getNumberOfPeople()));
+            tAvg.setText(String.format("%.1f",table.getT().getAvgPerPerson()));
+            String outputDateFormat = "yyyy-MM-dd,HH:mm";
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat(outputDateFormat, Locale.getDefault());
+
+            try {
+                Date date = inputFormat.parse(table.getT().getOpenTime());
+                String outputDateString = outputFormat.format(date);
+                tTime.setText(outputDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
     //---------------------OnItemClickListener ---------------------------

@@ -6,15 +6,15 @@ public class ClosedTable {
 
     String id;
     Table t;
-    String closeTime;
+    String openTime;
     Double tip;
     ArrayList<Payment> paymentArray;
 
 
 
-    public ClosedTable(Table t, String closeTime, Double tip, ArrayList<Payment> paymentArray) {
+    public ClosedTable(Table t, String openTime, Double tip, ArrayList<Payment> paymentArray) {
         this.t = t;
-        this.closeTime = closeTime;
+        this.openTime = openTime;
         this.tip = tip;
         this.paymentArray = paymentArray;
     }
@@ -23,13 +23,7 @@ public class ClosedTable {
 
     }
 
-    public ClosedTable(String id, Table t, String closeTime, Double tip, ArrayList<Payment> paymentArray) {
-        this.id = id;
-        this.t = t;
-        this.closeTime = closeTime;
-        this.tip = tip;
-        this.paymentArray = paymentArray;
-    }
+
 
     public String getId() {
         return id;
@@ -49,12 +43,12 @@ public class ClosedTable {
         this.t = t;
     }
 
-    public String getCloseTime() {
-        return closeTime;
+    public String getOpenTime() {
+        return openTime;
     }
 
-    public void setCloseTime(String closeTime) {
-        this.closeTime = closeTime;
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
     }
 
     public Double getTip() {

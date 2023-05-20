@@ -222,6 +222,7 @@ public class ServerConnection {
         getRequest(url, new RequestCallback() {
             @Override
             public void onSuccess(String response) {
+
                 future.complete(response);
             }
 
@@ -335,6 +336,34 @@ public class ServerConnection {
         return future;
     }
 
+    public static CompletableFuture<String> fire(String tableID) {
+        String postUrl = "http://10.0.2.2:3001/fire/FireTable";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"tableId\": \"" + tableID + "\"\n" +
+                "}";
+
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("Server connection fire", "fire success with response: " + response);
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return future;
+    }
+
 
 
 
@@ -350,7 +379,7 @@ public class ServerConnection {
                     dishObject.put("dishId", td.dish.dishId);
                     dishObject.put("amount", td.amount);
                     dishObject.put("firstOrMain", td.firstOrMain);
-                    dishObject.put("changes", td.getComments().get(0));
+                    dishObject.put("changes", td.getComments());
                     dishObject.put("ready", td.isReady());
                     dishObject.put("readyTime", td.getReadyTime());
                     dishObject.put("allTogether", td.isAllTogether());
@@ -367,7 +396,7 @@ public class ServerConnection {
                 //drinkObject.put("_id", drink.getId());
                 drinkObject.put("drinkId", drink.getDrink().getId());
                 drinkObject.put("amount", drink.getAmount());
-                drinkObject.put("changes", drink.getComments().get(0));
+                drinkObject.put("changes", drink.getComments());
                 drinkObject.put("ready", drink.getReady());
                 drinkObject.put("price", drink.getPrice());
 

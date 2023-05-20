@@ -50,7 +50,7 @@ public class OpenTableFragment extends Fragment {
     List<Dish> menu;
     List<Drink> drinksMenu;
     List<Dish> filterMenu;
-    List<TableDish> orderList;
+     List<TableDish> orderList;
     List<TableDrink> orderDrinkList;
 
     FragmentOpenTableBinding binding;
@@ -200,7 +200,10 @@ public class OpenTableFragment extends Fragment {
 
             currentT.setOrderList(orderList);
             currentT.setDrinkArray(orderDrinkList);
-            currentT.setFire(binding.fireCb.isChecked());
+            if(currentT.isFire()!=binding.fireCb.isChecked()) {
+                currentT.setFire(binding.fireCb.isChecked());
+                Model.instance().fire(currentT.getId());
+            }
             currentT.setGluten(binding.glutenCb.isChecked());
             currentT.setLactose(binding.LactoseCb.isChecked());
             currentT.setVeggie(binding.isVegetarianCb.isChecked());
@@ -370,7 +373,7 @@ public class OpenTableFragment extends Fragment {
         builder.show();
     }
 
-    private void showDishCommentsPopup(int dishIndex) {
+     public void showDishCommentsPopup(int dishIndex) {
         // Get the dish object from the orderList using the dishIndex
         TableDish tableDish = orderList.get(dishIndex);
 
@@ -710,7 +713,10 @@ public class OpenTableFragment extends Fragment {
             Dish d = Model.instance().getDishById(td.dish.getDishId());
             td.setDish(d);
             dishName.setText(td.dish.getDishName());
-            dishType.setText(td.getFirstOrMain());
+            if(td.getFirstOrMain().equals("M"))
+                dishType.setText("M");
+            else
+                dishType.setText("F");
             amount.setText("Amount: " + td.getAmount());
 
         }

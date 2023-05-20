@@ -7,20 +7,6 @@
     tools:context=".TablesFragment">
 
     <ImageButton
-        android:id="@+id/imageButton2ff"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginStart="550dp"
-        android:layout_marginEnd="550dp"
-        android:layout_marginBottom="35dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@drawable/img"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageButton
         android:id="@+id/imageButton3"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -33,19 +19,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/orderRecoveryBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:backgroundTintMode="src_in"
-        android:text="Recover"
-        android:textColor="#575353"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton2ff"
-        app:layout_constraintStart_toStartOf="@+id/imageButton2ff"
-        app:strokeColor="#FFC0CB" />
 
 
     <TextView
@@ -66,7 +39,7 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Table's Number"
+        android:text="Identifier"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold|italic"
@@ -140,7 +113,6 @@
         tools:ignore="MissingConstraints" />
 
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lastOrders_rv"
         android:layout_width="match_parent"
@@ -149,12 +121,11 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton2ff"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
 
     <!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 

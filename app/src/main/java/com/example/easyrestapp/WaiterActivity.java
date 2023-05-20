@@ -13,49 +13,58 @@ import android.util.Log;
 
 import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.ServerConnection;
+import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class WaiterActivity extends AppCompatActivity {
 
     NavController navController;
+    AtomicReference<ArrayList<Table>> atomicArrayList;
+    private static final Object modelLock = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiter);
 
-        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.main_navhost);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_navhost);
         navController = navHostFragment.getNavController();
-        NavigationUI.setupActionBarWithNavController(this,navController);
+        NavigationUI.setupActionBarWithNavController(this, navController);
+
 
         ExecutorService es = Executors.newSingleThreadExecutor();
         es.execute(() -> {
-            boolean notCalled = true;
-            while (notCalled) {
-                if (Model.instance().isWaiterCalled("64650d0e1f92b8b4fb302d7f")) {
-                    //notCalled = false;
-                    runOnUiThread(() -> {
-                        // Create and show the popup
-                        AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
-                        builder.setTitle("Waiter Called");
-                        // Set other properties of the dialog as needed
-                        builder.show();
-                    });
+            while (true) {
+                List<Table> openTables = Model.instance().getAllOpenTables(); // Move the getAllOpenTables() call outside the while loop
+                for (Table t : openTables) {
+                    Log.d("tag", t.id + " val: " + Model.instance().isWaiterCalled(t.getId()));
+                    boolean waiterCalled = Model.instance().isWaiterCalled(t.getId());
+                    if (waiterCalled) {
+                        runOnUiThread(() -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
+                            builder.setTitle("Waiter Called to table number: " + t.getTableNumber());
+                            builder.show();
+                        });
 
-                    try {
-                        Thread.sleep(10000); // Sleep for 10 seconds
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        Thread.sleep(1000); // Sleep for 1 second
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        try {
+                            Thread.sleep(10000); // Sleep for 10 seconds
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        try {
+                            Thread.sleep(1000); // Sleep for 1 second
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

@@ -34,7 +34,7 @@
 
             <TextView
                 android:id="@+id/table_num"
-                android:layout_width="50dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="1"
@@ -47,9 +47,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <TextView
                 android:id="@+id/notes_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="no notes"
                 android:textColor="#575353"
@@ -64,7 +68,7 @@
 
             <TextView
                 android:id="@+id/opentime_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:text="opening time"
                 android:textColor="#575353"
@@ -81,6 +85,7 @@
                 android:id="@+id/dinners_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
                 android:text="1"
                 android:textColor="#575353"
                 android:textSize="20sp"
@@ -96,6 +101,7 @@
                 android:id="@+id/amount_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
                 android:text="0"
                 android:textColor="#575353"
                 android:textSize="20sp"

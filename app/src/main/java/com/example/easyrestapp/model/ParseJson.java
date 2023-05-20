@@ -1,5 +1,7 @@
 package com.example.easyrestapp.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +72,7 @@ public class ParseJson {
                 ClosedTable closedTable = new ClosedTable();
                 closedTable.id = jsonObject.getString("_id");
                 closedTable.t = parseTable(jsonObject,false);
-                closedTable.closeTime = jsonObject.getString("closeTime");
+                closedTable.openTime = jsonObject.getString("closeTime");
                 closedTable.tip = jsonObject.getDouble("pTip");
                 closedTable.paymentArray = parsePaymentArray(jsonObject.getJSONArray("payment"));
                 closedTables.add(closedTable);
@@ -95,9 +97,8 @@ public class ParseJson {
         table.gluten = jsonObject.getBoolean("gluten");
         table.lactose = jsonObject.getBoolean("lactuse");
         table.veggie = jsonObject.getBoolean("isVegi");
-        table.vegan = jsonObject.getBoolean("isVagan");
-        table.notes = jsonObject.getString("notes");
         table.others = jsonObject.getString("others");
+        table.vegan = jsonObject.getBoolean("isVagan");
 
         JSONArray orderListArray = jsonObject.getJSONArray("dishArray");
         List<TableDish> orderList = new ArrayList<>();
@@ -110,9 +111,10 @@ public class ParseJson {
             table.update = jsonObject.getString("udate");
             table.fire = jsonObject.getBoolean("fire");
             table.askForWaiter = jsonObject.getBoolean("askedForwaiter");
-            table.askForWaiter = jsonObject.getBoolean("askedForBill");
+            table.askForBill = jsonObject.getBoolean("askedForBill");
             table.totalPrice = jsonObject.getDouble("TotalPrice");
             table.leftToPay = jsonObject.getDouble("leftToPay");
+            table.notes = jsonObject.getString("notes");
             JSONArray orderListDrinkArray = jsonObject.getJSONArray("drinkArray");
             List<TableDrink> orderDrinkList = new ArrayList<>();
             for (int j = 0; j < orderListDrinkArray.length(); j++) {
