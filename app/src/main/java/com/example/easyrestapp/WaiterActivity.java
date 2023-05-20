@@ -44,7 +44,6 @@ public class WaiterActivity extends AppCompatActivity {
             while (true) {
                 List<Table> openTables = Model.instance().getAllOpenTables(); // Move the getAllOpenTables() call outside the while loop
                 for (Table t : openTables) {
-                    Log.d("tag", t.id + " val: " + Model.instance().isWaiterCalled(t.getId()));
                     boolean waiterCalled = Model.instance().isWaiterCalled(t.getId());
                     if (waiterCalled) {
                         runOnUiThread(() -> {
@@ -60,11 +59,11 @@ public class WaiterActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        try {
-                            Thread.sleep(1000); // Sleep for 1 second
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Thread.sleep(1000); // Sleep for 1 second
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 }
             }

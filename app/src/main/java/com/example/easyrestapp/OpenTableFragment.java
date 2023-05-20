@@ -1,13 +1,11 @@
 package com.example.easyrestapp;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.MenuAdapter;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -31,17 +27,16 @@ import com.example.easyrestapp.databinding.FragmentOpenTableBinding;
 import com.example.easyrestapp.model.Dish;
 import com.example.easyrestapp.model.Drink;
 import com.example.easyrestapp.model.Model;
-import com.example.easyrestapp.model.ServerConnection;
+import com.example.easyrestapp.model.Payment;
 import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 import com.example.easyrestapp.model.TableDrink;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
@@ -66,6 +61,8 @@ public class OpenTableFragment extends Fragment {
     double totalAmount = 0;
     int numOfDiners = 0;
     int chosenTableDish = 0;
+    double totalPrice,discount;
+
 
     @Nullable
     @Override
@@ -254,8 +251,7 @@ public class OpenTableFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         View paymentPopup = getLayoutInflater().inflate(R.layout.payment_popup, null);
         builder.setView(paymentPopup);
-
-
+        AtomicReference<Boolean> isCalc= new AtomicReference<>(false);
         // Initialize views
         EditText editTextPrice = paymentPopup.findViewById(R.id.payment_popup_editTextPrice);
         EditText editTextDiscount = paymentPopup.findViewById(R.id.payment_popup_editTextDiscount);
@@ -273,6 +269,7 @@ public class OpenTableFragment extends Fragment {
             editTextPrice.setText(currentT.getAvgPerPerson()*currentT.numberOfPeople+"");
         // Set click listener for the Calculate button
         buttonCalculate.setOnClickListener((v)-> {
+            isCalc.set(true);
             String priceStr = editTextPrice.getText().toString().trim();
             String discountStr = editTextDiscount.getText().toString().trim();
             String serviceStr = editTextService.getText().toString().trim();
@@ -283,7 +280,7 @@ public class OpenTableFragment extends Fragment {
             }
 
             double price = Double.parseDouble(priceStr);
-            double discount = discountStr.isEmpty() ? 0.0 : Double.parseDouble(discountStr);
+            discount = discountStr.isEmpty() ? 0.0 : Double.parseDouble(discountStr);
             double service = serviceStr.isEmpty() ? 0.0 : Double.parseDouble(serviceStr);
 
             if (radioButtonPercentage.isChecked()) {
@@ -294,12 +291,24 @@ public class OpenTableFragment extends Fragment {
                 service = price * (service / 100.0);
             }
 
-            double totalPrice = price - discount + service;
+             totalPrice = price - discount + service;
             textViewTotalPrice.setText(String.format("Total Price: %.2f", totalPrice));
 
         });
 
+        builder.setPositiveButton("PAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(isCalc.get()){
+                    Payment payment=new Payment("Card",totalPrice);
+                    Model.instance().payment(currentT.getId(),payment,discount);
+                }
+                else{
+                    Toast.makeText(MyApplication.getMyContext(), "Please click on calc first", Toast.LENGTH_LONG).show();
 
+                }
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
     }

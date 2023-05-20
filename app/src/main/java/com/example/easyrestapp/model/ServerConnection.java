@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -235,6 +236,39 @@ public class ServerConnection {
         return future;
     }
 
+    public static CompletableFuture<String> payment(String tableID, Payment payment, Double discount){
+        String postUrl = "http://10.0.2.2:3001/closeTable/payment";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"tableId\": \"" + tableID + "\",\n" +
+                "    \"payment\": [\n" +
+                "        {\n" +
+                "            \"paymentMethod\": \"" + payment.getPaymentMethod() + "\",\n" +
+                "            \"amountPaid\": " + payment.getPrice() + "\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"discount\": " + discount + "\n" +
+                "}";
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("server connection payment", "payment success with response: " + response);
+
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+        }
+
+        return future;
+    }
 
     public static CompletableFuture<String> getAllClosedTables(){
 

@@ -26,6 +26,15 @@ public class Model {
         return getTableById(id).isAskForWaiter();
     }
 
+    public void payment(String tableID,Payment payment,Double discount){
+        try {
+            ServerConnection.payment(tableID,payment,discount).get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public ArrayList<Dish> getAllDishes(){
         ArrayList<Dish> arrayAllDishes = new ArrayList<>();
