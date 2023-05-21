@@ -493,9 +493,9 @@ public class ServerConnection {
                 dishObject.put("dishId", td.dish.dishId);
                 dishObject.put("amount", td.amount);
                 dishObject.put("firstOrMain", td.firstOrMain);
-                dishObject.put("changes", td.getComments().get(0));
+                dishObject.put("changes", td.getComments());
                 dishObject.put("ready", td.isReady());
-                dishObject.put("readyTime", td.getReadyTime());
+//                dishObject.put("readyTime", td.getReadyTime());
                 dishObject.put("allTogether", td.isAllTogether());
                 dishObject.put("price", td.getPrice());
                 dishObject.put("orderTime", td.getOrderTime());
@@ -510,7 +510,7 @@ public class ServerConnection {
                 drinkObject.put("_id", drink.getId());
                 drinkObject.put("drinkId", drink.getDrink().getId());
                 drinkObject.put("amount", drink.getAmount());
-                drinkObject.put("changes", drink.getComments().get(0));
+                drinkObject.put("changes", drink.getComments());
                 drinkObject.put("ready", drink.getReady());
                 drinkObject.put("price", drink.getPrice());
 
@@ -537,6 +537,7 @@ public class ServerConnection {
 
                 @Override
                 public void onFailure(String error) {
+                    Log.d("Server connection updateTable", "updateTable success with response: " + error);
                     future.completeExceptionally(new Exception(error));
                 }
             });

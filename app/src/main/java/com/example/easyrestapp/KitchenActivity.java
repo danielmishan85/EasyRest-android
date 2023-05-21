@@ -125,6 +125,8 @@ public class KitchenActivity extends AppCompatActivity {
         TextView dishName;
         TextView time;
         CheckBox checkBox;
+        List<TableDish> orderList;
+
 
         public OrderViewHolder(@NonNull View itemView, OnItemClickListener listener,Table t) {
             super(itemView);
@@ -132,15 +134,17 @@ public class KitchenActivity extends AppCompatActivity {
             dishName = itemView.findViewById(R.id.kitchenGridRow_dishName_tv);
             time = itemView.findViewById(R.id.kitchenGridRow_timeTV);
             checkBox = itemView.findViewById(R.id.kitchenGridRow_checkBox);
+            orderList = t.getOrderList();
 
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     checkBox.setChecked(true);
-                    int pos = getAdapterPosition();
-                    t.getOrderList().get(pos).setReady(true);
-                    Model.instance().updateTable(t);
-                    System.out.println("update succeed");
+                    orderList.get(getAdapterPosition()).setReady(true);
+                    //need to change the data of the adapter
+                    t.orderList = orderList;
+                   Model.instance().updateDishOrDrinkTable(t);
+                   System.out.println("update succeed");
                 }
             });
 
