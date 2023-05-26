@@ -139,8 +139,10 @@ public class KitchenActivity extends AppCompatActivity {
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkBox.setChecked(true);
-                    orderList.get(getAdapterPosition()).setReady(true);
+                    if(checkBox.isChecked())
+                        orderList.get(getAdapterPosition()).setReady(true);
+                    else
+                        orderList.get(getAdapterPosition()).setReady(false);
                     //need to change the data of the adapter
                     t.orderList = orderList;
                    Model.instance().updateDishOrDrinkTable(t);

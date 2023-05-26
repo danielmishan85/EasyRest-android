@@ -33,8 +33,11 @@ import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 import com.example.easyrestapp.model.TableDrink;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -80,6 +83,7 @@ public class OpenTableFragment extends Fragment {
         orderList = currentT.getOrderList();
         orderDrinkList=currentT.getDrinkArray();
         es= Executors.newSingleThreadExecutor();
+        binding.refreshTv2.setText("Last refresh: " + getCurrentDateTime());
 
 
         //*********************************menu list *********************************************
@@ -128,6 +132,17 @@ public class OpenTableFragment extends Fragment {
                 binding.tableOrderRV.setAdapter(tableOrderAdapter);
             });
 
+        });
+
+        binding.refreshTableDishesIb.setOnClickListener(V -> {
+            currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
+            orderList = currentT.getOrderList();
+            orderDrinkList=currentT.getDrinkArray();
+            tableOrderAdapter.setData(orderList);
+            tableDrinkRecyclerAdapter.setData(orderDrinkList);
+            refreshAmountDetails();
+            getSensitivityAndFire();
+            binding.refreshTv2.setText("Last refresh: " + getCurrentDateTime());
         });
 
         binding.openTableOrderBtnDrinks.setOnClickListener((V)->{
@@ -211,7 +226,14 @@ public class OpenTableFragment extends Fragment {
 
 
         });
+
+
         return v;
+    }
+    private String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
     }
 
     public void getSensitivityAndFire(){
@@ -303,6 +325,8 @@ public class OpenTableFragment extends Fragment {
                 if(isCalc.get()){
                     Payment payment=new Payment("Card",totalPrice);
                     Model.instance().payment(currentT.getId(),payment,discount);
+                    refreshAmountDetails();
+
                 }
                 else{
                     Toast.makeText(MyApplication.getMyContext(), "Please click on calc first", Toast.LENGTH_LONG).show();

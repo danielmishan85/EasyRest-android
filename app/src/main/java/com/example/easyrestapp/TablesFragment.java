@@ -27,9 +27,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyrestapp.databinding.FragmentTablesBinding;
 import com.example.easyrestapp.model.Model;
+import com.example.easyrestapp.model.Payment;
 import com.example.easyrestapp.model.Table;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class TablesFragment extends Fragment {
@@ -38,6 +43,7 @@ public class TablesFragment extends Fragment {
     TablesRecyclerAdapter adapter;
     List<Table> tables;
     int chosenTable;
+    Double discount,totalPrice;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -73,7 +79,14 @@ public class TablesFragment extends Fragment {
             showPaymentPopup();
         });
 
+        binding.refreshTablesIb.setOnClickListener(V -> {
+            tables = Model.instance().getAllOpenTables();
+            adapter.setData(tables);
+            binding.refreshTv.setText("Last refresh: " + getCurrentDateTime());
+        });
 
+
+        binding.refreshTv.setText("Last refresh: " + getCurrentDateTime());
         binding.tablesRv.setLayoutManager(new LinearLayoutManager(getContext())); //define the recycler view to be a list
         adapter = new TablesRecyclerAdapter(getLayoutInflater(),tables);
         binding.tablesRv.setAdapter(adapter);
@@ -85,7 +98,14 @@ public class TablesFragment extends Fragment {
         });
 
 
+
         return  v;
+    }
+
+    private String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
     }
 
 
@@ -144,8 +164,7 @@ public class TablesFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PinkAlertDialog);
         View paymentPopup = getLayoutInflater().inflate(R.layout.payment_popup, null);
         builder.setView(paymentPopup);
-
-
+        AtomicReference<Boolean> isCalc= new AtomicReference<>(false);
         // Initialize views
         EditText editTextPrice = paymentPopup.findViewById(R.id.payment_popup_editTextPrice);
         EditText editTextDiscount = paymentPopup.findViewById(R.id.payment_popup_editTextDiscount);
@@ -159,38 +178,51 @@ public class TablesFragment extends Fragment {
         Button buttonCalculate = paymentPopup.findViewById(R.id.payment_popup_buttonCalculate);
         TextView textViewTotalPrice = paymentPopup.findViewById(R.id.payment_popup_textViewTotalPrice);
 
-
         Table t=Model.instance().getTableByNumber(String.valueOf(chosenTable));
         if (chosenTable!=0)
             editTextPrice.setText(t.getAvgPerPerson()*t.numberOfPeople+"");
         // Set click listener for the Calculate button
         buttonCalculate.setOnClickListener((v)-> {
-                String priceStr = editTextPrice.getText().toString().trim();
-                String discountStr = editTextDiscount.getText().toString().trim();
-                String serviceStr = editTextService.getText().toString().trim();
+            isCalc.set(true);
+            String priceStr = editTextPrice.getText().toString().trim();
+            String discountStr = editTextDiscount.getText().toString().trim();
+            String serviceStr = editTextService.getText().toString().trim();
 
-                if (priceStr.isEmpty()) {
-                    Toast.makeText(MyApplication.getMyContext(), "Please enter the price.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (priceStr.isEmpty()) {
+                Toast.makeText(MyApplication.getMyContext(), "Please enter the price.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                double price = Double.parseDouble(priceStr);
-                double discount = discountStr.isEmpty() ? 0.0 : Double.parseDouble(discountStr);
-                double service = serviceStr.isEmpty() ? 0.0 : Double.parseDouble(serviceStr);
+            double price = Double.parseDouble(priceStr);
+            discount = discountStr.isEmpty() ? 0.0 : Double.parseDouble(discountStr);
+            double service = serviceStr.isEmpty() ? 0.0 : Double.parseDouble(serviceStr);
 
-                if (radioButtonPercentage.isChecked()) {
-                    discount = price * (discount / 100.0);
-                }
+            if (radioButtonPercentage.isChecked()) {
+                discount = price * (discount / 100.0);
+            }
 
-                if (radioButtonServicePercentage.isChecked()) {
-                    service = price * (service / 100.0);
-                }
+            if (radioButtonServicePercentage.isChecked()) {
+                service = price * (service / 100.0);
+            }
 
-                double totalPrice = price - discount + service;
-                textViewTotalPrice.setText(String.format("Total Price: %.2f", totalPrice));
+            totalPrice = price - discount + service;
+            textViewTotalPrice.setText(String.format("Total Price: %.2f", totalPrice));
 
         });
 
+        builder.setPositiveButton("PAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(isCalc.get()){
+                    Payment payment=new Payment("Card",totalPrice);
+                    Model.instance().payment(t.getId(),payment,discount);
+                }
+                else{
+                    Toast.makeText(MyApplication.getMyContext(), "Please click on calc first", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
     }

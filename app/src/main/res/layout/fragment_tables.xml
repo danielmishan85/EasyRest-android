@@ -208,6 +208,27 @@
         app:layout_constraintBottom_toTopOf="@+id/imageButton2ff"
         app:layout_constraintStart_toStartOf="@+id/openTableBtn" />
 
+    <ImageButton
+        android:id="@+id/refresh_tables_ib"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:src="@drawable/ic_baseline_refresh_24"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2ff"
+        app:layout_constraintStart_toEndOf="@+id/chosen_table_tv"
+        app:layout_constraintTop_toBottomOf="@+id/tables_rv" />
+
+    <TextView
+        android:id="@+id/refresh_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2ff"
+        app:layout_constraintStart_toEndOf="@+id/refresh_tables_ib"
+        app:layout_constraintTop_toBottomOf="@+id/tables_rv" />
+
     <!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

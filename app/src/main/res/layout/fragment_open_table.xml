@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".TablesFragment">
 
+    <TextView
+        android:id="@+id/refresh_tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/tableOrderRV"
+        app:layout_constraintStart_toEndOf="@+id/refresh_tableDishes_ib"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/refresh_tableDishes_ib"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/ic_baseline_refresh_24"
+        app:layout_constraintBottom_toTopOf="@+id/tableOrderRV"
+        app:layout_constraintStart_toEndOf="@+id/openTable_orderBtnDrinks"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/openTable_Btn4"
         android:layout_width="101dp"
@@ -86,8 +107,8 @@
 
     <Button
         android:id="@+id/openTable_orderBtnFood"
-        android:layout_width="101dp"
-        android:layout_height="80dp"
+        android:layout_width="96dp"
+        android:layout_height="75dp"
         android:backgroundTint="@color/white"
         android:text="food"
         android:textColor="@color/black"
