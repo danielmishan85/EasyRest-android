@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -681,7 +682,7 @@ public class OpenTableFragment extends Fragment {
         TextView dishName;
         Button dishType;
         ImageButton dishDelete;
-        Button orderFire;
+        CheckBox checkBox;
         ImageButton dishComment;
         TextView amount;
 
@@ -693,6 +694,7 @@ public class OpenTableFragment extends Fragment {
             dishDelete = itemView.findViewById(R.id.deleteDish_btn);
             dishComment = itemView.findViewById(R.id.commentsDish_btn);
             amount = itemView.findViewById(R.id.tableDishRow_amount_tv);
+            checkBox=itemView.findViewById(R.id.table_dish_row_checkBox);
 
 
 
@@ -720,6 +722,8 @@ public class OpenTableFragment extends Fragment {
 
         public void bind(TableDish td) {
             Dish d = Model.instance().getDishById(td.dish.getDishId());
+            checkBox.setClickable(false);
+            checkBox.setChecked(td.isReady());
             td.setDish(d);
             dishName.setText(td.dish.getDishName());
             if(td.getFirstOrMain().equals("M"))
