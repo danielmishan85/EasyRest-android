@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -247,6 +249,7 @@ public class OpenTableFragment extends Fragment {
     //**************************************total amount, avg per person, send reservation, fire, payment*******************
     public void refreshAmountDetails(){
 
+        currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
         binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(currentT.getTotalPrice())+ " ₪");
         double avgPerPerson = currentT.getAvgPerPerson();
         String avgPerPersonStr = String.format("%.1f", avgPerPerson);
@@ -326,6 +329,7 @@ public class OpenTableFragment extends Fragment {
                     Payment payment=new Payment("Card",totalPrice);
                     Model.instance().payment(currentT.getId(),payment,discount);
                     refreshAmountDetails();
+                    Navigation.findNavController(getView()).popBackStack();
 
                 }
                 else{
@@ -630,10 +634,15 @@ public class OpenTableFragment extends Fragment {
             });
 
             drinkDelete.setOnClickListener(v -> {
+                double newTotal = currentT.totalPrice-orderDrinkList.get(getAdapterPosition()).getPrice();
+                currentT.setLeftToPay(currentT.leftToPay-orderDrinkList.get(getAdapterPosition()).getPrice());
+                currentT.setTotalPrice(newTotal);
+                currentT.setAvgPerPerson(newTotal/currentT.getNumberOfPeople());
                 orderDrinkList.remove(getAdapterPosition());
                 tableDrinkRecyclerAdapter.setData(orderDrinkList);
                 currentT.drinkArray=orderDrinkList;
                 Model.instance().updateDishOrDrinkTable(currentT);
+                refreshAmountDetails();
             });
         }
 
@@ -723,10 +732,9 @@ public class OpenTableFragment extends Fragment {
 
 
             dishDelete.setOnClickListener(v -> {
-                orderList.remove(getAdapterPosition());
-                setTableOrderAdapter(tableOrderAdapter, orderList);
-                currentT.orderList=orderList;
-                Model.instance().updateDishOrDrinkTable(currentT);
+
+
+
             });
 
 

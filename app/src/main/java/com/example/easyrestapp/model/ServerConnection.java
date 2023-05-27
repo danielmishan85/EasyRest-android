@@ -520,6 +520,9 @@ public class ServerConnection {
             String patchBody = "{\n" +
                     "    \"tableId\": \"" + table.getId() + "\",\n" +
                     "    \"updates\": {\n" +
+                    "        \"TotalPrice\": " + table.getTotalPrice() + ",\n" +
+                    "        \"avgPerPerson\": " + table.getAvgPerPerson() + ",\n" +
+                    "        \"leftToPay\": " + table.getLeftToPay() + "\n" +
                     "        \"dishArray\": " + dishArray+ ",\n" +
                     "        \"drinkArray\": " + drinkArray + "\n" +
                     "    }\n" +
