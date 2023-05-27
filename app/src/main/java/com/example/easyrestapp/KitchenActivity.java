@@ -2,6 +2,7 @@ package com.example.easyrestapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,24 +22,33 @@ import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class KitchenActivity extends AppCompatActivity {
 
     List<Table> tables;
     RecyclerView openTablesList;
     kitchenRecyclerAdapter kitchenAdapter;
-
+    ExecutorService es;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen);
 
-        tables = Model.instance().getAllOpenTables();
         openTablesList = findViewById(R.id.kitchen_tablesList);
-        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
-        kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
-        openTablesList.setAdapter(kitchenAdapter);
+        es= Executors.newSingleThreadExecutor();
+
+        es.execute(() -> {
+            tables = Model.instance().getAllOpenTables();
+
+            runOnUiThread(() -> {
+                openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
+                kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
+                openTablesList.setAdapter(kitchenAdapter);
+            });
+        });
     }
 
 
@@ -143,14 +153,14 @@ public class KitchenActivity extends AppCompatActivity {
                         orderList.get(getAdapterPosition()).setReady(true);
                     else
                         orderList.get(getAdapterPosition()).setReady(false);
-                    //need to change the data of the adapter
                     t.orderList = orderList;
-                   Model.instance().updateDishOrDrinkTable(t);
-                   System.out.println("update succeed");
+
+                    es.execute(() -> {
+                        Model.instance().updateDishOrDrinkTable(t);
+                        System.out.println("update succeed");
+                    });
                 }
             });
-
-
         }
 
         public void bind(TableDish td) {
