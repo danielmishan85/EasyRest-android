@@ -143,6 +143,8 @@ public class ParseJson {
         tableDish.allTogether = orderListObject.getBoolean("allTogether");
         tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
         tableDish.ready = orderListObject.getBoolean("ready");
+        tableDish.price= orderListObject.getDouble("price");
+
 
         if(openTable) {
             ArrayList<String> commentsList = new ArrayList<>();

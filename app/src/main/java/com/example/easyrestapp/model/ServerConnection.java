@@ -517,12 +517,14 @@ public class ServerConnection {
                 drinkArray.put(drinkObject);
             }
 
+            Log.d("EDENNN","price tot: "+table.getTotalPrice()+"");
+
             String patchBody = "{\n" +
                     "    \"tableId\": \"" + table.getId() + "\",\n" +
                     "    \"updates\": {\n" +
                     "        \"TotalPrice\": " + table.getTotalPrice() + ",\n" +
                     "        \"avgPerPerson\": " + table.getAvgPerPerson() + ",\n" +
-                    "        \"leftToPay\": " + table.getLeftToPay() + "\n" +
+                    "        \"leftToPay\": " + table.getLeftToPay() + ",\n" +
                     "        \"dishArray\": " + dishArray+ ",\n" +
                     "        \"drinkArray\": " + drinkArray + "\n" +
                     "    }\n" +

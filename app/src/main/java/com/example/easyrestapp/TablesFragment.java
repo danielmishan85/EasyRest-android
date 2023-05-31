@@ -51,13 +51,15 @@ public class TablesFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Tables</font>"));
-
-
-        tables= Model.instance().getAllOpenTables();
-
-
         binding = FragmentTablesBinding.inflate(inflater, container, false);
         View v=binding.getRoot();
+
+        tables= Model.instance().getAllOpenTables();
+        if(tables.size()!=0) {
+            chosenTable = Integer.parseInt(tables.get(0).getTableNumber());
+            binding.chosenTableTv.setText("Chosen table: "+tables.get(0).getTableNumber());
+        }
+
 
         binding.openTableBtn.setOnClickListener(V->{
             NavDirections action = TablesFragmentDirections.actionTablesFragmentToOpenTableFragment(chosenTable);

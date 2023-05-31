@@ -51,7 +51,7 @@ public class OpenTableFragment extends Fragment {
     List<Dish> menu;
     List<Drink> drinksMenu;
     List<Dish> filterMenu;
-     List<TableDish> orderList;
+    List<TableDish> orderList;
     List<TableDrink> orderDrinkList;
 
     FragmentOpenTableBinding binding;
@@ -68,6 +68,7 @@ public class OpenTableFragment extends Fragment {
     int numOfDiners = 0;
     int chosenTableDish = 0;
     double totalPrice,discount;
+    TextView tableNum;
 
 
     @Nullable
@@ -86,6 +87,8 @@ public class OpenTableFragment extends Fragment {
         orderDrinkList=currentT.getDrinkArray();
         es= Executors.newSingleThreadExecutor();
         binding.refreshTv2.setText("Last refresh: " + getCurrentDateTime());
+        binding.openTableTableNumTv.setText("Table number: "+currentTable);
+
 
 
         //*********************************menu list *********************************************
@@ -93,7 +96,7 @@ public class OpenTableFragment extends Fragment {
 
         //the menu will open from starter
         binding.openTableBtn1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-        filterMenu = menu.stream().filter(d -> d.dishCategory.equals("starter")).collect(Collectors.toList());
+        filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Starters")).collect(Collectors.toList());
         menuAdapter = new MenuRecyclerAdapter(getLayoutInflater(), filterMenu);  //show all the dishes
         drinkMenuAdapter = new DrinkMenuRecyclerAdapter(getLayoutInflater(), drinksMenu);  //show all the dishes
         tableDrinkRecyclerAdapter=new TableDrinkRecyclerAdapter((getLayoutInflater()), orderDrinkList);
@@ -158,7 +161,7 @@ public class OpenTableFragment extends Fragment {
         binding.openTableBtn4.setOnClickListener(V -> {
             menuButtonsColorReset();
             binding.openTableBtn4.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Fish and Meat")).collect(Collectors.toList());
+            filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Fish-and-Meat")).collect(Collectors.toList());
             binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
         });
@@ -180,7 +183,7 @@ public class OpenTableFragment extends Fragment {
         binding.openTableBtn1.setOnClickListener(V -> {
             menuButtonsColorReset();
             binding.openTableBtn1.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.pink));
-            filterMenu = menu.stream().filter(d -> d.dishCategory.equals("starter")).collect(Collectors.toList());
+            filterMenu = menu.stream().filter(d -> d.dishCategory.equals("Starters")).collect(Collectors.toList());
             binding.menuRV.setAdapter(menuAdapter);
             menuAdapter.setData(filterMenu);
         });
@@ -732,8 +735,14 @@ public class OpenTableFragment extends Fragment {
 
 
             dishDelete.setOnClickListener(v -> {
-
-
+                double newTotal = currentT.totalPrice-orderList.get(getAdapterPosition()).getPrice();
+                currentT.setLeftToPay(currentT.leftToPay-orderList.get(getAdapterPosition()).getPrice());
+                currentT.setTotalPrice(newTotal);
+                currentT.setAvgPerPerson(newTotal/currentT.getNumberOfPeople());
+                orderList.remove(getAdapterPosition());
+                currentT.orderList=orderList;
+                Model.instance().updateDishOrDrinkTable(currentT);
+                tableOrderAdapter.setData(orderList);
 
             });
 

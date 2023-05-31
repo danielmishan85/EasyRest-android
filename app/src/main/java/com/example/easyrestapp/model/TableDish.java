@@ -13,25 +13,12 @@ public class TableDish {
     public boolean ready;
     public String readyTime; //consider to change
     public boolean allTogether;
-    public double price;
+    public Double price;
     public String orderTime; //consider to change
 
     public TableDish() {
     }
 
-//    public TableDish(String id,Dish dish, int amount, int firstOrMain, String readyTime, boolean allTogether, double price, String orderTime, boolean ready,ArrayList<String> comments) {
-//
-//        this.id=id;
-//        this.dish = dish;
-//        this.amount = amount;
-//        this.firstOrMain = firstOrMain;
-//        this.readyTime = readyTime;
-//        this.allTogether = allTogether;
-//        this.price = price;
-//        this.orderTime = orderTime;
-//        this.ready = ready;
-//        this.comments=comments;
-//    }
 
     public TableDish(Dish dish, int amount, String firstOrMain, boolean allTogether,ArrayList<String> comments) {
         this.dish = dish;
