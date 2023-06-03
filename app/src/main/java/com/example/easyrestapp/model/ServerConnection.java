@@ -22,7 +22,7 @@ public class ServerConnection {
 
     //GET - get all category list
     public static CompletableFuture<String> categoryList() {
-        String url = "http://10.0.2.2:3001/dish/categoryList";
+        String url = "https://easy-rest.herokuapp.com/dish/categoryList";
         CompletableFuture<String> future = new CompletableFuture<>();
 
         getRequest(url, new RequestCallback() {
@@ -44,7 +44,7 @@ public class ServerConnection {
 
     //POST - get list of dishes by his category
     public static CompletableFuture<String> getDishByCategory(String dishCategory) {
-        String postUrl = "http://10.0.2.2:3001/dish/getByCategory";
+        String postUrl = "https://easy-rest.herokuapp.com/dish/getByCategory";
         CompletableFuture<String> future = new CompletableFuture<>();
         String postBody = "{\n" +
                 "    \"dishCategory\": \"" + dishCategory + "\"\n" +
@@ -76,7 +76,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<String> addTable(Table table) {
-        String postUrl = "http://10.0.2.2:3001/openTable/open";
+        String postUrl = "https://easy-rest.herokuapp.com/openTable/open";
         String postBody = "{\n" +
                 "    \"numTable\": " + table.getTableNumber() + ",\n" +
                 "    \"numberOfPeople\": " + table.getNumberOfPeople() + ",\n" +
@@ -116,7 +116,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<Boolean> addDishToOrder(String tableId, TableDish td) {
-        String postUrl = "http://10.0.2.2:3001/openTable/addToOrder";
+        String postUrl = "https://easy-rest.herokuapp.com/openTable/addToOrder";
 
         JSONObject dishObject = new JSONObject();
         try {
@@ -168,7 +168,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<Boolean> addDrinkToOrder(String tableId, TableDrink td) {
-        String postUrl = "http://10.0.2.2:3001/openTable/addToOrder";
+        String postUrl = "https://easy-rest.herokuapp.com/openTable/addToOrder";
 
         JSONObject drinkObject = new JSONObject();
         try {
@@ -217,8 +217,8 @@ public class ServerConnection {
 
 
     public static CompletableFuture<String> getAllOpenTables(){
-
-        String url = "http://10.0.2.2:3001/openTable/getTables";
+        String url = "https://easy-rest.herokuapp.com/openTable/getTables";
+//        String url = "http://10.0.2.2:3001/openTable/getTables";
         CompletableFuture<String> future = new CompletableFuture<>();
         getRequest(url, new RequestCallback() {
             @Override
@@ -237,7 +237,7 @@ public class ServerConnection {
     }
 
     public static CompletableFuture<String> payment(String tableID, Payment payment, Double discount){
-        String postUrl = "http://10.0.2.2:3001/closeTable/payment";
+        String postUrl = "https://easy-rest.herokuapp.com/closeTable/payment";
         CompletableFuture<String> future = new CompletableFuture<>();
         String postBody = "{\n" +
                 "    \"tableId\": \"" + tableID + "\",\n" +
@@ -272,7 +272,7 @@ public class ServerConnection {
 
     public static CompletableFuture<String> getAllClosedTables(){
 
-        String url = "http://10.0.2.2:3001/closeTable/getCloseTables";
+        String url = "https://easy-rest.herokuapp.com/closeTable/getCloseTables";
         CompletableFuture<String> future = new CompletableFuture<>();
         getRequest(url, new RequestCallback() {
             @Override
@@ -291,7 +291,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<String> getDrinkByCategory(String drinkCategory) {
-        String postUrl = "http://10.0.2.2:3001/drink/getByCategory";
+        String postUrl = "https://easy-rest.herokuapp.com/drink/getByCategory";
         CompletableFuture<String> future = new CompletableFuture<>();
         String postBody = "{\n" +
                 "    \"drinkCategory\": \"" + drinkCategory + "\"\n" +
@@ -319,7 +319,7 @@ public class ServerConnection {
     }
 
     public static CompletableFuture<String> getCategoryDrinksList() {
-        String getUrl = "http://10.0.2.2:3001/drink/categoryList";
+        String getUrl = "https://easy-rest.herokuapp.com/drink/categoryList";
         CompletableFuture<String> future = new CompletableFuture<>();
 
         try {
@@ -343,7 +343,7 @@ public class ServerConnection {
     }
     // POST - get list of tables by restaurant ID
     public static CompletableFuture<String> getAvailableTablesByRestaurant(String restaurantId) {
-        String postUrl = "http://10.0.2.2:3001/res/getTableAavailable";
+        String postUrl = "https://easy-rest.herokuapp.com/res/getTableAavailable";
         CompletableFuture<String> future = new CompletableFuture<>();
         String postBody = "{\n" +
                 "    \"resID\": \"" + restaurantId + "\"\n" +
@@ -371,7 +371,7 @@ public class ServerConnection {
     }
 
     public static CompletableFuture<String> fire(String tableID) {
-        String postUrl = "http://10.0.2.2:3001/fire/FireTable";
+        String postUrl = "https://easy-rest.herokuapp.com/fire/FireTable";
         CompletableFuture<String> future = new CompletableFuture<>();
         String postBody = "{\n" +
                 "    \"tableId\": \"" + tableID + "\"\n" +
@@ -402,7 +402,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<String> updateTable(Table table) {
-        String patchUrl = "http://10.0.2.2:3001/openTable/updateTable";
+        String patchUrl = "https://easy-rest.herokuapp.com/openTable/updateTable";
         CompletableFuture<String> future = new CompletableFuture<>();
 
         try {
@@ -482,7 +482,7 @@ public class ServerConnection {
 
 
     public static CompletableFuture<String> updateDishOrDrinkTable(Table table) {
-        String patchUrl = "http://10.0.2.2:3001/openTable/updateTable";
+        String patchUrl = "https://easy-rest.herokuapp.com/openTable/updateTable";
         CompletableFuture<String> future = new CompletableFuture<>();
 
         try {
