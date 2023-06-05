@@ -164,6 +164,7 @@ public class KitchenActivity extends AppCompatActivity {
             });
         }
 
+
         public void bind(TableDish td) {
             Dish d = Model.instance().getDishById(td.dish.getDishId());
             td.setDish(d);
