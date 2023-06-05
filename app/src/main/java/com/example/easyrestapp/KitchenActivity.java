@@ -158,7 +158,8 @@ public class KitchenActivity extends AppCompatActivity {
                     es.execute(() -> {
                         Model.instance().updateDishOrDrinkTable(t);
                         Model.instance().dishIsReady(t.orderList.get(getAdapterPosition()).getId());
-                        System.out.println("update succeed");
+                        Log.d("updated","updateDishOrDrinkTable succeed");
+                        Log.d("updated","dishIsReady succeed");
                     });
                 }
             });
