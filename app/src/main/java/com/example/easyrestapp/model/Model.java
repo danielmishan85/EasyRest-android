@@ -214,6 +214,17 @@ public class Model {
         return ParseJson.parseDishesFromJson(dishes);
     }
 
+    public void dishIsReady(String orderId) {
+        try {
+            ServerConnection.dishIsReady(orderId).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public ArrayList<Drink> getDrinksByCategory(String category) {
 
         String drinks="";

@@ -42,35 +42,35 @@ public class WaiterActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController);
 
 
-//        ExecutorService es = Executors.newSingleThreadExecutor();
-//        es.execute(() -> {
-//            while (true) {
-//                List<Table> openTables = Model.instance().getAllOpenTables(); // Move the getAllOpenTables() call outside the while loop
-//                for (Table t : openTables) {
-//                    boolean waiterCalled = Model.instance().isWaiterCalled(t.getId());
-//                    if (waiterCalled) {
-//                        runOnUiThread(() -> {
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
-//                            builder.setTitle("Waiter Called to table number: " + t.getTableNumber());
-//                            builder.show();
-//                        });
-//
-//                        try {
-//                            Thread.sleep(10000); // Sleep for 10 seconds
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    } else {
-//                        try {
-//                            Thread.sleep(1000); // Sleep for 1 second
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        });
+        ExecutorService es = Executors.newSingleThreadExecutor();
+        es.execute(() -> {
+            while (true) {
+                List<Table> openTables = Model.instance().getAllOpenTables(); // Move the getAllOpenTables() call outside the while loop
+                for (Table t : openTables) {
+                    boolean waiterCalled = Model.instance().isWaiterCalled(t.getId());
+                    if (waiterCalled) {
+                        runOnUiThread(() -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
+                            builder.setTitle("Waiter Called to table number: " + t.getTableNumber());
+                            builder.show();
+                        });
+
+                        try {
+                            Thread.sleep(10000); // Sleep for 10 seconds
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        try {
+                            Thread.sleep(1000); // Sleep for 1 second
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
 
 
     }

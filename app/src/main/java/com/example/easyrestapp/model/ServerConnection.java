@@ -74,6 +74,37 @@ public class ServerConnection {
 
     }
 
+    public static CompletableFuture<String> dishIsReady(String orderId) {
+        String postUrl = "https://easy-rest.herokuapp.com/openTable/DishIsReady";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String postBody = "{\n" +
+                "    \"orderId\": \"" + orderId + "\"\n" +
+                "}";
+
+
+        try {
+            postRequest(postUrl, postBody, new RequestCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("server connection dishIsReady","dishIsReady success with response: "+response);
+
+                    future.complete(response);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    future.completeExceptionally(new Exception(error));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return future;
+
+    }
+
 
     public static CompletableFuture<String> addTable(Table table) {
         String postUrl = "https://easy-rest.herokuapp.com/openTable/open";
