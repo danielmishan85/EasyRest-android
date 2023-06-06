@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.easyrestapp.model.Dish;
@@ -21,7 +22,10 @@ import com.example.easyrestapp.model.Model;
 import com.example.easyrestapp.model.Table;
 import com.example.easyrestapp.model.TableDish;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,6 +35,8 @@ public class KitchenActivity extends AppCompatActivity {
     RecyclerView openTablesList;
     kitchenRecyclerAdapter kitchenAdapter;
     ExecutorService es;
+    ImageButton refreshBtn;
+    TextView refreshTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,9 @@ public class KitchenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kitchen);
 
         openTablesList = findViewById(R.id.kitchen_tablesList);
+        refreshBtn = findViewById(R.id.kitchen_refresh_btn);
+        refreshTv = findViewById(R.id.kitchen_refresh_tv);
+
         es= Executors.newSingleThreadExecutor();
 
         es.execute(() -> {
@@ -49,8 +58,25 @@ public class KitchenActivity extends AppCompatActivity {
                 openTablesList.setAdapter(kitchenAdapter);
             });
         });
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tables = Model.instance().getAllOpenTables();
+
+                kitchenAdapter.setData(tables);
+                refreshTv.setText("Last refresh: " + getCurrentDateTime());
+            }
+        });
+
+        refreshTv.setText("Last refresh: " + getCurrentDateTime());
     }
 
+    private String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
+    }
 
     //--------------------- kitchen view holder ---------------------------
     class kitchenViewHolder extends RecyclerView.ViewHolder {

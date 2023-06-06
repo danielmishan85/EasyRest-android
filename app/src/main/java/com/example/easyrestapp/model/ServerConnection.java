@@ -440,7 +440,7 @@ public class ServerConnection {
             JSONArray dishArray = new JSONArray();
             for (TableDish td : table.getOrderList()) {
                 JSONObject dishObject = new JSONObject();
-                    //dishObject.put("_id", td.getId());
+//                    dishObject.put("_id", td.getId());
                     dishObject.put("dishId", td.dish.dishId);
                     dishObject.put("amount", td.amount);
                     dishObject.put("firstOrMain", td.firstOrMain);
@@ -583,7 +583,6 @@ public class ServerConnection {
 
         return future;
     }
-
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
