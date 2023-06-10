@@ -42,7 +42,7 @@ public class OrderRecoveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Order Recovery</font>"));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<font color='#FFC0CB'>Closed Tables</font>"));
         lastOrders= Model.instance().getAllClosedTables();
 
         binding = FragmentOrderRecoveryBinding.inflate(inflater, container, false);

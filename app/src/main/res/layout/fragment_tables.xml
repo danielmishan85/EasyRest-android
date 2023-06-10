@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:backgroundTintMode="src_in"
-        android:text="Order Recovery"
+        android:text="Closed Tables"
         android:textColor="#575353"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

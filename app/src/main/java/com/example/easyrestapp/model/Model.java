@@ -22,8 +22,13 @@ public class Model {
         return _instance;
     }
 
-    public boolean isWaiterCalled(String id){
-        return getTableById(id).isAskForWaiter();
+    public String isWaiterCalledOrAskedForBill(String id){
+        Table t = getTableById(id);
+        if (t.isAskForWaiter())
+            return "Waiter";
+        else if (t.isAskForBill())
+            return "Bill";
+        return "none";
     }
 
     public void payment(String tableID,Payment payment,Double discount){
