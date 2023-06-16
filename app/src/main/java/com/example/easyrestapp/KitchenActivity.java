@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.easyrestapp.model.Dish;
@@ -34,10 +36,12 @@ public class KitchenActivity extends AppCompatActivity {
     List<Table> tables;
     RecyclerView openTablesList;
     kitchenRecyclerAdapter kitchenAdapter;
-    ExecutorService es;
+    ExecutorService es,es2;
     ImageButton refreshBtn;
     TextView refreshTv;
+    ProgressBar pb;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,15 +50,19 @@ public class KitchenActivity extends AppCompatActivity {
         openTablesList = findViewById(R.id.kitchen_tablesList);
         refreshBtn = findViewById(R.id.kitchen_refresh_btn);
         refreshTv = findViewById(R.id.kitchen_refresh_tv);
+        pb = findViewById(R.id.pbKitchen);
+        pb.setVisibility(View.GONE);
+
 
         es= Executors.newSingleThreadExecutor();
+        es2= Executors.newSingleThreadExecutor();
 
+        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
         es.execute(() -> {
+            pb.setVisibility(View.VISIBLE);
             tables = Model.instance().getAllOpenTables();
-
+            kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
             runOnUiThread(() -> {
-                openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
-                kitchenAdapter = new kitchenRecyclerAdapter(getLayoutInflater(), tables);
                 openTablesList.setAdapter(kitchenAdapter);
             });
         });
@@ -101,9 +109,16 @@ public class KitchenActivity extends AppCompatActivity {
 
         public void bind(Table t) {
             tableNumber.setText("Table Number " + t.getTableNumber());
-            orderList.setLayoutManager(new LinearLayoutManager(MyApplication.getMyContext()));  //define the recycler view to be a list
-            tableOrderAdapter = new OrderRecyclerAdapter(getLayoutInflater(), t);
-            orderList.setAdapter(tableOrderAdapter);
+            es2.execute(()->{
+                orderList.setLayoutManager(new LinearLayoutManager(MyApplication.getMyContext()));  //define the recycler view to be a list
+                runOnUiThread(() -> {
+                    tableOrderAdapter = new OrderRecyclerAdapter(getLayoutInflater(), t);
+                    orderList.setAdapter(tableOrderAdapter);
+                    pb.setVisibility(View.GONE);
+
+                });
+            });
+
         }
     }
 
