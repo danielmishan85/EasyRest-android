@@ -144,6 +144,8 @@ public class ParseJson {
         tableDish.orderTime = orderListObject.getString("orderTime"); // Change if necessary
         tableDish.ready = orderListObject.getBoolean("ready");
         tableDish.price= orderListObject.getDouble("price");
+        if( tableDish.firstOrMain.equals("F"))
+            tableDish.estimatedPrepTime = orderListObject.getString("estimatedPrepTime"); // Change if necessary
 
 
         if(openTable) {

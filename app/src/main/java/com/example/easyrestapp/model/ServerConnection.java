@@ -450,8 +450,10 @@ public class ServerConnection {
                     dishObject.put("allTogether", td.isAllTogether());
                     dishObject.put("price", td.getPrice());
                     dishObject.put("orderTime", td.getOrderTime());
+                    if(td.getFirstOrMain().equals("F"))
+                        dishObject.put("estimatedPrepTime", td.getEstimatedPrepTime());
 
-                    dishArray.put(dishObject);
+                dishArray.put(dishObject);
 
             }
 

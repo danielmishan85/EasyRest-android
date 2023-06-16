@@ -1,6 +1,7 @@
 package com.example.easyrestapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -172,6 +174,7 @@ public class KitchenActivity extends AppCompatActivity {
     //--------------------- table's order view holder ---------------------------
     class OrderViewHolder extends RecyclerView.ViewHolder {
 
+        ImageButton dishComments;
         Button dishType;
         TextView dishName;
         TextView time;
@@ -185,7 +188,12 @@ public class KitchenActivity extends AppCompatActivity {
             dishName = itemView.findViewById(R.id.kitchenGridRow_dishName_tv);
             time = itemView.findViewById(R.id.kitchenGridRow_timeTV);
             checkBox = itemView.findViewById(R.id.kitchenGridRow_checkBox);
+            dishComments=itemView.findViewById(R.id.KitchencommentsDish_btn);
             orderList = t.getOrderList();
+
+            dishComments.setOnClickListener(v->{
+                showDishCommentsPopup(getAdapterPosition());
+            });
 
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,8 +212,40 @@ public class KitchenActivity extends AppCompatActivity {
                     });
                 }
             });
+
+
         }
 
+
+
+        public void showDishCommentsPopup(int dishIndex) {
+            // Get the dish object from the orderList using the dishIndex
+            TableDish tableDish = orderList.get(dishIndex);
+
+            // Create the popup dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getMyContext(), R.style.PinkAlertDialog);
+            builder.setTitle("Comments for " + tableDish.dish.getDishName()); // Set the title of the popup dialog
+            List<String> possibleChanges = tableDish.getComments();
+            StringBuilder messageBuilder = new StringBuilder();
+            for (String change : possibleChanges) {
+                messageBuilder.append(change).append("\n");
+            }
+            builder.setMessage(messageBuilder.toString());
+
+            //builder.setMessage(tableDish.dish.getPossibleChanges().get(0)); // Set the comments as the message of the popup dialog
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Dismiss the dialog when "OK" is clicked
+                    dialog.dismiss();
+                }
+            });
+
+            // Show the popup dialog
+            builder.show();
+        }
 
 
         public void bind(TableDish td) {
@@ -217,6 +257,9 @@ public class KitchenActivity extends AppCompatActivity {
                 checkBox.setChecked(true);
             }
             time.setText("no time yet");
+            if(td.getFirstOrMain().equals("F"))
+                time.setText(td.getEstimatedPrepTime() + " minutes");
+
         }
     }
 
@@ -263,4 +306,6 @@ public class KitchenActivity extends AppCompatActivity {
             return orderList.size();
         }
     }
+
+
 }

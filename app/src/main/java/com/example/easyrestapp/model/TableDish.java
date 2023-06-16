@@ -16,6 +16,9 @@ public class TableDish {
     public Double price;
     public String orderTime; //consider to change
 
+    public String estimatedPrepTime;
+
+
     public TableDish() {
     }
 
@@ -106,5 +109,13 @@ public class TableDish {
 
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+    public String getEstimatedPrepTime() {
+        return estimatedPrepTime;
+    }
+
+    public void setEstimatedPrepTime(String estimatedPrepTime) {
+        this.estimatedPrepTime = estimatedPrepTime;
     }
 }

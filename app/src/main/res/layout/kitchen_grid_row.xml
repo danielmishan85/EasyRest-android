@@ -66,6 +66,18 @@
                 app:layout_constraintStart_toEndOf="@+id/kitchenGridRow_FirstOrMainBtb"
                 app:layout_constraintTop_toBottomOf="@+id/kitchenGridRow_dishName_tv" />
 
+            <ImageButton
+                android:id="@+id/KitchencommentsDish_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/kitchenGridRow_dishName_tv"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/kitchenGridRow_FirstOrMainBtb"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_comment_24" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
