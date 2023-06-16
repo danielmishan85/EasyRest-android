@@ -223,7 +223,7 @@ public class KitchenActivity extends AppCompatActivity {
             TableDish tableDish = orderList.get(dishIndex);
 
             // Create the popup dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getMyContext(), R.style.PinkAlertDialog);
+            AlertDialog.Builder builder = new AlertDialog.Builder(KitchenActivity.this, R.style.PinkAlertDialog);
             builder.setTitle("Comments for " + tableDish.dish.getDishName()); // Set the title of the popup dialog
             List<String> possibleChanges = tableDish.getComments();
             StringBuilder messageBuilder = new StringBuilder();
