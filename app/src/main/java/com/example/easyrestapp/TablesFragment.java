@@ -146,11 +146,13 @@ public class TablesFragment extends Fragment {
                 {
                     Toast.makeText(MyApplication.getMyContext(), "Table is unAvailable", Toast.LENGTH_SHORT).show();
                 }
-                Model.instance().addNewTable(t);
+                else {
+                    Model.instance().addNewTable(t);
+                    // Refresh the table data
+                    List<Table> tables = Model.instance().getAllOpenTables();
+                    adapter.setData(tables);
+                }
 
-                // Refresh the table data
-                List<Table> tables = Model.instance().getAllOpenTables();
-                adapter.setData(tables);
 
             }
         });

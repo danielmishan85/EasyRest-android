@@ -258,13 +258,12 @@ public class Model {
     public Boolean isTableAvailable(String resId, String tableNumber) {
         try {
             String response = ServerConnection.getAvailableTablesByRestaurant(resId).get();
-            Log.d("tag", response);
 
             // Parse the response as a JSON object
             JSONObject json = new JSONObject(response);
 
             // Get the "tables" array from the JSON object
-            JSONArray tablesArray = json.getJSONArray("tableArr");
+            JSONArray tablesArray = json.getJSONArray("tables");
 
             // Iterate over each table object in the array
             for (int i = 0; i < tablesArray.length(); i++) {
@@ -273,6 +272,7 @@ public class Model {
                 // Check if the table number matches the given tableNumber parameter
                 if (tableObj.getString("tableNum").equals(tableNumber)) {
                     boolean isAvailable = tableObj.getBoolean("available");
+
                     return isAvailable;
                 }
             }

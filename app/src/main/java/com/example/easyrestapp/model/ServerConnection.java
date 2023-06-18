@@ -254,8 +254,10 @@ public class ServerConnection {
         getRequest(url, new RequestCallback() {
             @Override
             public void onSuccess(String response) {
+                Log.d("server connection1", "addDrinkToOrder failed with response: " + response);
 
                 future.complete(response);
+
             }
 
             @Override

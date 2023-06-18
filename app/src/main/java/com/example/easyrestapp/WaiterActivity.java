@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 
 import com.example.easyrestapp.model.Model;
@@ -48,12 +49,11 @@ public class WaiterActivity extends AppCompatActivity {
                 List<Table> openTables = Model.instance().getAllOpenTables(); // Move the getAllOpenTables() call outside the while loop
                 for (Table t : openTables) {
                     String value = Model.instance().isWaiterCalledOrAskedForBill(t.getId());
-
                     switch (value){
                         case "Waiter":
                             runOnUiThread(() -> {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
-                                builder.setTitle("Waiter Called to table number: " + t.getTableNumber());
+                                builder.setTitle(Html.fromHtml("<font color=\"#FFC0CB\">Waiter Called to table number: " + t.getTableNumber() + "</font>", Html.FROM_HTML_MODE_LEGACY));
                                 builder.show();
                             });
 
@@ -63,18 +63,18 @@ public class WaiterActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-//                        case "Bill":
-//                            runOnUiThread(() -> {
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
-//                                builder.setTitle("Table number " + t.getTableNumber() + " is asking for Bill");
-//                                builder.show();
-//                            });
-//
-//                            try {
-//                                Thread.sleep(10000); // Sleep for 10 seconds
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
+                        case "Bill":
+                            runOnUiThread(() -> {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(WaiterActivity.this);
+                                builder.setTitle(Html.fromHtml("<font color=\"#FFC0CB\">Table number " + t.getTableNumber() + " is asking for Bill</font>", Html.FROM_HTML_MODE_LEGACY));
+                                builder.show();
+                            });
+
+                            try {
+                                Thread.sleep(10000); // Sleep for 10 seconds
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         case "None":
                             try {
                                 Thread.sleep(1000); // Sleep for 1 second

@@ -3,4 +3,5 @@
     <style name="PinkAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">#FFC0CB</item>
     </style>
+
 </resources>

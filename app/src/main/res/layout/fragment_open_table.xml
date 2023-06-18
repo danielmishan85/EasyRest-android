@@ -123,29 +123,33 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menuRV"
         android:layout_width="500dp"
-        android:layout_height="700dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openTable_Btn3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tableOrderRV"
-        android:layout_width="650dp"
-        android:layout_height="350dp"
+        android:layout_width="450dp"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toStartOf="@+id/menuRV"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openTable_orderBtnFood" />
 
     <Button
         android:id="@+id/send_res_btn"
-        android:layout_width="250dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
         android:backgroundTint="@android:color/holo_orange_light"
-        android:text="Send Reservation"
+        android:text="Send"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
         app:cornerRadius="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/button10"
         app:layout_constraintEnd_toStartOf="@+id/menuRV"
         app:layout_constraintTop_toBottomOf="@+id/tableOrderRV" />
 
@@ -182,9 +186,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:text="Number of diners:"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/openTable_paymentBtn"
         app:layout_constraintStart_toStartOf="parent" />
@@ -193,9 +197,9 @@
         android:id="@+id/openTable_avgPerDiner_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="5dp"
         android:text="Avg per diner:"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/openTable_numOfDiners_tv"
         app:layout_constraintStart_toStartOf="@+id/openTable_numOfDiners_tv" />
@@ -204,18 +208,20 @@
         android:id="@+id/openTable_totalAmount_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:text="Total amount:"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/openTable_avgPerDiner_tv"
         app:layout_constraintStart_toStartOf="@+id/openTable_avgPerDiner_tv" />
 
     <LinearLayout
-        android:layout_width="650dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="450dp"
         android:layout_height="98dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/send_res_btn"
+        app:layout_constraintBottom_toTopOf="@+id/openTable_totalAmount_tv"
+        app:layout_constraintEnd_toStartOf="@+id/menuRV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableOrderRV">
 
