@@ -204,10 +204,6 @@ public class OpenTableFragment extends Fragment {
             chosenTableDish = pos;
             Log.d("chosenTableDish", Integer.toString(pos));
         });
-        binding.openTablePaymentBtn.setOnClickListener(V -> {
-            showPaymentPopup();
-
-        });
 
         refreshAmountDetails();
         getSensitivityAndFire();
@@ -253,7 +249,9 @@ public class OpenTableFragment extends Fragment {
     public void refreshAmountDetails(){
 
         currentT = Model.instance().getTableByNumber(String.valueOf(currentTable));
-        binding.openTableTotalAmountTv.setText("Total amount: " + Double.toString(currentT.getTotalPrice())+ " ₪");
+        String tot = String.format("%.1f", currentT.getTotalPrice());
+
+        binding.openTableTotalAmountTv.setText("Total amount: " + tot+ " ₪");
         double avgPerPerson = currentT.getAvgPerPerson();
         String avgPerPersonStr = String.format("%.1f", avgPerPerson);
         binding.openTableAvgPerDinerTv.setText("Avg per diner: " + avgPerPersonStr + " ₪");

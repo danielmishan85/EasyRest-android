@@ -210,7 +210,7 @@ public class TablesFragment extends Fragment {
             }
 
             totalPrice = price - discount + service;
-            textViewTotalPrice.setText(String.format("Total Price: %.2f", totalPrice));
+            textViewTotalPrice.setText(String.format("Total Price: %.1f", totalPrice));
 
         });
 
@@ -220,7 +220,7 @@ public class TablesFragment extends Fragment {
                 if(isCalc.get()){
                     Payment payment=new Payment("Card",totalPrice);
                     Model.instance().payment(t.getId(),payment,discount);
-                    Navigation.findNavController(getView()).popBackStack();
+                   // Navigation.findNavController(getView()).popBackStack();
                 }
                 else{
                     Toast.makeText(MyApplication.getMyContext(), "Please click on calc first", Toast.LENGTH_LONG).show();

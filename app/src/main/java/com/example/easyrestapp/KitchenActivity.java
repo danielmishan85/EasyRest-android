@@ -59,7 +59,7 @@ public class KitchenActivity extends AppCompatActivity {
         es= Executors.newSingleThreadExecutor();
         es2= Executors.newSingleThreadExecutor();
 
-        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),2,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
+        openTablesList.setLayoutManager(new GridLayoutManager(MyApplication.getMyContext(),1,GridLayoutManager.HORIZONTAL,false));  //define the recycler view to be a list
         es.execute(() -> {
             pb.setVisibility(View.VISIBLE);
             tables = Model.instance().getAllOpenTables();
