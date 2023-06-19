@@ -552,7 +552,7 @@ public class ServerConnection {
 
                 drinkArray.put(drinkObject);
             }
-
+            Log.d("daniela ", table.getOrderList().get(0).estimatedPrepTime+"");
             Log.d("EDENNN","price tot: "+table.getTotalPrice()+"");
 
             String patchBody = "{\n" +

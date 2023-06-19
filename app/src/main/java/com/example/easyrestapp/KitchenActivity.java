@@ -3,7 +3,6 @@ package com.example.easyrestapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -258,7 +257,7 @@ public class KitchenActivity extends AppCompatActivity {
             }
             time.setText("no time yet");
             if(td.getFirstOrMain().equals("F"))
-                time.setText(td.getEstimatedPrepTime() + " minutes");
+                time.setText(Integer.parseInt(td.getEstimatedPrepTime()) + " minutes");
 
         }
     }
