@@ -452,8 +452,8 @@ public class ServerConnection {
                     dishObject.put("allTogether", td.isAllTogether());
                     dishObject.put("price", td.getPrice());
                     dishObject.put("orderTime", td.getOrderTime());
-                    if(td.getFirstOrMain().equals("F"))
-                        dishObject.put("estimatedPrepTime", td.getEstimatedPrepTime());
+                    dishObject.put("estimatedPrepTime", td.getEstimatedPrepTime());
+
 
                 dishArray.put(dishObject);
 
@@ -534,6 +534,7 @@ public class ServerConnection {
                 dishObject.put("allTogether", td.isAllTogether());
                 dishObject.put("price", td.getPrice());
                 dishObject.put("orderTime", td.getOrderTime());
+                dishObject.put("estimatedPrepTime", td.getEstimatedPrepTime());
 
                 dishArray.put(dishObject);
 
@@ -551,7 +552,7 @@ public class ServerConnection {
 
                 drinkArray.put(drinkObject);
             }
-
+            Log.d("daniela ", table.getOrderList().get(0).estimatedPrepTime+"");
             Log.d("EDENNN","price tot: "+table.getTotalPrice()+"");
 
             String patchBody = "{\n" +
