@@ -11,3 +11,4 @@ part of big project. An Android application that manages a restaurant's interfac
 4. nav graph
 5. parallel programming with threads
 6. connecting to server (nodeJS)
+7. mongoDB
